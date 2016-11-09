@@ -2,8 +2,8 @@
   <div class="table">
     <div class="table-header">
       <span class="title">机器人:{{currentAccount.nick_name}}</span>
-      <i class="status on" v-if="currentAccount.online">在线</i>
-      <i class="status off" v-else>离线</i>
+      <i class="status on" v-if="currentAccount.online === true">在线</i>
+      <i class="status off" v-if="currentAccount.online === false">离线</i>
     </div>
     <div class="table-content">
       <table>
@@ -33,36 +33,36 @@ export default {
   name: 'GroupList',
   computed: {
     uin () {
-      return this.$route.query.uin
+      return parseInt(this.$route.query.uin)
     },
     currentAccount () {
-      for (let item of this.$store.state.account.items) {
+      for (let item of this.accounts) {
         if (item.uin === this.uin) {
           return item
         }
       }
+      return {}
     },
     ...mapState({
-      groups: state => state.group.items
+      groups: state => state.group.items,
+      accounts: state => state.account.items
     })
   },
   methods: {
-    getGroupList (uin) {
-      if (!uin) {
+    getGroupList () {
+      if (!this.uin) {
         return
       }
-      this.$store.dispatch('getGroupList', {
-        uin: uin
-      })
+      this.$store.dispatch('getGroupList', { uin: this.uin })
     }
   },
   watch: {
     uin (newVal) {
-      this.getGroupList(newVal)
+      this.getGroupList()
     }
   },
   mounted () {
-    this.getGroupList(this.uin)
+    this.getGroupList()
   }
 }
 </script>

@@ -38,12 +38,14 @@ export default {
   },
   async mounted () {
     await this.getAccountList()
-    this.$router.replace({
-      path: '/home/group-list',
-      query: {
-        uin: this.accounts[0].uin
-      }
-    })
+    if (!this.uin) {
+      this.$router.replace({
+        path: '/home/group-list',
+        query: {
+          uin: this.accounts[0].uin
+        }
+      })
+    }
   }
 }
 </script>

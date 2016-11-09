@@ -10,7 +10,6 @@ const mutations = {
   },
   [types.DEL_MESSAGES] (state) {
     state.items = []
-    console.log('delete')
   }
 }
 
