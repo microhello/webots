@@ -1,23 +1,35 @@
 <template>
   <div class="clearfix">
-    <side-bar class="side-bar"></side-bar>
+    <account-list class="side-bar"></account-list>
     <router-view class="side-content"></router-view>
   </div>
 </template>
 
 <script>
-const SideBar = resolve => require(['../components/SideBar'], resolve)
+const AccountList = resolve => require(['../components/AccountList'], resolve)
 
 export default {
   name: 'Home',
   components: {
-    SideBar
+    AccountList
   }
 }
 </script>
 
 <style lang="less">
 @import "../assets/less/colors.less";
+
+.side-bar {
+  float: left;
+  width: 200px;
+  margin-bottom: -9999px;
+  padding-bottom: 9999px;
+}
+
+.side-content {
+  margin-left: 200px;
+  min-height: 600px;
+}
 
 .table {
   position: relative;

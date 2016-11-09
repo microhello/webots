@@ -3,7 +3,7 @@ import Vue from 'vue'
 const urlPrefix = 'http://neituiyun.com'
 const urlPort = ':1000'
 const urlDict = {
-  // 微信账号列表
+  // 微信账号（机器人）列表
   getAccounts: '/wx/accounts'
 }
 const methodDict = {

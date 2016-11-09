@@ -1,7 +1,7 @@
 <template>
   <div class="table">
     <div class="table-header">
-      <span class="title">机器人:{{currentAccount.nick_name}}</span>
+      <span class="title">机器人:{{ currentAccount.nick_name }}</span>
       <i class="status on" v-if="currentAccount.online === true">在线</i>
       <i class="status off" v-if="currentAccount.online === false">离线</i>
     </div>
@@ -12,9 +12,9 @@
           <th>人数</th>
           <th>操作</th>
         </tr>
-        <tr v-for="item in groups">
-          <td>{{item.nick_name}}</td>
-          <td>{{item.member_count}}</td>
+        <tr v-for="item of groups">
+          <td>{{ item.nick_name }}</td>
+          <td>{{ item.member_count }}</td>
           <td><router-link :to="{ path: '/home/message', query: { uin: item.uin, receiver_name: item.nick_name } }" class="action">查看</router-link></td>
         </tr>
       </table>

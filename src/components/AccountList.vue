@@ -1,13 +1,19 @@
 <template>
-  <div class="side-bar">
-    <h2 class="side-bar-title side-bar-item">
+  <div class="account-list">
+    <h2 class="account-list-title account-list-item">
       <i class="iconfont">&#xe64c;</i>
       <span>机器人</span>
     </h2>
-    <ul class="side-bar-list">
-      <router-link :to="{ path: '/home/group-list', query: { uin: item.uin } }" v-for="item in accounts" tag="li" class="side-bar-item clearfix" :class="{ 'active': item.uin === uin }">
+    <ul class="account-list-list">
+      <router-link
+        v-for="item of accounts" 
+        :to="{ path: '/home/group-list', query: { uin: item.uin } }"
+        class="account-list-item clearfix"
+        :class="{ 'active': item.uin === uin }"
+        tag="li"
+      >
         <i class="iconfont" :class="item.online ? 'icon-zaixian' : 'icon-lixian'"></i>
-        <span>{{item.nick_name}}</span>
+        <span>{{ item.nick_name }}</span>
       </router-link>
     </ul>
   </div>
@@ -17,7 +23,7 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: 'SideBar',
+  name: 'AccountList',
   computed: {
     uin () {
       return parseInt(this.$route.query.uin)
@@ -48,9 +54,9 @@ export default {
 <style lang="less">
 @import "../assets/less/colors.less";
 
-.side-bar {
+.account-list {
   border-right: 1px solid @main-border-color;
-  .side-bar-item {
+  .account-list-item {
     line-height: 35px;
     font-size: 0;
     i {
@@ -67,7 +73,7 @@ export default {
       vertical-align: top;
     }
   }
-  .side-bar-title {
+  .account-list-title {
     padding: 20px 32px 0;
     i {
       color: #c0c0c0;
@@ -76,7 +82,7 @@ export default {
       font-size: 16px;
     }
   }
-  .side-bar-list {
+  .account-list-list {
     .active {
       color: #fff;
       background-color: @active-background-color;

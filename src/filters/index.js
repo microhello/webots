@@ -1,17 +1,22 @@
 export const formatDate = (inputDate, format = 'yyyy-MM-dd hh:mm:ss') => {
   if (typeof inputDate === 'number') {
-    let length = (inputDate + '').length
-    switch (length) {
+    // 如果输入值为时间戳，判断是否合法，并转换成13位时间戳
+    switch ((inputDate + '').length) {
       case 10:
         inputDate *= 1000
         break
       case 13:
         break
       default:
+        // 时间戳不合法，结束
         return
     }
   }
-  let date = new Date(inputDate)
+  const date = new Date(inputDate)
+  if (date.toString() === 'Invalid Date') {
+    // Date不合法，结束
+    return
+  }
   const o = {
     'M+': date.getMonth() + 1,                    // 月份
     'd+': date.getDate(),                         // 日

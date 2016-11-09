@@ -32,16 +32,6 @@ export default {
     background-color: #fff;
     border: 1px solid @main-border-color;
     overflow: hidden;
-    .side-bar {
-      float: left;
-      width: 200px;
-      margin-bottom: -9999px;
-      padding-bottom: 9999px;
-    }
-    .side-content {
-      margin-left: 200px;
-      min-height: 600px;
-    }
   }
 }
 </style>

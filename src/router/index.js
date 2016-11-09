@@ -25,17 +25,17 @@ const router = new Router({
   routes: [
     {
       path: '/home',
-      name: 'home',
+      name: 'Home',
       component: Home,
       children: [{
         path: '/home/group-list',
-        name: 'group',
+        name: 'GroupList',
         component: GroupList
         // children: [], //路由嵌套，子路由
         // alias: '/home/group-list' // 别名
       }, {
         path: '/home/message',
-        name: 'message',
+        name: 'Message',
         component: Message
       }]
       // alias: '/item', // 别名
@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(route => {
-  window.scrollTo(0, 0)
+  window.scrollTo(0, 0) // 回到页面顶部
 })
 
 export { router as default }

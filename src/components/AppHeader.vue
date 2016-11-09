@@ -15,12 +15,11 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
 .app-header {
   background-color: #fff;
-  -moz-box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
   -webkit-box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
+  -moz-box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
   box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
   .header-title {
     font-size: 20px;
