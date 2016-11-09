@@ -5,7 +5,7 @@ const state = {
 }
 
 const mutations = {
-  [types.GET_MESSAGES] (state, data) {
+  [types.SET_MESSAGES] (state, data) {
     state.items = data
   },
   [types.DEL_MESSAGES] (state) {

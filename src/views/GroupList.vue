@@ -49,20 +49,20 @@ export default {
     })
   },
   methods: {
-    getGroupList () {
+    setGroups () {
       if (!this.uin) {
         return
       }
-      this.$store.dispatch('getGroupList', { uin: this.uin })
+      this.$store.dispatch('setGroups', { uin: this.uin })
     }
   },
   watch: {
     uin (newVal) {
-      this.getGroupList()
+      this.setGroups()
     }
   },
   mounted () {
-    this.getGroupList()
+    this.setGroups()
   }
 }
 </script>

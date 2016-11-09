@@ -5,7 +5,7 @@ const state = {
 }
 
 const mutations = {
-  [types.GET_GROUP_LIST] (state, data) {
+  [types.SET_GROUPS] (state, data) {
     state.items = data
   }
 }

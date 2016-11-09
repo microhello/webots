@@ -31,15 +31,15 @@ export default {
     })
   },
   methods: {
-    getMessages (payload) {
+    setMessages (payload) {
       if (!payload.uin || !payload.receiver_name) {
         return
       }
-      this.$store.dispatch('getMessages', payload)
+      this.$store.dispatch('setMessages', payload)
     }
   },
   created () {
-    this.getMessages(this.query)
+    this.setMessages(this.query)
   }
 }
 </script>

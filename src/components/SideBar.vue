@@ -2,10 +2,10 @@
   <div class="side-bar">
     <h2 class="side-bar-title side-bar-item">
       <i class="iconfont">&#xe64c;</i>
-      <span>{{ title }}</span>
+      <span>机器人</span>
     </h2>
     <ul class="side-bar-list">
-      <router-link :to="{ path: '/home/group-list', query: { uin: item.uin } }" v-for="item in accounts" tag="li" class="side-bar-item clearfix" :class="{ 'active': uin == item.uin }">
+      <router-link :to="{ path: '/home/group-list', query: { uin: item.uin } }" v-for="item in accounts" tag="li" class="side-bar-item clearfix" :class="{ 'active': item.uin === uin }">
         <i class="iconfont" :class="item.online ? 'icon-zaixian' : 'icon-lixian'"></i>
         <span>{{item.nick_name}}</span>
       </router-link>
@@ -18,14 +18,9 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'SideBar',
-  data () {
-    return {
-      title: '机器人'
-    }
-  },
   computed: {
     uin () {
-      return this.$route.query.uin
+      return parseInt(this.$route.query.uin)
     },
     ...mapState({
       accounts: state => state.account.items
@@ -33,11 +28,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAccountList: 'getAccountList'
+      setAccounts: 'setAccounts'
     })
   },
   async mounted () {
-    await this.getAccountList()
+    await this.setAccounts()
     if (!this.uin) {
       this.$router.replace({
         path: '/home/group-list',
@@ -50,7 +45,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less">
 @import "../assets/less/colors.less";
 

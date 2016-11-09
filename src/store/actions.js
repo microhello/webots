@@ -1,32 +1,32 @@
 import * as types from './types'
 import { Account, Group, Message } from '../api'
 
-export const getAccountList = async ({ commit }) => {
+export const setAccounts = async ({ commit }) => {
   try {
-    let data = await Account.getAccountList()
+    let data = await Account.getAccounts()
     console.log('success', data)
-    commit(types.GET_ACCOUNT_LIST, data)
+    commit(types.SET_ACCOUNTS, data)
   } catch (err) {
     console.log('failure', err)
   }
 }
 
-export const getGroupList = async ({ commit }, { uin }) => {
+export const setGroups = async ({ commit }, payload) => {
   try {
-    let data = await Group.getGroupList(uin)
+    let data = await Group.getGroups(payload)
     console.log('success', data)
-    commit(types.GET_GROUP_LIST, data)
+    commit(types.SET_GROUPS, data)
   } catch (err) {
     console.log('failure', err)
   }
 }
 
-export const getMessages = async ({ commit }, payload) => {
+export const setMessages = async ({ commit }, payload) => {
   commit(types.DEL_MESSAGES)
   try {
     let data = await Message.getMessages(payload)
     console.log('success', data)
-    commit(types.GET_MESSAGES, data)
+    commit(types.SET_MESSAGES, data)
   } catch (err) {
     console.log('failure', err)
   }

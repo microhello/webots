@@ -4,7 +4,7 @@ const urlPrefix = 'http://neituiyun.com'
 const urlPort = ':1000'
 const urlDict = {
   // 微信群列表
-  getGroupList: '/wx/groups'
+  getGroups: '/wx/groups'
 }
 const methodDict = {
   get: 'GET',
@@ -14,10 +14,10 @@ const methodDict = {
 }
 
 export default {
-  getGroupList (uin) {
+  getGroups ({ uin }) {
     return new Promise((resolve, reject) => {
       Vue.http({
-        url: urlPrefix + urlPort + urlDict.getGroupList,
+        url: urlPrefix + urlPort + urlDict.getGroups,
         method: methodDict.get,
         params: {
           uin: uin

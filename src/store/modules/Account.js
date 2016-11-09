@@ -5,7 +5,7 @@ const state = {
 }
 
 const mutations = {
-  [types.GET_ACCOUNT_LIST] (state, data) {
+  [types.SET_ACCOUNTS] (state, data) {
     state.items = data
   }
 }

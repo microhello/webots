@@ -4,7 +4,7 @@ const urlPrefix = 'http://neituiyun.com'
 const urlPort = ':1000'
 const urlDict = {
   // 微信账号列表
-  getAccountList: '/wx/accounts'
+  getAccounts: '/wx/accounts'
 }
 const methodDict = {
   get: 'GET',
@@ -14,10 +14,10 @@ const methodDict = {
 }
 
 export default {
-  getAccountList () {
+  getAccounts () {
     return new Promise((resolve, reject) => {
       Vue.http({
-        url: urlPrefix + urlPort + urlDict.getAccountList,
+        url: urlPrefix + urlPort + urlDict.getAccounts,
         method: methodDict.get,
         params: {}
       }).then(response => {
