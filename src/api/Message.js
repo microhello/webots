@@ -14,14 +14,16 @@ const methodDict = {
 }
 
 export default {
-  getMessages ({ uin, receiver_name }) {
+  getMessages ({ uin, receiver_name, start_time, end_time }) {
     return new Promise((resolve, reject) => {
       Vue.http({
         url: urlPrefix + urlPort + urlDict.getMessages,
         method: methodDict.get,
         params: {
           uin: uin,
-          receiver_name: receiver_name
+          receiver_name: receiver_name,
+          start_time: start_time,
+          end_time: end_time
         }
       }).then(response => {
         if (response.status === 200 || response.status === 204 || response.status === 201) {

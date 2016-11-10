@@ -15,7 +15,14 @@
         <tr v-for="item of groups">
           <td>{{ item.nick_name }}</td>
           <td>{{ item.member_count }}</td>
-          <td><router-link :to="{ path: '/home/message', query: { uin: item.uin, receiver_name: item.nick_name } }" class="action">查看</router-link></td>
+          <td>
+            <router-link
+              :to="{ path: '/home/message', query: { uin: item.uin, receiver_name: item.nick_name } }"
+              class="action"
+            >
+              查看
+            </router-link>
+          </td>
         </tr>
       </table>
     </div>
@@ -61,7 +68,7 @@ export default {
       this.setGroups()
     }
   },
-  mounted () {
+  created () {
     this.setGroups()
   }
 }

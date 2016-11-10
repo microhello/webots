@@ -6,7 +6,7 @@
     </h2>
     <ul class="account-list-list">
       <router-link
-        v-for="item of accounts" 
+        v-for="item of accounts"
         :to="{ path: '/home/group-list', query: { uin: item.uin } }"
         class="account-list-item clearfix"
         :class="{ 'active': item.uin === uin }"
@@ -37,7 +37,7 @@ export default {
       setAccounts: 'setAccounts'
     })
   },
-  async mounted () {
+  async created () {
     await this.setAccounts()
     if (!this.uin) {
       this.$router.replace({

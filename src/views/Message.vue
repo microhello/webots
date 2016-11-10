@@ -1,45 +1,83 @@
 <template>
   <div class="table message">
     <div class="table-header">
-      <span class="title">{{ query.receiver_name }}</span>
+      <span class="title">{{ currentGroup.nick_name }}{{ '(' + currentGroup.member_count + '人)'}}</span>
       <router-link :to="{ path: '/home/group-list', query: { uin: query.uin } }" class="back-button">返回</router-link>
     </div>
+    <date-selector class="date-selector" @selected="selected"></date-selector>
     <div class="message-content">
       <div class="message-line" v-for="item of messages">
         <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
         <p>{{ item.message }}</p>
       </div>
     </div>
-    <div class="table-footer">
-      <a class="page-button">上一页</a>
-      <a class="page-button">下一页</a>
-    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+const DateSelector = resolve => require(['../components/DateSelector'], resolve)
 
 export default {
   name: 'Message',
+  data () {
+    return {
+      time: {
+        start: null,
+        end: null
+      }
+    }
+  },
   computed: {
     query () {
+      this.$route.query.uin = parseInt(this.$route.query.uin)
       return this.$route.query
     },
+    currentGroup () {
+      for (let item of this.groups) {
+        if (item.nick_name === this.query.receiver_name && item.uin === this.query.uin) {
+          return item
+        }
+      }
+      return {}
+    },
+    payload () {
+      return {
+        uin: this.query.uin,
+        receiver_name: this.query.receiver_name,
+        start_time: this.time.start,
+        end_time: this.time.end
+      }
+    },
     ...mapState({
-      messages: state => state.message.items
+      messages: state => state.message.items,
+      groups: state => state.group.items
     })
   },
   methods: {
-    setMessages (payload) {
-      if (!payload.uin || !payload.receiver_name) {
+    setMessages () {
+      if (!this.payload.uin || !this.payload.receiver_name) {
         return
       }
-      this.$store.dispatch('setMessages', payload)
+      this.$store.dispatch('setMessages', this.payload)
+    },
+    selected (event) {
+      this.time.start = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate()) / 1000)
+      this.time.end = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate() + 1) / 1000)
     }
   },
+  watch: {
+    payload (newVal) {
+      this.setMessages()
+    }
+  },
+  components: {
+    DateSelector
+  },
   created () {
-    this.setMessages(this.query)
+    if (this.groups.length === 0) {
+      this.$store.dispatch('setGroups', { uin: this.query.uin })
+    }
   }
 }
 </script>
@@ -48,16 +86,20 @@ export default {
 @import "../assets/less/colors.less";
 
 .message {
-  min-height: 300px;
-  position: relative;
+  min-height: 500px;
+  .date-selector {
+    margin: 20px 40px 0;
+  }
   .message-content {
-    padding: 10px 40px;
+    margin: 20px 40px;
     margin-bottom: 45px;
+    padding: 0 16px;
     line-height: normal;
+    background-color: @main-background-color;
     .message-line {
       font-size: 12px;
-      padding: 16px 0 16px 8px;
-      border-bottom: 1px solid @main-border-color;
+      padding: 16px 0;
+      border-bottom: 1px solid #fff;
       word-wrap: break-word;
       .sub-title {
         font-size: 12px;
