@@ -9,9 +9,9 @@ import * as types from '../store/types'
 Vue.use(VueResource)
 
 Vue.http.interceptors.push((request, next) => {
-  store.commit(types.TOGGLE_SHOWLOADING)
+  store.commit(types.TOGGLE_SHOWLOADING, true)
   next(response => {
-    store.commit(types.TOGGLE_SHOWLOADING)
+    store.commit(types.TOGGLE_SHOWLOADING, false)
     return response
   })
 })

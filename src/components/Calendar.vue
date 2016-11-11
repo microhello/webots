@@ -21,7 +21,8 @@
           class="calendar-item"
           :class="{ 'active': item.year + '/' + (item.month + 1) + '/' + item.date === currentDate.toLocaleDateString()}"
           @click="select($event, item)"
-          :disabled="item.month !== calendar.month"
+          :disabled="new Date(item.year, item.month, item.date) > today"
+          :otherMonth="item.month !== calendar.month"
         >{{ item.date }}</a>
       </p>
     </div>
@@ -40,7 +41,8 @@ export default {
         year: this.currentDate.getFullYear(),
         month: this.currentDate.getMonth(),
         date: this.currentDate.getDate()
-      }
+      },
+      now: new Date()
     }
   },
   computed: {
@@ -76,11 +78,17 @@ export default {
         })
       }
       return dates
+    },
+    today () {
+      return new Date(this.now.getFullYear(), this.now.getMonth(), this.now.getDate())
     }
   },
   methods: {
     select (event, date) {
       if (event.target.attributes.disabled) {
+        return
+      }
+      if (event.target.attributes.otherMonth) {
         this.calendar.year = date.year
         this.calendar.month = date.month
         return
@@ -144,8 +152,11 @@ export default {
       .calendar-item {
         flex-grow: 1;
         flex-basis: 14.2857%;
-        &[disabled] {
+        &[disabled], &[otherMonth] {
           color: @main-dashed-color;
+        }
+        &[disabled] {
+          cursor: default;
         }
       }
       .active {
