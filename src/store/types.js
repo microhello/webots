@@ -7,3 +7,6 @@ export const SET_GROUPS = 'group/SET_GROUPS'
 // message微信群消息
 export const SET_MESSAGES = 'message/SET_MESSAGES'
 export const DEL_MESSAGES = 'message/DEL_MESSAGES'
+
+// help
+export const TOGGLE_SHOWLOADING = 'help/TOGGLE_SHOWLOADING'

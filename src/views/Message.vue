@@ -8,7 +8,7 @@
     <div class="message-content">
       <div class="message-line" v-for="item of messages">
         <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
-        <p>{{ item.message }}</p>
+        <p v-transcoding:br>{{ item.message }}</p>
       </div>
     </div>
   </div>
@@ -16,6 +16,7 @@
 
 <script>
 import { mapState } from 'vuex'
+
 const DateSelector = resolve => require(['../components/DateSelector'], resolve)
 
 export default {
@@ -49,6 +50,17 @@ export default {
         end_time: this.time.end
       }
     },
+    // messages () {
+    //   return [{
+    //     account_id: '@3570627337074279f499d3898abae5eb28762fe6eed75c937c99278c3f2f443d',
+    //     create_time: 1478794504,
+    //     message: '<div></div>\n\n\n\n',
+    //     msg_id: '6739472728310394156',
+    //     msg_type: 3,
+    //     receiver_name: '💟皮皮果最爱稻草人💟提问群',
+    //     sender_name: '多多'
+    //   }]
+    // },
     ...mapState({
       messages: state => state.message.items,
       groups: state => state.group.items
