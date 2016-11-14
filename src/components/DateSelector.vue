@@ -19,14 +19,14 @@
       <a class="more" @click="showMore = false" v-else>
         收起<i class="iconfont">&#xe630;</i>
       </a> -->
-      <div class="detail-row clearfix">
+      <div class="detail-row">
         <div class="label">
           今日消息总计：
         </div>
         <div class="info">{{ $store.state.message.items.length }}条</div>
       </div>
       <hr class="detail-row" v-if="showMore" />
-      <div class="detail-row clearfix" v-if="showMore">
+      <div class="detail-row" v-if="showMore">
         <div class="label">
           按消息发送者：
         </div>
@@ -36,7 +36,7 @@
           <span class="count">系统消息 0</span>
         </div>
       </div>
-      <div class="detail-row clearfix" v-if="showMore">
+      <div class="detail-row" v-if="showMore">
         <div class="label">
           按消息内容：
         </div>

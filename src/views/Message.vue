@@ -1,9 +1,5 @@
 <template>
-  <div class="table message">
-    <div class="table-header">
-      <span class="title">{{ currentGroup.nick_name }}{{ '(' + currentGroup.member_count + '人)'}}</span>
-      <router-link :to="{ path: '/home/group-list', query: { uin: query.uin } }" class="back-button">返回</router-link>
-    </div>
+  <div class="message" @click="action">
     <date-selector class="date-selector" @selected="selected"></date-selector>
     <div class="message-content">
       <div class="message-line" v-for="item of messages">
@@ -34,33 +30,14 @@ export default {
       this.$route.query.uin = parseInt(this.$route.query.uin)
       return this.$route.query
     },
-    currentGroup () {
-      for (let item of this.groups) {
-        if (item.nick_name === this.query.receiver_name && item.uin === this.query.uin) {
-          return item
-        }
-      }
-      return {}
-    },
     payload () {
       return {
         uin: this.query.uin,
-        receiver_name: this.query.receiver_name,
+        receiver_name: this.query.nick_name,
         start_time: this.time.start,
         end_time: this.time.end
       }
     },
-    // messages () {
-    //   return [{
-    //     account_id: '@3570627337074279f499d3898abae5eb28762fe6eed75c937c99278c3f2f443d',
-    //     create_time: 1478794504,
-    //     message: '<div></div>\n\n\n\n',
-    //     msg_id: '6739472728310394156',
-    //     msg_type: 3,
-    //     receiver_name: '💟皮皮果最爱稻草人💟提问群',
-    //     sender_name: '多多'
-    //   }]
-    // },
     ...mapState({
       messages: state => state.message.items,
       groups: state => state.group.items
@@ -76,6 +53,9 @@ export default {
     selected (event) {
       this.time.start = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate()) / 1000)
       this.time.end = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate() + 1) / 1000)
+    },
+    action () {
+      console.log(this.$el.clientHeight)
     }
   },
   watch: {
@@ -99,15 +79,22 @@ export default {
 
 .message {
   min-height: 500px;
+  padding: 20px 10px;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
   .date-selector {
-    margin: 20px 40px 0;
+    margin-bottom: 10px;
   }
   .message-content {
-    margin: 20px 40px;
     margin-bottom: 45px;
     padding: 0 16px;
     line-height: normal;
     background-color: @main-background-color;
+    overflow-y: scroll;
     .message-line {
       font-size: 12px;
       padding: 16px 0;

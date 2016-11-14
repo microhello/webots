@@ -1,19 +1,20 @@
 <template>
   <div class="account-list">
-    <h2 class="account-list-title account-list-item">
-      <i class="iconfont">&#xe64c;</i>
-      <span>机器人</span>
-    </h2>
+    <div class="title">
+      <h2 class="title-name">机器人</h2>
+      <router-link to="/login" class="add-account" tag="span">增加账号</router-link>
+    </div>
     <ul class="account-list-list">
       <router-link
         v-for="item of accounts"
         :to="{ path: '/home/group-list', query: { uin: item.uin } }"
-        class="account-list-item clearfix"
+        class="clearfix"
         :class="{ 'active': item.uin === uin }"
         tag="li"
       >
-        <i class="iconfont" :class="item.online ? 'icon-zaixian' : 'icon-lixian'"></i>
-        <span>{{ item.nick_name }}</span>
+        <div class="status online" v-if="item.online"></div>
+        <div class="status offline" v-else></div>
+        <div class="account-name">{{ item.nick_name }}</div>
       </router-link>
     </ul>
   </div>
@@ -55,57 +56,71 @@ export default {
 @import "../assets/less/colors.less";
 
 .account-list {
-  border-right: 1px solid @main-border-color;
-  .account-list-item {
-    line-height: 35px;
-    font-size: 0;
-    i {
-      font-size: 20px;
-      float: left;
-    }
-    span {
-      font-size: 14px;
-      display: block;
-      margin-left: 30px;
-    }
-    i, span {
-      cursor: default;
-      vertical-align: top;
-    }
-  }
-  .account-list-title {
-    padding: 20px 32px 0;
-    i {
-      color: #c0c0c0;
-    }
-    span {
-      font-size: 16px;
+  .title {
+    position: relative;
+    .add-account {
+      display: inline-block;
+      width: 80px;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #fff;
+      background-color: @active-background-color;
+      border-radius: 5px;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
     }
   }
   .account-list-list {
-    .active {
-      color: #fff;
-      background-color: @active-background-color;
+    .active .account-name {
+      color: @active-background-color;
+      font-weight: bold;
     }
     li {
-      padding-left: 30%;
+      padding: 0 10px 0 30px;
+      line-height: 35px;
+      cursor: default;;
       -webkit-transition: background-color .3s;
       -moz-transition: background-color .3s;
       -ms-transition: background-color .3s;
       -o-transition: background-color .3s;
       transition: background-color .3s;
-      span {
+      &:hover {
+        color: @active-background-color;
+      }
+      div {
         -webkit-transition: color .3s;
         -moz-transition: color .3s;
         -ms-transition: color .3s;
         -o-transition: color .3s;
         transition: color .3s;
       }
-      .icon-zaixian {
-        color: @main-text-color-success;
+      .status {
+        float: left;
+        &::before {
+          color: #fff;
+          font-size: 12px;
+          text-align: center;
+          display: inline-block;
+          width: 35px;
+          height: 20px;
+          line-height: 20px;
+        }
+        &.online::before {
+          content: "在线";
+          background-color: @main-text-color-success;
+        }
+        &.offline::before {
+          content: "离线";
+          background-color: @main-text-color-failure;
+        }
       }
-      .icon-lixian {
-        color: @main-text-color-failure;
+      .account-name {
+        margin-left: 45px;
       }
     }
   }

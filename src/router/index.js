@@ -3,9 +3,9 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const Login = resolve => require(['../views/Login'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
 const GroupList = resolve => require(['../views/GroupList'], resolve)
-// const MessageList = resolve => require(['../views/MessageList'], resolve)
 const Message = resolve => require(['../views/Message'], resolve)
 
 const router = new Router({
@@ -24,6 +24,11 @@ const router = new Router({
   // },
   routes: [
     {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
       path: '/home',
       name: 'Home',
       component: Home,
@@ -41,7 +46,7 @@ const router = new Router({
       // alias: '/item', // 别名
     }, {
       path: '*',
-      redirect: '/home' // 重定向
+      redirect: '/login' // 重定向
     }
   ]
 })
