@@ -19,7 +19,7 @@
         <a
           v-for="item of dates"
           class="calendar-item"
-          :class="{ 'active': item.year + '/' + (item.month + 1) + '/' + item.date === currentDate.toLocaleDateString()}"
+          :class="{ 'active': active(item)}"
           @click="select($event, item)"
           :disabled="new Date(item.year, item.month, item.date) > today"
           :otherMonth="item.month !== calendar.month"
@@ -110,6 +110,9 @@ export default {
         this.calendar.month = 0
         this.calendar.year++
       }
+    },
+    active (item) {
+      return item.year === this.currentDate.getFullYear() && item.month === this.currentDate.getMonth() && item.date === this.currentDate.getDate()
     }
   }
 }

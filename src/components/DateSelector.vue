@@ -3,11 +3,11 @@
     <calendar class="calendar" v-if="showCalendar" :currentDate="currentDate" @selected="selected"></calendar>
     <div class="calendar-wrapper" v-if="showCalendar" @click="showCalendar = false"></div>
     <ul class="date-selector-list">
-      <li v-for="item of dates" :class="{ 'active': item === currentDate }" @click="currentDate = item">
-        {{ item.getMonth() + 1 }}-{{ item.getDate() }}
+      <li v-for="(item, index) of dates" :class="{ 'active': item === currentDate }" @click="currentDate = item" :key="item.toLocaleDateString()">
+        {{ ('0' + (item.getMonth() + 1)).slice(-2) }}-{{ ('0' + item.getDate()).slice(-2) }}
         <span v-show="now.toLocaleDateString() === item.toLocaleDateString()">今天</span>
       </li>
-      <li class="select-date">
+      <li class="select-date" key="calendar">
         <span class="label">请选择日期</span>
         <i class="iconfont" @click="showCalendar = true">&#xe674;</i>
       </li>
