@@ -13,44 +13,46 @@
       </li>
     </ul>
     <div class="date-selector-detail">
-      <!-- <a class="more" @click="showMore = true" v-if="!showMore">
+      <a class="more" @click="showMoreData" v-if="!showMore">
         更多数据<i class="iconfont">&#xe601;</i>
       </a>
-      <a class="more" @click="showMore = false" v-else>
+      <a class="more" @click="showMoreData" v-else>
         收起<i class="iconfont">&#xe630;</i>
-      </a> -->
+      </a>
       <div class="detail-row">
         <div class="label">
           今日消息总计：
         </div>
         <div class="info">{{ $store.state.message.items.length }}条</div>
       </div>
-      <hr class="detail-row" v-if="showMore" />
-      <div class="detail-row" v-if="showMore">
-        <div class="label">
-          按消息发送者：
+      <template v-if="showMore">
+        <hr class="detail-row" />
+        <div class="detail-row">
+          <div class="label">
+            按消息发送者：
+          </div>
+          <div class="info">
+            <span class="count">其他成员 0</span>
+            <span class="count">我 0</span>
+            <span class="count">系统消息 0</span>
+          </div>
         </div>
-        <div class="info">
-          <span class="count">其他成员 0</span>
-          <span class="count">我 0</span>
-          <span class="count">系统消息 0</span>
+        <div class="detail-row">
+          <div class="label">
+            按消息内容：
+          </div>
+          <div class="info">
+            <span class="count">文本 0</span>
+            <span class="count">图片 0</span>
+            <span class="count">语音 0</span>
+            <span class="count">共享名片 0</span>
+            <span class="count">分享链接 0</span>
+            <span class="count">小视频 0</span>
+            <span class="count">动画表情 0</span>
+            <span class="count">其它 0</span>
+          </div>
         </div>
-      </div>
-      <div class="detail-row" v-if="showMore">
-        <div class="label">
-          按消息内容：
-        </div>
-        <div class="info">
-          <span class="count">文本 0</span>
-          <span class="count">图片 0</span>
-          <span class="count">语音 0</span>
-          <span class="count">共享名片 0</span>
-          <span class="count">分享链接 0</span>
-          <span class="count">小视频 0</span>
-          <span class="count">动画表情 0</span>
-          <span class="count">其它 0</span>
-        </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -94,6 +96,12 @@ export default {
     selected (event) {
       this.currentDate = event
       this.showCalendar = false
+    },
+    showMoreData () {
+      this.showMore = !this.showMore
+      this.$nextTick(() => {
+        this.$emit('height-changed', this.$el.scrollHeight)
+      })
     }
   },
   watch: {
@@ -106,6 +114,7 @@ export default {
   },
   mounted () {
     this.$emit('selected', this.currentDate)
+    this.$emit('height-changed', this.$el.scrollHeight)
   }
 }
 </script>

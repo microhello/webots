@@ -2,18 +2,18 @@
   <div class="account-list">
     <div class="title">
       <h2 class="title-name">机器人</h2>
-      <router-link to="/login" class="add-account" tag="span">增加账号</router-link>
+      <span @click="addAccount" class="add-account">增加账号</span>
     </div>
-    <ul class="account-list-list">
+    <ul class="account-list-items">
       <router-link
         v-for="item of accounts"
-        :to="{ path: '/home/group-list', query: { uin: item.uin } }"
+        :to="{ path: '/home/message', query: { uin: item.uin } }"
         class="clearfix"
         :class="{ 'active': item.uin === uin }"
         tag="li"
       >
-        <div class="status online" v-if="item.online"></div>
-        <div class="status offline" v-else></div>
+        <div class="account-status online" v-if="item.online"></div>
+        <div class="account-status offline" v-else></div>
         <div class="account-name">{{ item.nick_name }}</div>
       </router-link>
     </ul>
@@ -21,7 +21,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import * as types from '../store/types'
 
 export default {
   name: 'AccountList',
@@ -30,19 +31,30 @@ export default {
       return parseInt(this.$route.query.uin)
     },
     ...mapState({
-      accounts: state => state.account.items
+      accounts: state => state.account.items,
+      tabs: state => state.tab.items
     })
   },
   methods: {
+    addAccount () {
+      this.addTab({
+        title: '增加账号',
+        value: new Date().valueOf(),
+        type: 'new-account'
+      })
+    },
     ...mapActions({
       setAccounts: 'setAccounts'
+    }),
+    ...mapMutations({
+      addTab: types.ADD_TAB
     })
   },
-  async created () {
+  async mounted () {
     await this.setAccounts()
     if (!this.uin) {
       this.$router.replace({
-        path: '/home/group-list',
+        path: '/home/message',
         query: {
           uin: this.accounts[0].uin
         }
@@ -56,6 +68,7 @@ export default {
 @import "../assets/less/colors.less";
 
 .account-list {
+  position: relative;
   .title {
     position: relative;
     .add-account {
@@ -75,53 +88,53 @@ export default {
       transform: translateY(-50%);
     }
   }
-  .account-list-list {
-    .active .account-name {
+}
+
+.account-list-items {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  .active .account-name {
+    color: @active-background-color;
+    font-weight: bold;
+  }
+  li {
+    padding: 0 10px 0 30px;
+    line-height: 35px;
+    cursor: default;;
+    &:hover {
       color: @active-background-color;
-      font-weight: bold;
     }
-    li {
-      padding: 0 10px 0 30px;
-      line-height: 35px;
-      cursor: default;;
-      -webkit-transition: background-color .3s;
-      -moz-transition: background-color .3s;
-      -ms-transition: background-color .3s;
-      -o-transition: background-color .3s;
-      transition: background-color .3s;
-      &:hover {
-        color: @active-background-color;
+    .account-status {
+      float: left;
+      &::before {
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        display: inline-block;
+        width: 35px;
+        height: 20px;
+        line-height: 20px;
       }
-      div {
-        -webkit-transition: color .3s;
-        -moz-transition: color .3s;
-        -ms-transition: color .3s;
-        -o-transition: color .3s;
-        transition: color .3s;
+      &.online::before {
+        content: "在线";
+        background-color: @main-text-color-success;
       }
-      .status {
-        float: left;
-        &::before {
-          color: #fff;
-          font-size: 12px;
-          text-align: center;
-          display: inline-block;
-          width: 35px;
-          height: 20px;
-          line-height: 20px;
-        }
-        &.online::before {
-          content: "在线";
-          background-color: @main-text-color-success;
-        }
-        &.offline::before {
-          content: "离线";
-          background-color: @main-text-color-failure;
-        }
+      &.offline::before {
+        content: "离线";
+        background-color: @main-text-color-failure;
       }
-      .account-name {
-        margin-left: 45px;
-      }
+    }
+    .account-name {
+      margin-left: 45px;
+      -webkit-transition: all .3s;
+      -moz-transition: all .3s;
+      -ms-transition: all .3s;
+      -o-transition: all .3s;
+      transition: all .3s;
     }
   }
 }

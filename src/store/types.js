@@ -10,3 +10,8 @@ export const DEL_MESSAGES = 'message/DEL_MESSAGES'
 
 // help
 export const TOGGLE_SHOWLOADING = 'help/TOGGLE_SHOWLOADING'
+
+// tab标签页
+export const ADD_TAB = 'tab/ADD_TAB'
+export const DEL_TAB = 'tab/DEL_TAB'
+export const ACTIVE = 'tab/ACTIVE'

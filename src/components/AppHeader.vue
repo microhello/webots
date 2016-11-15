@@ -2,19 +2,35 @@
   <div class="app-header">
     <h1 class="header-title">{{ title }}</h1>
     <div class="header-search">
-      <input type="text" placeholder="搜索关键词" />
-      <i class="iconfont">&#xe620;</i>
+      <input type="text" placeholder="搜索关键词" v-model="keyword" />
+      <i class="iconfont" @click="search">&#xe620;</i>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import * as types from '../store/types'
+
 export default {
   name: 'AppHeader',
   data () {
     return {
-      title: '微信群助理机器人'
+      title: '微信群助理机器人',
+      keyword: ''
     }
+  },
+  methods: {
+    search () {
+      this.addTab({
+        title: '搜索',
+        value: this.keyword,
+        type: 'search'
+      })
+    },
+    ...mapMutations({
+      addTab: types.ADD_TAB
+    })
   }
 }
 </script>

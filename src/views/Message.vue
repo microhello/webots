@@ -1,7 +1,7 @@
 <template>
-  <div class="message" @click="action">
-    <date-selector class="date-selector" @selected="selected"></date-selector>
-    <div class="message-content">
+  <div class="message">
+    <date-selector class="date-selector" @selected="selected" @height-changed="newTop"></date-selector>
+    <div class="message-content" :style="{ 'top': messageContentTop + 'px' }">
       <div class="message-line" v-for="item of messages">
         <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
         <p v-transcoding:br>{{ item.message }}</p>
@@ -22,7 +22,8 @@ export default {
       time: {
         start: null,
         end: null
-      }
+      },
+      messageContentTop: 0
     }
   },
   computed: {
@@ -39,13 +40,12 @@ export default {
       }
     },
     ...mapState({
-      messages: state => state.message.items,
-      groups: state => state.group.items
+      messages: state => state.message.items
     })
   },
   methods: {
     setMessages () {
-      if (!this.payload.uin || !this.payload.receiver_name) {
+      if (typeof this.payload.uin === 'undefined' || typeof this.payload.receiver_name === 'undefined') {
         return
       }
       this.$store.dispatch('setMessages', this.payload)
@@ -54,8 +54,8 @@ export default {
       this.time.start = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate()) / 1000)
       this.time.end = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate() + 1) / 1000)
     },
-    action () {
-      console.log(this.$el.clientHeight)
+    newTop (newVal) {
+      this.messageContentTop = newVal + 10
     }
   },
   watch: {
@@ -65,11 +65,6 @@ export default {
   },
   components: {
     DateSelector
-  },
-  created () {
-    if (this.groups.length === 0) {
-      this.$store.dispatch('setGroups', { uin: this.query.uin })
-    }
   }
 }
 </script>
@@ -79,7 +74,7 @@ export default {
 
 .message {
   min-height: 500px;
-  padding: 20px 10px;
+  margin: 20px 10px;
   position: absolute;
   top: 50px;
   right: 0;
@@ -90,11 +85,14 @@ export default {
     margin-bottom: 10px;
   }
   .message-content {
-    margin-bottom: 45px;
     padding: 0 16px;
     line-height: normal;
     background-color: @main-background-color;
     overflow-y: scroll;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
     .message-line {
       font-size: 12px;
       padding: 16px 0;

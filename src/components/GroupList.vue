@@ -53,9 +53,20 @@ export default {
   watch: {
     uin (newVal) {
       this.setGroups()
+    },
+    groups (newVal) {
+      if (typeof this.nick_name === 'undefined') {
+        this.$router.replace({
+          path: '/home/message',
+          query: {
+            uin: this.groups[0].uin,
+            nick_name: this.groups[0].nick_name
+          }
+        })
+      }
     }
   },
-  created () {
+  mounted () {
     this.setGroups()
   }
 }
@@ -65,17 +76,29 @@ export default {
 @import "../assets/less/colors.less";
 
 .group-list {
+  position: relative;
   .title {
     .count {
       color: #868686;
     }
   }
   .list-content {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
     li {
       line-height: 45px;
       padding: 0 20px;
       border-bottom: 1px solid @main-border-color;
       cursor: default;
+      -webkit-transition: all .3s;
+      -moz-transition: all .3s;
+      -ms-transition: all .3s;
+      -o-transition: all .3s;
+      transition: all .3s;
       &:hover {
         background-color: rgba(48, 135, 181, .1);
       }

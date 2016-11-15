@@ -5,7 +5,6 @@ Vue.use(Router)
 
 const Login = resolve => require(['../views/Login'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
-const GroupList = resolve => require(['../views/GroupList'], resolve)
 const Message = resolve => require(['../views/Message'], resolve)
 
 const router = new Router({
@@ -32,13 +31,8 @@ const router = new Router({
       path: '/home',
       name: 'Home',
       component: Home,
+      redirect: '/home/message',
       children: [{
-        path: '/home/group-list',
-        name: 'GroupList',
-        component: GroupList
-        // children: [], //路由嵌套，子路由
-        // alias: '/home/group-list' // 别名
-      }, {
         path: '/home/message',
         name: 'Message',
         component: Message

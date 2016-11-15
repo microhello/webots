@@ -1,7 +1,7 @@
 <template>
   <ul class="app-sidebar">
     <li>
-      <i class="iconfont">&#xe600;</i>
+      <router-link to="/login" class="iconfont" tag="i">&#xe600;</router-link>
     </li>
     <li>
       <i class="iconfont">&#xe64c;</i>
@@ -29,6 +29,7 @@ export default {
       margin: 0 auto;
       font-size: 30px;
       color: #515151;
+      cursor: default;
     }
   }
 }

@@ -1,3 +1,7 @@
 import transcoding from './Transcoding'
+import highlight from './Highlight'
 
-export { transcoding }
+export {
+  transcoding,
+  highlight
+ }

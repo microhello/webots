@@ -5,6 +5,7 @@ import help from './modules/Help'
 import account from './modules/Account'
 import group from './modules/Group'
 import message from './modules/Message'
+import tab from './modules/Tab'
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     help,
     account,
     group,
-    message
+    message,
+    tab
   }
 })

@@ -2,7 +2,7 @@
   <div class="calendar">
     <h1 class="header">
       <i class="iconfont left" @click="prevMonth">&#xe698;</i>
-      <span class="title">{{ calendar.year }}年{{ calendar.month + 1 }}月</span>
+      <span>{{ calendar.year }}年{{ calendar.month + 1 }}月</span>
       <i class="iconfont right" @click="nextMonth">&#xe607;</i>
     </h1>
     <div class="calendar-content">
@@ -123,6 +123,7 @@ export default {
 
 .calendar {
   background-color: #fff;
+  border: 1px solid rgba(153, 153, 153, 0.35);
   -webkit-box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
   -moz-box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
   box-shadow: 0px 1px 5px rgba(153, 153, 153, 0.35);
