@@ -2,7 +2,7 @@
   <div class="account-list">
     <div class="title">
       <h2 class="title-name">机器人</h2>
-      <span @click="addAccount" class="add-account">增加账号</span>
+      <span @click="addAccount" class="button add-account">增加账号</span>
     </div>
     <ul class="account-list-items">
       <router-link

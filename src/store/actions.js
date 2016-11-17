@@ -21,12 +21,18 @@ export const setGroups = async ({ commit }, payload) => {
   }
 }
 
-export const setMessages = async ({ commit }, payload) => {
-  commit(types.DEL_MESSAGES)
+export const setMessages = async ({ state, commit }, payload) => {
   try {
+    payload.offset = state.message.pageIndex * state.message.pageSize
+    payload.limit = state.message.pageSize
     let data = await Message.getMessages(payload)
+    if (data.length < state.message.pageSize) {
+      commit(types.SET_MESSAGES, { action: 'splice', items: data })
+    } else {
+      commit(types.SET_MESSAGES, { action: 'concat', items: data })
+      commit(types.NEXT_PAGE)
+    }
     console.log('success', data)
-    commit(types.SET_MESSAGES, data)
   } catch (err) {
     console.log('failure', err)
   }

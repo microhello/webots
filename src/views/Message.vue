@@ -1,17 +1,18 @@
 <template>
   <div class="message">
     <date-selector class="date-selector" @selected="selected" @height-changed="newTop"></date-selector>
-    <div class="message-content" :style="{ 'top': messageContentTop + 'px' }">
+    <div class="message-content" :style="{ 'top': messageContentTop + 'px' }" @scroll="nextPage">
       <div class="message-line" v-for="item of messages">
         <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
-        <p v-transcoding:br>{{ item.message }}</p>
+        <p v-replace="{ rgExp: /\n/g, replaceText: '<br />' }">{{ item.message }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import * as types from '../store/types'
 
 const DateSelector = resolve => require(['../components/DateSelector'], resolve)
 
@@ -56,10 +57,24 @@ export default {
     },
     newTop (newVal) {
       this.messageContentTop = newVal + 10
-    }
+    },
+    nextPage (event) {
+      let offsetHeight = event.target.offsetHeight
+      let scrollTop = event.target.scrollTop
+      let scrollHeight = event.target.scrollHeight
+      let scrollBottom = scrollHeight - scrollTop - offsetHeight
+      // console.log(scrollBottom)
+      if (scrollBottom === 0) {
+        this.setMessages()
+      }
+    },
+    ...mapMutations({
+      delMessages: types.DEL_MESSAGES
+    })
   },
   watch: {
-    payload (newVal) {
+    payload () {
+      this.delMessages()
       this.setMessages()
     }
   },

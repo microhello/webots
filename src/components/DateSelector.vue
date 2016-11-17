@@ -9,14 +9,14 @@
       </li>
       <li class="select-date" key="calendar">
         <span class="label">请选择日期</span>
-        <i class="iconfont" @click="showCalendar = true">&#xe674;</i>
+        <i class="button iconfont" @click="showCalendar = true">&#xe674;</i>
       </li>
     </ul>
     <div class="date-selector-detail">
-      <a class="more" @click="showMoreData" v-if="!showMore">
+      <a class="button more" @click="showMoreData" v-if="!showMore">
         更多数据<i class="iconfont">&#xe601;</i>
       </a>
-      <a class="more" @click="showMoreData" v-else>
+      <a class="button more" @click="showMoreData" v-else>
         收起<i class="iconfont">&#xe630;</i>
       </a>
       <div class="detail-row">
@@ -183,10 +183,6 @@ export default {
         vertical-align: text-bottom;
         color: #1296db;
         cursor: pointer;
-        -webkit-user-select:none;
-        -moz-user-select:none;
-        -ms-user-select:none;
-        user-select:none;
       }
     }
   }

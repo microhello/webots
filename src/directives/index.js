@@ -1,7 +1,7 @@
-import transcoding from './Transcoding'
+import replace from './Replace'
 import highlight from './Highlight'
 
 export {
-  transcoding,
+  replace,
   highlight
  }

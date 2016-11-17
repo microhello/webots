@@ -2,8 +2,8 @@
   <div class="app-header">
     <h1 class="header-title">{{ title }}</h1>
     <div class="header-search">
-      <input type="text" placeholder="搜索关键词" v-model="keyword" />
-      <i class="iconfont" @click="search">&#xe620;</i>
+      <input type="text" placeholder="搜索关键词" v-model="keywords" @keyup.enter="search" />
+      <i class="button iconfont" @click="search">&#xe620;</i>
     </div>
   </div>
 </template>
@@ -17,16 +17,20 @@ export default {
   data () {
     return {
       title: '微信群助理机器人',
-      keyword: ''
+      keywords: ''
     }
   },
   methods: {
     search () {
+      if (this.keywords === '') {
+        return
+      }
       this.addTab({
-        title: '搜索',
-        value: this.keyword,
+        title: '搜索：' + this.keywords,
+        value: this.keywords,
         type: 'search'
       })
+      this.keywords = ''
     },
     ...mapMutations({
       addTab: types.ADD_TAB

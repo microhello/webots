@@ -7,7 +7,7 @@
         <app-tab class="tab"></app-tab>
         <router-view class="content" v-show="tabs[0] === active"></router-view>
         <login v-for="item of NewAccountTabs" class="content" v-show="item === active" :key="item"></login>
-        <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item"></search>
+        <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@ const AppTab = resolve => require(['./components/AppTab'], resolve)
 const AppHeader = resolve => require(['./components/AppHeader'], resolve)
 const AppSidebar = resolve => require(['./components/AppSidebar'], resolve)
 const Search = resolve => require(['./components/Search'], resolve)
-const Login = resolve => require(['./views/Login'], resolve)
+const Login = resolve => require(['./components/Login'], resolve)
 
 export default {
   name: 'App',

@@ -1,7 +1,7 @@
 <template>
   <ul class="tab">
-    <li v-for="item of tabs" :class="{ 'active': active === item }" @click="setActiveTab(item)">
-      <span>{{ item.title }}</span>
+    <li v-for="item of tabs" :class="{ 'active': active === item }" @click="setActiveTab(item)" :title="item.title">
+      <p>{{ item.title }}</p>
       <i v-if="item.type !== 'root'" @click.stop="delTab(item)">x</i>
     </li>
   </ul>
@@ -20,9 +20,6 @@ export default {
     })
   },
   methods: {
-    active (value) {
-      this.$emit('active', value)
-    },
     ...mapMutations({
       delTab: types.DEL_TAB,
       setActiveTab: types.ACTIVE
@@ -39,11 +36,14 @@ export default {
   line-height: 40px;
   overflow-y: hidden;
   font-size: 0;
+  display: -webkit-flex;
+  display: flex;
   li {
+    flex-basis: 150px;
+    max-width: 150px;
     font-size: 14px;
     display: inline-block;
     vertical-align: top;
-    width: 150px;
     text-align: center;
     cursor: default;
     background-color: #d7d7d7;
@@ -63,8 +63,12 @@ export default {
         opacity: 1;
       }
     }
-    span {
-      display: block;
+    p {
+      padding-right: 20px;
+      word-break: keep-all;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     i {
       font-style: normal;
