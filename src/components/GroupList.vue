@@ -7,7 +7,7 @@
     <ul class="list-content">
       <router-link
         v-for="item of groups"
-        :to="{ path: '/home/message', query: { uin: item.uin, nick_name: item.nick_name } }"
+        :to="{ path: '/home/messages', query: { uin: item.uin, nick_name: item.nick_name } }"
         :class="{ 'active': item.nick_name === nick_name }"
         tag="li"
       >
@@ -57,7 +57,7 @@ export default {
     groups (newVal) {
       if (typeof this.nick_name === 'undefined') {
         this.$router.replace({
-          path: '/home/message',
+          path: '/home/messages',
           query: {
             uin: this.groups[0].uin,
             nick_name: this.groups[0].nick_name

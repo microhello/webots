@@ -7,7 +7,7 @@
     <ul class="account-list-items">
       <router-link
         v-for="item of accounts"
-        :to="{ path: '/home/message', query: { uin: item.uin } }"
+        :to="{ path: '/home/messages', query: { uin: item.uin } }"
         class="clearfix"
         :class="{ 'active': item.uin === uin }"
         tag="li"
@@ -54,7 +54,7 @@ export default {
     await this.setAccounts()
     if (!this.uin) {
       this.$router.replace({
-        path: '/home/message',
+        path: '/home/messages',
         query: {
           uin: this.accounts[0].uin
         }

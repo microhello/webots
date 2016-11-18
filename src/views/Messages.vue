@@ -1,10 +1,10 @@
 <template>
-  <div class="message">
+  <div class="messages">
     <date-selector class="date-selector" @selected="selected" @height-changed="newTop"></date-selector>
     <div class="message-content" :style="{ 'top': messageContentTop + 'px' }" @scroll="nextPage">
       <div class="message-line" v-for="item of messages">
         <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
-        <p v-replace="{ rgExp: /\n/g, replaceText: '<br />' }">{{ item.message }}</p>
+        <message :message="item.message"></message>
       </div>
     </div>
   </div>
@@ -15,9 +15,10 @@ import { mapState, mapMutations } from 'vuex'
 import * as types from '../store/types'
 
 const DateSelector = resolve => require(['../components/DateSelector'], resolve)
+const Message = resolve => require(['../components/Message'], resolve)
 
 export default {
-  name: 'Message',
+  name: 'Messages',
   data () {
     return {
       time: {
@@ -64,7 +65,7 @@ export default {
       let scrollHeight = event.target.scrollHeight
       let scrollBottom = scrollHeight - scrollTop - offsetHeight
       // console.log(scrollBottom)
-      if (scrollBottom === 0) {
+      if (scrollBottom === 0 && scrollTop !== 0) {
         this.setMessages()
       }
     },
@@ -79,7 +80,8 @@ export default {
     }
   },
   components: {
-    DateSelector
+    DateSelector,
+    Message
   }
 }
 </script>
@@ -87,7 +89,7 @@ export default {
 <style lang="less">
 @import "../assets/less/colors.less";
 
-.message {
+.messages {
   min-height: 500px;
   margin: 20px 10px;
   position: absolute;

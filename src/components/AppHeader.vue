@@ -2,7 +2,7 @@
   <div class="app-header">
     <h1 class="header-title">{{ title }}</h1>
     <div class="header-search">
-      <input type="text" placeholder="搜索关键词" v-model="keywords" @keyup.enter="search" />
+      <input type="text" name="keywords" placeholder="搜索关键词：多个关键词使用“+”或“,”分隔" v-model="keywords" @keyup.enter="search" />
       <i class="button iconfont" @click="search">&#xe620;</i>
     </div>
   </div>
@@ -22,7 +22,8 @@ export default {
   },
   methods: {
     search () {
-      if (this.keywords === '') {
+      this.keywords = this.keywords.replace(/^[+,]+|[+,]+$/g, '').replace(/[+,]{2,}/g, $ => $[0])
+      if (this.keywords === '' || this.$route.name === 'Login') {
         return
       }
       this.addTab({
@@ -57,12 +58,13 @@ export default {
     vertical-align: middle;
     position: relative;
     input[type=text] {
+      width: 300px;
       height: 30px;
       border: 1px solid @main-border-color;
       border-radius: 15px;
       background-color: @main-background-color;
       outline: 0;
-      padding: 0 45px 0 15px;
+      padding: 0 40px 0 15px;
     }
     i {
       color: #707070;

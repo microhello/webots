@@ -30,6 +30,9 @@ export default {
   },
   methods: {
     addAccount () {
+      if (this.$route.name === 'Login') {
+        return
+      }
       this.addTab({
         title: '增加账号',
         value: new Date().valueOf(),

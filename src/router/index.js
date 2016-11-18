@@ -5,7 +5,7 @@ Vue.use(Router)
 
 const Login = resolve => require(['../components/Login'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
-const Message = resolve => require(['../views/Message'], resolve)
+const Messages = resolve => require(['../views/Messages'], resolve)
 
 const router = new Router({
   // mode: 'history',
@@ -31,11 +31,11 @@ const router = new Router({
       path: '/home',
       name: 'Home',
       component: Home,
-      redirect: '/home/message',
+      redirect: '/home/messages',
       children: [{
-        path: '/home/message',
-        name: 'Message',
-        component: Message
+        path: '/home/messages',
+        name: 'Messages',
+        component: Messages
       }]
       // alias: '/item', // 别名
     }, {

@@ -13,15 +13,15 @@
       </li>
     </ul>
     <div class="date-selector-detail">
-      <a class="button more" @click="showMoreData" v-if="!showMore">
+      <!-- <a class="button more" @click="showMoreData" v-if="!showMore">
         更多数据<i class="iconfont">&#xe601;</i>
       </a>
       <a class="button more" @click="showMoreData" v-else>
         收起<i class="iconfont">&#xe630;</i>
-      </a>
+      </a> -->
       <div class="detail-row">
         <div class="label">
-          今日消息总计：
+          已经显示消息：
         </div>
         <div class="info">{{ $store.state.message.items.length }}条</div>
       </div>

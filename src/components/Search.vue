@@ -27,22 +27,23 @@
       <div class="title">
         <h2 class="title-name">搜索"<span :title="keywords">{{ keywords }}</span>"</h2>
       </div>
-      <ul class="search-results" @scroll="nextPage" v-if="messages.length">
-        <li class="search-results-item" v-for="item of messages">
-          <p class="result-name">{{ item.sender_name }}：</p>
-          <p class="result-message" v-replace="{ rgExp: /\n/g, replaceText: '<br />' }" v-highlight="keywords">{{ item.message }}</p>
-          <p class="result-time">{{ item.create_time | formatDate }}</p>
-        </li>
-      </ul>
-      <div class="search-results" v-else>
-        <p class="no-result">没有找到与"<mark>{{ keywords }}</mark>"相关的消息</p>
+      <div class="search-results-wrapper">
+        <ul class="search-results" v-if="messages.length" @scroll="nextPage">
+          <li class="search-results-item" v-for="item of messages">
+            <p class="result-item result-name">{{ item.sender_name }}：</p>
+            <message class="result-item result-message" :message="item.message" :keyword="keywords"></message>
+            <p class="result-item result-time">{{ item.create_time | formatDate }}</p>
+          </li>
+        </ul>
+        <p class="no-result" v-else>没有找到与"<mark>{{ keywords }}</mark>"相关的消息</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Message } from '../api'
+import { Message as MessageApi } from '../api'
+const Message = resolve => require(['./Message'], resolve)
 
 export default {
   name: 'Search',
@@ -56,13 +57,11 @@ export default {
       pageSize: 10
     }
   },
-  computed: {
-  },
   methods: {
     async search () {
       try {
         let offset = this.pageIndex * this.pageSize
-        let data = await Message.getMessages({ keywords: this.keywords, offset: offset, limit: this.pageSize })
+        let data = await MessageApi.getMessages({ keywords: this.keywords, offset: offset, limit: this.pageSize })
         if (data.length < this.pageSize) {
           this.messages.splice(offset, this.pageSize, ...data)
         } else {
@@ -84,6 +83,9 @@ export default {
         this.search()
       }
     }
+  },
+  components: {
+    Message
   },
   mounted () {
     this.search()
@@ -144,28 +146,31 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .search-results {
+    .search-results-wrapper {
       position: absolute;
       top: 50px;
       right: 0;
       bottom: 0;
       left: 0;
-      overflow-y: auto;
-      .search-results-item {
-        padding: 15px 30px;
-        border-bottom: 1px solid @main-border-color;
-        font-size: 12px;
-        p {
-          margin-bottom: 10px;
-          &:last-child {
-            margin-bottom: 0;
+      .search-results {
+        overflow-y: auto;
+        height: 100%;
+        .search-results-item {
+          padding: 15px 30px;
+          border-bottom: 1px solid @main-border-color;
+          font-size: 12px;
+          .result-item {
+            margin-bottom: 10px;
+            &:last-child {
+              margin-bottom: 0;
+            }
           }
-        }
-        .result-name {
-          color: @active-background-color;
-        }
-        .result-time {
-          color: #a1a1a1;
+          .result-name {
+            color: @active-background-color;
+          }
+          .result-time {
+            color: #a1a1a1;
+          }
         }
       }
       .no-result {

@@ -1,7 +1,4 @@
-import replace from './Replace'
-import highlight from './Highlight'
+// import wrap from './Wrap'
+// import highlight from './Highlight'
 
-export {
-  replace,
-  highlight
- }
+export {}
