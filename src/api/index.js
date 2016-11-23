@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import User from './User'
 import Account from './Account'
 import Group from './Group'
 import Message from './Message'
@@ -19,5 +20,6 @@ Vue.http.interceptors.push((request, next) => {
 export {
   Account,
   Group,
-  Message
+  Message,
+  User
 }

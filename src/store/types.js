@@ -1,5 +1,5 @@
 // account微信账号（机器人）
-export const SET_ACCOUNTS = 'account/SET_ACCOUNTS'
+export const SET_ACCOUNTS = Symbol('account/SET_ACCOUNTS')
 
 // group微信群
 export const SET_GROUPS = 'group/SET_GROUPS'
@@ -16,3 +16,6 @@ export const TOGGLE_SHOWLOADING = 'help/TOGGLE_SHOWLOADING'
 export const ADD_TAB = 'tab/ADD_TAB'
 export const DEL_TAB = 'tab/DEL_TAB'
 export const ACTIVE = 'tab/ACTIVE'
+
+// user
+export const REGISTER = Symbol('user/REGISTER')

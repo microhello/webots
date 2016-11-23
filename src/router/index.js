@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const HomePage = resolve => require(['../views/HomePage'], resolve)
 const Login = resolve => require(['../components/Login'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
 const Messages = resolve => require(['../views/Messages'], resolve)
@@ -21,28 +22,29 @@ const router = new Router({
   //     y: 0
   //   }
   // },
-  routes: [
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/home',
-      name: 'Home',
-      component: Home,
-      redirect: '/home/messages',
-      children: [{
-        path: '/home/messages',
-        name: 'Messages',
-        component: Messages
-      }]
-      // alias: '/item', // 别名
-    }, {
-      path: '*',
-      redirect: '/login' // 重定向
-    }
-  ]
+  routes: [{
+    path: '/homepage',
+    name: 'HomePage',
+    component: HomePage
+  }, {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  }, {
+    path: '/home',
+    name: 'Home',
+    component: Home,
+    redirect: '/home/messages',
+    children: [{
+      path: '/home/messages',
+      name: 'Messages',
+      component: Messages
+    }]
+    // alias: '/item', // 别名
+  }, {
+    path: '*',
+    redirect: '/homepage' // 重定向
+  }]
 })
 
 router.beforeEach((to, from, next) => {

@@ -1,63 +1,12 @@
 <template>
   <div id="app">
-    <app-header class="app-header"></app-header>
-    <div class="main clearfix">
-      <app-sidebar class="app-sidebar"></app-sidebar>
-      <div class="wrapper">
-        <app-tab class="tab"></app-tab>
-        <router-view class="content" v-show="tabs[0] === active"></router-view>
-        <login v-for="item of NewAccountTabs" class="content" v-show="item === active" :key="item"></login>
-        <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
-      </div>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import * as types from './store/types'
-
-const AppTab = resolve => require(['./components/AppTab'], resolve)
-const AppHeader = resolve => require(['./components/AppHeader'], resolve)
-const AppSidebar = resolve => require(['./components/AppSidebar'], resolve)
-const Search = resolve => require(['./components/Search'], resolve)
-const Login = resolve => require(['./components/Login'], resolve)
-
 export default {
-  name: 'App',
-  computed: {
-    NewAccountTabs () {
-      return this.tabs.filter(item => item.type === 'new-account')
-    },
-    SearchTabs () {
-      return this.tabs.filter(item => item.type === 'search')
-    },
-    ...mapState({
-      tabs: state => state.tab.items,
-      active: state => state.tab.active
-    })
-  },
-  methods: {
-    ...mapMutations({
-      addTab: types.ADD_TAB,
-      setActiveTab: types.ACTIVE
-    })
-  },
-  components: {
-    AppHeader,
-    AppSidebar,
-    AppTab,
-    Login,
-    Search
-  },
-  mounted () {
-    this.addTab({
-      title: '机器人',
-      value: 'root',
-      type: 'root'
-    })
-    this.setActiveTab(this.tabs[0])
-  }
+  name: 'App'
 }
 </script>
 

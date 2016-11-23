@@ -1,0 +1,364 @@
+<template>
+  <div class="homepage">
+    <div class="header">
+      <img class="background unselectable" src="../assets/image/background/02.png" />
+      <div class="header-content">
+        <ul class="nav">
+          <li>
+            <img src="../assets/image/logo/01.png" />
+          </li>
+          <li class="pull-right">
+            <a class="unselectable">登录</a>
+          </li>
+        </ul>
+        <div class="title-wrapper">
+          <div class="title">
+            <h1>智能群管理助手，高效社群运营助推器</h1>
+            <a class="join-button unselectable">申请试用</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-item function">
+        <h2>为社群运营人员提供智能群管理服务</h2>
+        <h3>将<em>智能助理</em>引入微信群，简化社群运营，提升运营效率</h3>
+        <div class="function-box">
+          <div class="function-box-item img-box">
+            <img src="../assets/image/common/01.png" />
+          </div>
+          <ul class="function-box-item function-list">
+            <li>
+              <label>多账户</label>
+              <p>多账号，多群整合为一</p>
+            </li>
+            <li>
+              <label>群消息</label>
+              <p>海量群消息结构化管理，统计与分析</p>
+            </li>
+            <li>
+              <label>群值守</label>
+              <p>关键字监控，有效消息留存，短信提醒</p>
+            </li>
+            <li>
+              <label>拉群帮</label>
+              <p>设定拉群策略，自助拉群</p>
+            </li>
+            <li>
+              <label>群客服</label>
+              <p>消息模板，智能聊天，工单管理</p>
+            </li>
+            <li>
+              <label>群营销</label>
+              <p>客户分析，需求捕获，策略群发，内容自动投放</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-item service">
+        <div class="service-item">
+          <i class="iconfont">&#xe63c;</i>
+          <h2>群运营</h2>
+          <p>智能助理将用户加为好友</p>
+          <p>自动拉用户进入指定群</p>
+          <p>通讯录好友，群成员数据统计与分析</p>
+          <p>服务/产品内容投放</p>
+          <p>群记录保存，内容沉淀，运营效果分析</p>
+        </div>
+        <div class="service-item">
+          <i class="iconfont">&#xe611;</i>
+          <h2>群客服</h2>
+          <p>设定消息模板和关键词，智能客服自动答复</p>
+          <p>智能客服加用户为通讯录好友，私聊</p>
+          <p>对于群内不合规行为，设定智能客服监管</p>
+          <p>工单系统</p>
+        </div>
+        <div class="service-item">
+          <i class="iconfont">&#xe62e;</i>
+          <h2>群营销</h2>
+          <p>群消息记录分类保存，结构化管理</p>
+          <p>根据分析结果分类用户群，投放广告</p>
+          <p>群值守，设定关键词，在线与短信提醒</p>
+          <p>有效消息留存，定位消息用户，完成销售行为</p>
+        </div>
+      </div>
+      <div class="content-item join">
+        <h2>现在选择群喵，让你的运营更简单，高效</h2>
+        <a class="join-button unselectable">立即体验</a>
+      </div>
+    </div>
+    <ul class="footer">
+      <li>联系我们</li>
+      <li>在线咨询： 209736950</li>
+      <li>手机： 13162502127</li>
+      <li>邮箱： service@wemiyun.com</li>
+    </ul>
+    <ul class="float-navi">
+      <li>
+        <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2183133171&site=qq&menu=yes">
+          <i class="iconfont">&#xe629;</i>
+          <p>在线咨询</p>
+        </a>
+      </li>
+      <li>
+        <i class="iconfont">&#xe602;</i>
+        <p>电话咨询</p>
+      </li>
+      <li>
+        <i class="iconfont">&#xe67a;</i>
+        <p>申请试用</p>
+      </li>
+      <li>
+        <a @click="goTop">
+          <i class="iconfont">&#xe653;</i>
+          <p>返回顶部</p>
+        </a>
+      </li>
+    </ul>
+    <div class="modal">
+
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HomePage',
+  methods: {
+    goTop () {
+      window.scrollTo(0, 0)
+    }
+  }
+}
+</script>
+
+<style lang="less">
+@import "../assets/less/colors.less";
+
+.homepage {
+  @label-color: #187be0;
+  @padding_left_and_right: 100%/6;
+  .join-button {
+    font-size: 16px;
+    display: inline-block;
+    width: 140px;
+    line-height: 50px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  .header {
+    position: relative;
+    font-size: 0;
+    max-height: 600px;
+    overflow: hidden;
+    .background {
+      width: 100%;
+    }
+    .header-content {
+      position: absolute;
+      top: 0;
+      right: @padding_left_and_right;
+      bottom: 0;
+      left: @padding_left_and_right;
+      .nav {
+        height: 90px;
+        line-height: 90px;
+        font-size: 0;
+        li {
+          font-size: 14px;
+          display: inline-block;
+          img {
+            height: 35px;
+            vertical-align: middle;
+          }
+          a {
+            color: #fff;
+            background-color: transparent;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            display: inline-block;
+            width: 90px;
+            line-height: 35px;
+            text-align: center;
+            vertical-align: middle;
+          }
+        }
+      }
+      .title-wrapper {
+        position: absolute;
+        top: 90px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        text-align: center;
+        .title {
+          position: absolute;
+          top: 50%;
+          right: 0;
+          left: 0;
+          transform: translateY(-50%);
+          h1 {
+            color: #fff;
+            font-size: 42px;
+            margin-bottom: 10%;
+          }
+        }
+      }
+    }
+  }
+  .content {
+    .content-item {
+      padding: 0 @padding_left_and_right;
+    }
+    .function {
+      background-color: #fff;
+      padding-top: 120px;
+      padding-bottom: 120px;
+      h2 {
+        font-size: 28px;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      h3 {
+        font-size: 14px;
+        text-align: center;
+        color: #45525b;
+        em {
+          color: @label-color;
+          font-style: normal;
+        }
+      }
+      .function-box {
+        margin-top: 20px;
+        display: -webkit-flex;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        .function-box-item {
+          flex-basis: 40%;
+        }
+        .img-box {
+          img {
+            width: 100%;
+            max-width: 400px;
+          }
+        }
+        .function-list {
+          font-size: 16px;
+          li {
+            margin-bottom: 10px;
+            &:last-of-type {
+              margin-bottom: 0;
+            }
+            label {
+              width: 65px;
+              float: left;
+              color: @label-color;
+            }
+            p {
+              margin-left: 65px;
+            }
+          }
+        }
+      }
+    }
+    .service {
+      padding-top: 50px;
+      padding-bottom: 50px;
+      background-color: #ececec;
+      font-size: 0;
+      .service-item {
+        display: inline-block;
+        width: 33.33333%;
+        vertical-align: top;
+        text-align: center;
+        padding: 0 20px;
+        i {
+          display: inline-block;
+          width: 120px;
+          height: 120px;
+          line-height: 120px;
+          border-radius: 50%;
+          font-size: 60px;
+          color: #fff;
+          background-color: @label-color;
+          margin-bottom: 20px;
+        }
+        h2 {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 25px;
+        }
+        p {
+          font-size: 14px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .join {
+      padding-top: 75px;
+      padding-bottom: 75px;
+      background-image: url(../assets/image/background/03.png);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      text-align: center;
+      h2 {
+        color: #fff;
+        font-size: 24px;
+        margin-bottom: 35px;
+      }
+      .join-button {
+        line-height: 50px;
+      }
+    }
+  }
+  .footer {
+    color: #fff;
+    background-color: #485359;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0;
+    li {
+      font-size: 14px;
+      display: inline-block;
+      margin-right: 20px;
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+  .float-navi {
+    position: fixed;
+    right: 0;
+    bottom: 20%;
+    width: 70px;
+    li {
+      margin-bottom: 5px;
+      color: #fff;
+      width: 70px;
+      text-align: center;
+      background-color: rgba(0, 0, 0, .3);
+      cursor: default;
+      transition: background-color .3s;
+      a {
+        color: #fff;
+        display: block;
+      }
+      i {
+        font-size: 28px;
+        display: inline-block;
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+      p {
+        font-size: 12px;
+        padding-bottom: 20px;
+      }
+    }
+    li:hover {
+      background-color: @label-color;
+    }
+  }
+}
+</style>

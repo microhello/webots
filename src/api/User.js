@@ -3,8 +3,12 @@ import Vue from 'vue'
 const urlPrefix = 'http://neituiyun.com'
 const urlPort = ':1000'
 const urlDict = {
-  // 微信账号（机器人）列表
-  getAccounts: '/wx/accounts'
+  // 注册
+  register: '/wx/auth/register',
+  // 登录
+  login: '/wx/auth/login',
+  // 登出
+  logout: '/wx/auth/logout'
 }
 const methodDict = {
   get: 'GET',
@@ -14,13 +18,14 @@ const methodDict = {
 }
 
 export default {
-  getAccounts ({ access_token }) {
+  rigister ({ phone, password }) {
     return new Promise((resolve, reject) => {
       Vue.http({
-        url: urlPrefix + urlPort + urlDict.getAccounts,
-        method: methodDict.get,
-        params: {
-          access_token: access_token
+        url: urlPrefix + urlPort + urlDict.register,
+        method: methodDict.post,
+        data: {
+          phone: phone,
+          password: password
         }
       }).then(response => {
         if (response.status === 200 || response.status === 204 || response.status === 201) {

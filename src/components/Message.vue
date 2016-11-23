@@ -1,5 +1,5 @@
 <template>
-  <div class="message" @click="console">
+  <div class="message">
     <p v-for="item in messages" v-html="highLight(item)"></p>
   </div>
 </template>
@@ -25,9 +25,6 @@ export default {
     }
   },
   methods: {
-    console () {
-      console.log(this.messages, this.keywords)
-    },
     highLight (text) {
       let replaceCode = {
         '<': '&lt;',

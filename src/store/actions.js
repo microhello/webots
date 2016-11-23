@@ -1,9 +1,9 @@
 import * as types from './types'
-import { Account, Group, Message } from '../api'
+import { Account, Group, Message, User } from '../api'
 
-export const setAccounts = async ({ commit }) => {
+export const setAccounts = async ({ state, commit }) => {
   try {
-    let data = await Account.getAccounts()
+    let data = await Account.getAccounts({ access_token: state.user.accessToken })
     console.log('success', data)
     commit(types.SET_ACCOUNTS, data)
   } catch (err) {
@@ -33,6 +33,16 @@ export const setMessages = async ({ state, commit }, payload) => {
       commit(types.NEXT_PAGE)
     }
     console.log('success', data)
+  } catch (err) {
+    console.log('failure', err)
+  }
+}
+
+export const register = async ({ commit }, payload) => {
+  try {
+    let data = await User.register(payload)
+    console.log('success', data)
+    commit(types.register, data)
   } catch (err) {
     console.log('failure', err)
   }
