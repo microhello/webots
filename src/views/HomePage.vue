@@ -8,13 +8,13 @@
             <img src="../assets/image/logo/01.png" />
           </li>
           <li class="pull-right">
-            <a class="unselectable">登录</a>
+            <router-link to="/login" class="unselectable">登录</router-link>
           </li>
         </ul>
         <div class="title-wrapper">
           <div class="title">
             <h1>智能群管理助手，高效社群运营助推器</h1>
-            <a class="join-button unselectable">申请试用</a>
+            <a class="join-button unselectable" @click="toggleModal">申请试用</a>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@
       </div>
       <div class="content-item join">
         <h2>现在选择群喵，让你的运营更简单，高效</h2>
-        <a class="join-button unselectable">立即体验</a>
+        <a class="join-button unselectable" @click="toggleModal">立即体验</a>
       </div>
     </div>
     <ul class="footer">
@@ -100,13 +100,18 @@
           <p>在线咨询</p>
         </a>
       </li>
-      <li>
-        <i class="iconfont">&#xe602;</i>
-        <p>电话咨询</p>
+      <li class="phone">
+        <a>
+          <i class="iconfont">&#xe602;</i>
+          <p>电话咨询</p>
+        </a>
+        <span>13162502127</span>
       </li>
       <li>
-        <i class="iconfont">&#xe67a;</i>
-        <p>申请试用</p>
+        <a @click="toggleModal">
+          <i class="iconfont">&#xe67a;</i>
+          <p>申请试用</p>
+        </a>
       </li>
       <li>
         <a @click="goTop">
@@ -115,19 +120,82 @@
         </a>
       </li>
     </ul>
-    <div class="modal">
-
+    <div class="modal" v-if="showModal">
+      <div class="backdrop" @click="toggleModal"></div>
+      <div class="dialog">
+        <div class="dialog-header">申请试用<i class="iconfont" @click="toggleModal">&#xe652;</i></div>
+        <div class="dialog-body">
+          <h1>请填写以下信息：</h1>
+          <div class="form-line">
+            <label>姓名：</label>
+            <input type="text" v-model.trim="trialForm.name" />
+          </div>
+          <div class="form-line">
+            <label>手机：</label>
+            <input type="text" v-model.trim="trialForm.phone" />
+          </div>
+        </div>
+        <div class="dialog-footer">
+          <a class="unselectable" @click="submit">立即申请</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
+import * as types from '../store/types'
+
 export default {
   name: 'HomePage',
+  data () {
+    return {
+      showModal: false,
+      trialForm: {
+        name: '',
+        phone: ''
+      }
+    }
+  },
   methods: {
     goTop () {
       window.scrollTo(0, 0)
-    }
+    },
+    toggleModal () {
+      this.showModal = !this.showModal
+      if (!this.showModal) {
+        this.trialForm.name = ''
+        this.trialForm.phone = ''
+      }
+    },
+    async submit () {
+      if (!this.trialForm.name || !this.trialForm.phone) {
+        this.addALertMessage({
+          type: 'error',
+          message: '请填写申请信息'
+        })
+        return
+      }
+      let message = await this.trial(this.trialForm)
+      if (message === 'success') {
+        this.addALertMessage({
+          type: 'success',
+          message: '提交成功'
+        })
+      } else {
+        this.addALertMessage({
+          type: 'error',
+          message: message
+        })
+        return
+      }
+      this.toggleModal()
+    },
+    ...mapMutations({
+      addALertMessage: types.ADD_ALERT_MESSAGE
+    }),
+    ...mapActions(['trial'])
   }
 }
 </script>
@@ -332,18 +400,24 @@ export default {
     position: fixed;
     right: 0;
     bottom: 20%;
-    width: 70px;
     li {
       margin-bottom: 5px;
       color: #fff;
-      width: 70px;
+      width: 100%;
+      height: 100px;
       text-align: center;
-      background-color: rgba(0, 0, 0, .3);
-      cursor: default;
-      transition: background-color .3s;
+      overflow: hidden;
       a {
         color: #fff;
-        display: block;
+        display: inline-block;
+        width: 70px;
+        height: 100px;
+        float: right;
+        background-color: rgba(0, 0, 0, .3);
+        transition: background-color .3s;
+        &:hover {
+          background-color: #2e8ded;
+        }
       }
       i {
         font-size: 28px;
@@ -355,9 +429,99 @@ export default {
         font-size: 12px;
         padding-bottom: 20px;
       }
+      &.phone {
+        width: 70px;
+        transition: all .3s;
+        background-color: rgba(0, 0, 0, .3);
+        cursor: default;
+        a {
+          cursor: default;
+          background-color: transparent;
+        }
+        span {
+          display: inline-block;
+          width: 130px;
+          height: 100px;
+          line-height: 100px;
+        }
+        &:hover {
+          width: 200px;
+          background-color: #2e8ded;
+        }
+      }
     }
-    li:hover {
-      background-color: @label-color;
+  }
+  .modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100000;
+    .backdrop {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .3);
+    }
+    .dialog {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 100001;
+      transform: translate(-50%, -50%);
+      width: 450px;
+      height: 300px;
+      background-color: #fff;
+      box-shadow: 1px 1px 50px rgba(0, 0, 0, .3);
+      .dialog-header {
+        padding: 0 20px;
+        height: 42px;
+        line-height: 42px;
+        border-bottom: 1px solid #eee;
+        background-color: #F8F8F8;
+        i {
+          float: right;
+          cursor: pointer;
+        }
+      }
+      .dialog-body {
+        padding: 20px;
+        line-height: 24px;
+        h1 {
+          font-size: 14px;
+        }
+        .form-line {
+          margin-top: 20px;
+          line-height: 35px;
+          label {
+            display: inline-block;
+            vertical-align: middle;
+            float: left;
+            width: 100px;
+            text-align: right;
+            padding-right: 20px;
+          }
+          input[type=text] {
+            display: inline-block;
+            vertical-align: middle;
+            padding: 5px;
+            width: 240px;
+          }
+        }
+      }
+      .dialog-footer {
+        padding: 20px;
+        text-align: right;
+        a {
+          display: inline-block;
+          height: 28px;
+          line-height: 28px;
+          padding: 0 15px;
+          color: #fff;
+          background-color: #2e8ded;
+          margin-right: 40px;
+        }
+      }
     }
   }
 }

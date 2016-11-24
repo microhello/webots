@@ -4,7 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const HomePage = resolve => require(['../views/HomePage'], resolve)
-const Login = resolve => require(['../components/Login'], resolve)
+const Login = resolve => require(['../views/Login'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
 const Messages = resolve => require(['../views/Messages'], resolve)
 

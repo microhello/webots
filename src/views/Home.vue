@@ -6,8 +6,7 @@
       <div class="wrapper">
         <app-tab class="tab"></app-tab>
         <div class="content" v-show="tabs[0] === active">
-          <account-list class="side-bar"></account-list>
-          <group-list class="side-bar group-list"></group-list>
+          <group-list class="side-bar"></group-list>
           <div class="side-content">
             <ul class="title nav">
               <li>
@@ -36,7 +35,6 @@ const AppHeader = resolve => require(['../components/AppHeader'], resolve)
 const AppSidebar = resolve => require(['../components/AppSidebar'], resolve)
 const Search = resolve => require(['../components/Search'], resolve)
 const Login = resolve => require(['../components/Login'], resolve)
-const AccountList = resolve => require(['../components/AccountList'], resolve)
 const GroupList = resolve => require(['../components/GroupList'], resolve)
 
 export default {
@@ -65,7 +63,6 @@ export default {
     AppTab,
     Login,
     Search,
-    AccountList,
     GroupList
   },
   mounted () {
@@ -83,7 +80,43 @@ export default {
 @import "../assets/less/colors.less";
 
 .home {
-  background: #fff;
+  .app-header {
+    box-shadow: 0 0 2px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #d4d4d4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+  }
+  .main {
+    position: absolute;
+    top: 62px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: @main-background-color;
+    .app-sidebar {
+      background-color: #e7e7e7;
+      width: 60px;
+      height: 100%;
+      line-height: 60px;
+      float: left;
+    }
+    .wrapper {
+      height: 100%;
+      margin-left: 60px;
+      position: relative;
+      .content {
+        background-color: #fff;
+        position: absolute;
+        top: 40px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
   .title {
     height: 50px;
     line-height: 50px;
@@ -98,12 +131,12 @@ export default {
 
   .side-bar {
     float: left;
-    width: 200px;
+    width: 300px;
     height: 100%;
     border-right: 1px solid @main-border-color;
   }
   .side-content {
-    margin-left: 490px;
+    margin-left: 300px;
     height: 100%;
     position: relative;
     .nav {
@@ -116,9 +149,6 @@ export default {
         }
       }
     }
-  }
-  .group-list {
-    width: 290px;
   }
 }
 </style>

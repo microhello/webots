@@ -1,7 +1,8 @@
 import * as types from '../types'
 
 const state = {
-  showLoading: 0
+  showLoading: 0,
+  messages: []
 }
 
 const mutations = {
@@ -14,6 +15,12 @@ const mutations = {
     } else {
       state.showLoading--
     }
+  },
+  [types.ADD_ALERT_MESSAGE] ({ messages }, message) {
+    messages.push(message)
+    setTimeout(() => {
+      messages.splice(messages.indexOf(message), 1)
+    }, 3000)
   }
 }
 

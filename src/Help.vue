@@ -1,6 +1,7 @@
 <template>
   <div id="help">
     <loading v-if="showLoading"></loading>
+    <alert></alert>
   </div>
 </template>
 
@@ -8,6 +9,7 @@
 import { mapState } from 'vuex'
 
 const Loading = resolve => require(['./components/Loading'], resolve)
+const Alert = resolve => require(['./components/Alert'], resolve)
 
 export default {
   name: 'Help',
@@ -17,7 +19,8 @@ export default {
     })
   },
   components: {
-    Loading
+    Loading,
+    Alert
   }
 }
 </script>

@@ -1,12 +1,18 @@
 import * as types from '../types'
 
 const state = {
-  items: []
+  count: 0,
+  items: [],
+  offset: 0,
+  limit: 0
 }
 
 const mutations = {
   [types.SET_ACCOUNTS] (state, data) {
-    state.items = data
+    state.count = data.count
+    state.items = data.items
+    state.offset = data.offset
+    state.limit = data.limit
   }
 }
 

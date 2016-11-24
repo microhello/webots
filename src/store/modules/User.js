@@ -1,12 +1,12 @@
 import * as types from '../types'
 
 const state = {
-  accessToken: null
+  token: ''
 }
 
 const mutations = {
-  [types.SET_ACCOUNTS] (state, data) {
-    state.items = data
+  [types.LOGIN] (state, data) {
+    state.token = data.token
   }
 }
 

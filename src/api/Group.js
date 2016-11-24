@@ -14,12 +14,13 @@ const methodDict = {
 }
 
 export default {
-  getGroups ({ uin }) {
+  getGroups ({ uin, access_token }) {
     return new Promise((resolve, reject) => {
       Vue.http({
         url: urlPrefix + urlPort + urlDict.getGroups,
         method: methodDict.get,
         params: {
+          access_token: access_token,
           uin: uin
         }
       }).then(response => {
