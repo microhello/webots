@@ -39,8 +39,8 @@ export default {
   data () {
     return {
       loginForm: {
-        phone: '1863333333',
-        password: 'qm00001'
+        phone: '',
+        password: ''
       }
     }
   },
@@ -60,7 +60,7 @@ export default {
           message: '登录成功'
         })
         this.$router.push({
-          path: '/home'
+          path: '/main'
         })
       } else {
         this.addALertMessage({

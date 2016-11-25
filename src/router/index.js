@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 
 Vue.use(Router)
 
 const HomePage = resolve => require(['../views/HomePage'], resolve)
 const Login = resolve => require(['../views/Login'], resolve)
+const Main = resolve => require(['../views/Main'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
 const Messages = resolve => require(['../views/Messages'], resolve)
 
@@ -31,12 +33,16 @@ const router = new Router({
     name: 'Login',
     component: Login
   }, {
-    path: '/home',
-    name: 'Home',
-    component: Home,
-    redirect: '/home/messages',
+    path: '/main',
+    name: 'Main',
+    component: Main,
+    redirect: '/main/home',
     children: [{
-      path: '/home/messages',
+      path: '/main/home',
+      name: 'Home',
+      component: Home
+    }, {
+      path: '/main/messages',
       name: 'Messages',
       component: Messages
     }]
@@ -49,7 +55,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // console.log(to, from, next)
-  next() // 必须调用，否则导航会终止
+  if (to.path === '/login' || to.path === '/homepage' || store.state.user.token) {
+    next() // 必须调用，否则导航会终止
+  } else {
+    next('/login')
+  }
 })
 
 router.afterEach(route => {

@@ -21,9 +21,9 @@
       </a> -->
       <div class="detail-row">
         <div class="label">
-          已经显示消息：
+          今日消息总计
         </div>
-        <div class="info">{{ $store.state.message.items.length }}条</div>
+        <div class="info">{{ $store.state.message.count }}条</div>
       </div>
       <template v-if="showMore">
         <hr class="detail-row" />
@@ -99,9 +99,6 @@ export default {
     },
     showMoreData () {
       this.showMore = !this.showMore
-      this.$nextTick(() => {
-        this.$emit('height-changed', this.$el.scrollHeight)
-      })
     }
   },
   watch: {
@@ -114,7 +111,6 @@ export default {
   },
   mounted () {
     this.$emit('selected', this.currentDate)
-    this.$emit('height-changed', this.$el.scrollHeight)
   }
 }
 </script>

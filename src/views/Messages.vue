@@ -1,10 +1,19 @@
 <template>
   <div class="messages">
-    <date-selector class="date-selector" @selected="selected" @height-changed="newTop"></date-selector>
-    <div class="message-content" :style="{ 'top': messageContentTop + 'px' }" @scroll="nextPage">
-      <div class="message-line" v-for="item of messages">
-        <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
-        <message :message="item.message"></message>
+    <group-list class="side-bar"></group-list>
+    <div class="side-content">
+      <div class="title">
+        <p>群消息记录</p>
+      </div>
+      <!-- <router-view></router-view> -->
+      <div class="messages-content">
+        <date-selector class="date-selector" @selected="selected"></date-selector>
+        <div class="message-content" @scroll="nextPage">
+          <div class="message-line" v-for="item of messages">
+            <h2 class="sub-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</h2>
+            <message :message="item.message"></message>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -16,6 +25,7 @@ import * as types from '../store/types'
 
 const DateSelector = resolve => require(['../components/DateSelector'], resolve)
 const Message = resolve => require(['../components/Message'], resolve)
+const GroupList = resolve => require(['../components/GroupList'], resolve)
 
 export default {
   name: 'Messages',
@@ -24,8 +34,7 @@ export default {
       time: {
         start: null,
         end: null
-      },
-      messageContentTop: 0
+      }
     }
   },
   computed: {
@@ -56,9 +65,6 @@ export default {
       this.time.start = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate()) / 1000)
       this.time.end = parseInt(new Date(event.getFullYear(), event.getMonth(), event.getDate() + 1) / 1000)
     },
-    newTop (newVal) {
-      this.messageContentTop = newVal + 10
-    },
     nextPage (event) {
       let offsetHeight = event.target.offsetHeight
       let scrollTop = event.target.scrollTop
@@ -81,7 +87,8 @@ export default {
   },
   components: {
     DateSelector,
-    Message
+    Message,
+    GroupList
   }
 }
 </script>
@@ -90,34 +97,48 @@ export default {
 @import "../assets/less/colors.less";
 
 .messages {
-  min-height: 500px;
-  margin: 20px 10px;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  .date-selector {
-    margin-bottom: 10px;
+  .side-bar {
+    float: left;
+    width: 300px;
+    height: 100%;
+    border-right: 1px solid @main-border-color;
   }
-  .message-content {
-    padding: 0 16px;
-    line-height: normal;
-    background-color: @main-background-color;
-    overflow-y: scroll;
+  .side-content {
+    margin-left: 300px;
+    height: 100%;
+    position: relative;
+  }
+  .messages-content {
+    min-height: 500px;
+    margin: 20px 10px;
     position: absolute;
+    top: 50px;
     right: 0;
     bottom: 0;
     left: 0;
-    .message-line {
-      font-size: 12px;
-      padding: 16px 0;
-      border-bottom: 1px solid #fff;
-      word-wrap: break-word;
-      .sub-title {
+    overflow: hidden;
+    .date-selector {
+      margin-bottom: 10px;
+    }
+    .message-content {
+      padding: 0 16px;
+      line-height: normal;
+      background-color: @main-background-color;
+      overflow-y: scroll;
+      position: absolute;
+      top: 98px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      .message-line {
         font-size: 12px;
-        margin-bottom: 14px;
+        padding: 16px 0;
+        border-bottom: 1px solid #fff;
+        word-wrap: break-word;
+        .sub-title {
+          font-size: 12px;
+          margin-bottom: 14px;
+        }
       }
     }
   }

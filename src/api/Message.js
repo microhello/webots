@@ -14,7 +14,7 @@ const methodDict = {
 }
 
 export default {
-  getMessages ({ uin, receiver_name, start_time, end_time, keywords, offset, limit }) {
+  getMessages ({ uin, receiver_name, start_time, end_time, keywords, offset, limit, access_token }) {
     return new Promise((resolve, reject) => {
       Vue.http({
         url: urlPrefix + urlPort + urlDict.getMessages,
@@ -26,7 +26,8 @@ export default {
           end_time: end_time,
           keywords: keywords,
           offset: offset,
-          limit: limit
+          limit: limit,
+          access_token: access_token
         }
       }).then(response => {
         if (response.status === 200 || response.status === 204 || response.status === 201) {

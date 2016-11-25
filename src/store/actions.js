@@ -24,10 +24,14 @@ export const setGroups = async ({ state, commit }, payload) => {
 
 export const setMessages = async ({ state, commit }, payload) => {
   try {
-    payload.offset = state.message.pageIndex * state.message.pageSize
-    payload.limit = state.message.pageSize
+    payload.offset = state.message.offset
+    payload.limit = state.message.limit
+    payload.access_token = state.user.token
     let data = await Message.getMessages(payload)
-    if (data.length < state.message.pageSize) {
+    if (data.items.length < state.message.limit) {
+      if (state.message.items.length >= state.message.count) {
+        commit(types.ADD_ALERT_MESSAGE, { type: 'error', message: '暂无新消息' })
+      }
       commit(types.SET_MESSAGES, { action: 'splice', items: data })
     } else {
       commit(types.SET_MESSAGES, { action: 'concat', items: data })

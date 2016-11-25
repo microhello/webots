@@ -1,151 +1,244 @@
 <template>
-  <div class="home clearfix">
-    <app-header class="app-header"></app-header>
-    <div class="main clearfix">
-      <app-sidebar class="app-sidebar"></app-sidebar>
-      <div class="wrapper">
-        <app-tab class="tab"></app-tab>
-        <div class="content" v-show="tabs[0] === active">
-          <group-list class="side-bar"></group-list>
-          <div class="side-content">
-            <ul class="title nav">
-              <li>
-                <a>消息记录</a>
-              </li>
-              <li>
-                <a>群成员</a>
-              </li>
+  <div class="home">
+    <div class="count-box">
+      <div class="count-content">
+        <div class="count-item">
+          <a>
+            <div class="count">
+              <i class="iconfont">&#xe6ef;</i>
+              <span>3</span>
+            </div>
+            <p>托管账号</p>
+          </a>
+        </div>
+        <div class="count-item">
+          <a @click="addTab({ title: '微信好友', value: 'contact', type: 'contact' })">
+            <div class="count">
+              <i class="iconfont">&#xe604;</i>
+              <span>12332</span>
+            </div>
+            <p>微信好友</p>
+          </a>
+        </div>
+      </div>
+      <div class="count-content">
+        <div class="count-item">
+          <a>
+            <div class="count">
+              <i class="iconfont">&#xe603;</i>
+              <span>545</span>
+            </div>
+            <p>微信群</p>
+          </a>
+        </div>
+        <div class="count-item">
+          <a @click="addTab({ title: '群成员', value: 'member', type: 'member' })">
+            <div class="count">
+              <i class="iconfont">&#xe627;</i>
+              <span>1545</span>
+            </div>
+            <p>群成员</p>
+          </a>
+        </div>
+      </div>
+      <div class="count-content">
+        <div class="count-item">
+          <router-link to="/main/messages">
+            <div class="count">
+              <i class="iconfont">&#xe654;</i>
+              <span>11213456</span>
+            </div>
+            <p>全部消息</p>
+          </router-link>
+        </div>
+        <div class="count-item">
+          <a>
+            <div class="count">
+              <i class="iconfont">&#xe663;</i>
+              <span>3421</span>
+            </div>
+            <p>值守消息</p>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="message-box">
+      <div class="message-content">
+        <div class="title clearfix">
+          <i class="title-item"></i>
+          <h1 class="title-item">群消息</h1>
+          <a class="title-item">更多</a>
+        </div>
+        <div class="table">
+          <div class="table-head">
+            <ul class="table-row">
+              <li>群名称</li>
+              <li>今日消息数</li>
+              <li>消息总数</li>
+              <li>最后接收时间</li>
             </ul>
-            <router-view></router-view>
+          </div>
+          <div class="table-body">
+            <ul class="table-row" v-for="n of 10">
+              <li>【地推人·上海1】🅰跨界社群</li>
+              <li>7</li>
+              <li>124</li>
+              <li>今天   09:30:31</li>
+            </ul>
           </div>
         </div>
-        <login v-for="item of NewAccountTabs" class="content" v-show="item === active" :key="item"></login>
-        <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
+      </div>
+      <div class="message-content">
+        <div class="title clearfix">
+          <i class="title-item"></i>
+          <h1 class="title-item">群值守</h1>
+          <a class="title-item">更多</a>
+        </div>
+        <div class="table">
+          <div class="table-head">
+            <ul class="table-row">
+              <li>监控账号</li>
+              <li>值守消息</li>
+              <li>最后接收时间</li>
+            </ul>
+          </div>
+          <div class="table-body">
+            <ul class="table-row" v-for="n of 10">
+              <li>老大哥在看着我</li>
+              <li>24</li>
+              <li>今天   09:30:31</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import * as types from '../store/types'
-
-const AppTab = resolve => require(['../components/AppTab'], resolve)
-const AppHeader = resolve => require(['../components/AppHeader'], resolve)
-const AppSidebar = resolve => require(['../components/AppSidebar'], resolve)
-const Search = resolve => require(['../components/Search'], resolve)
-const Login = resolve => require(['../components/Login'], resolve)
-const GroupList = resolve => require(['../components/GroupList'], resolve)
 
 export default {
   name: 'Home',
-  computed: {
-    NewAccountTabs () {
-      return this.tabs.filter(item => item.type === 'new-account')
-    },
-    SearchTabs () {
-      return this.tabs.filter(item => item.type === 'search')
-    },
-    ...mapState({
-      tabs: state => state.tab.items,
-      active: state => state.tab.active
-    })
-  },
   methods: {
     ...mapMutations({
-      addTab: types.ADD_TAB,
-      setActiveTab: types.ACTIVE
+      addTab: types.ADD_TAB
     })
-  },
-  components: {
-    AppHeader,
-    AppSidebar,
-    AppTab,
-    Login,
-    Search,
-    GroupList
-  },
-  mounted () {
-    this.addTab({
-      title: '机器人',
-      value: 'root',
-      type: 'root'
-    })
-    this.setActiveTab(this.tabs[0])
   }
 }
 </script>
 
 <style lang="less">
-@import "../assets/less/colors.less";
-
 .home {
-  .app-header {
-    box-shadow: 0 0 2px rgba(0,0,0,0.1);
-    border-bottom: 1px solid #d4d4d4;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 9999;
-  }
-  .main {
-    position: absolute;
-    top: 62px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: @main-background-color;
-    .app-sidebar {
-      background-color: #e7e7e7;
-      width: 60px;
-      height: 100%;
-      line-height: 60px;
-      float: left;
-    }
-    .wrapper {
-      height: 100%;
-      margin-left: 60px;
-      position: relative;
-      .content {
-        background-color: #fff;
-        position: absolute;
-        top: 40px;
-        right: 0;
-        bottom: 0;
-        left: 0;
+  padding: 40px 50px;
+  .count-box {
+    font-size: 0;
+    margin-bottom: 40px;
+    .count-content {
+      display: inline-block;
+      vertical-align: top;
+      width: 33.33333333%;
+      color: #fff;
+      border-width: 0 5px;
+      border-style: solid;
+      border-color: #fff;
+      &:nth-of-type(1) {
+        border-left: 0;
+        background-color: #73c3e6;
+      }
+      &:nth-of-type(2) {
+        background-color: #a3c284;
+      }
+      &:nth-of-type(3) {
+        border-right: 0;
+        background-color: #ffe084;
+      }
+      .count-item {
+        display: inline-block;
+        width: 50%;
+        padding: 30px 0;
+        text-align: center;
+        a {
+          display: inline-block;
+          color: #fff;
+        }
+        .count {
+          margin-bottom: 10px;
+          i {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 30px;
+            margin-right: 10px;
+          }
+          span {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 20px;
+          }
+        }
+        p {
+          font-size: 14px;
+          text-align: left;
+        }
       }
     }
   }
-  .title {
-    height: 50px;
-    line-height: 50px;
-    padding: 0 15px;
-    border-bottom: 1px solid @main-border-color;
-    .title-name {
-      font-size: 16px;
-      font-weight: bold;
+  .message-box {
+    font-size: 0;
+    .message-content {
       display: inline-block;
-    }
-  }
-
-  .side-bar {
-    float: left;
-    width: 300px;
-    height: 100%;
-    border-right: 1px solid @main-border-color;
-  }
-  .side-content {
-    margin-left: 300px;
-    height: 100%;
-    position: relative;
-    .nav {
-      padding: 0;
-      li {
-        display: inline-block;
-        padding: 0 20px;
-        &:last-child {
-          margin-right: 0;
+      vertical-align: top;
+      &:first-of-type {
+        width: 60%;
+        padding-right: 20px;
+      }
+      &:last-of-type {
+        width: 40%;
+        padding-left: 20px;
+        li {
+          width: 33.333%;
+          &:first-of-type {
+            text-align: left;
+            padding-left: 20px;
+          }
+        }
+      }
+      .title {
+        height: 40px;
+        line-height: 40px;
+        padding: 0;
+        border: 0;
+        .title-item {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        i {
+          width: 10px;
+          height: 10px;
+          background-color: #a1a1a1;
+          margin-right: 10px;
+        }
+        h1 {
+          font-size: 16px;
+        }
+        a {
+          font-size: 12px;
+          float: right;
+          color: #A1A1A1;
+        }
+      }
+      .table > .table-body {
+        position: static;
+        .table-row > li {
+          font-size: 12px;
+          &:first-of-type {
+            text-align: left;
+            padding-left: 20px;
+          }
+          &:last-of-type {
+            color: #A1A1A1;
+          }
         }
       }
     }

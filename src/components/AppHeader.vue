@@ -1,6 +1,6 @@
 <template>
   <div class="app-header">
-    <h1 class="header-title">{{ title }}</h1>
+    <img src="../assets/image/logo/02.jpg" />
     <div class="header-search">
       <input type="text" name="keywords" placeholder="搜索关键词：多个关键词使用“+”或“,”分隔" v-model="keywords" @keyup.enter="search" />
       <i class="button iconfont" @click="search">&#xe620;</i>
@@ -46,12 +46,18 @@ export default {
 .app-header {
   background-color: #fff;
   line-height: 60px;
-  .header-title {
+  // .header-title {
+  //   display: inline-block;
+  //   vertical-align: middle;
+  //   font-size: 20px;
+  //   font-weight: bold;
+  //   padding: 0 20px;
+  // }
+  img {
     display: inline-block;
+    height: 25px;
     vertical-align: middle;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 0 20px;
+    margin: 0 20px;
   }
   .header-search {
     display: inline-block;

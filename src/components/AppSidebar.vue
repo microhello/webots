@@ -1,10 +1,22 @@
 <template>
   <ul class="app-sidebar">
     <li>
-      <i class="iconfont" @click="addAccount">&#xe600;</i>
+      <router-link to="/main/home" :class="{ 'active': currentPath === '/main/home' }">
+        <i class="iconfont" style="transform: translateX(2px)">&#xe60a;</i>
+        <p>首页</p>
+      </router-link>
     </li>
     <li>
-      <i class="iconfont" @click="setActiveTab(root)">&#xe64c;</i>
+      <router-link to="/main/messages" :class="{ 'active': currentPath === '/main/messages' }">
+        <i class="iconfont">&#xe84a;</i>
+        <p>群消息</p>
+      </router-link>
+    </li>
+    <li>
+      <router-link to="/main" :class="{ 'active': currentPath === '/main' }">
+        <i class="iconfont">&#xe608;</i>
+        <p>群值守</p>
+      </router-link>
     </li>
   </ul>
 </template>
@@ -15,34 +27,23 @@ import * as types from '../store/types'
 
 export default {
   name: 'AppSidebar',
-  data () {
-    return {
-      title: '微信群营销机器人管理'
-    }
-  },
   computed: {
-    root () {
-      return this.tabs.filter(item => item.type === 'root')[0]
+    currentPath () {
+      return this.$route.path
     },
     ...mapState({
       tabs: state => state.tab.items
     })
   },
   methods: {
-    addAccount () {
-      if (this.$route.name === 'Login') {
-        return
-      }
-      this.addTab({
-        title: '增加账号',
-        value: new Date().valueOf(),
-        type: 'new-account'
-      })
-    },
     ...mapMutations({
-      addTab: types.ADD_TAB,
       setActiveTab: types.ACTIVE
     })
+  },
+  watch: {
+    currentPath () {
+      this.setActiveTab(this.tabs[0])
+    }
   }
 }
 </script>
@@ -50,13 +51,22 @@ export default {
 <style lang="less">
 .app-sidebar {
   li {
-    i {
-      display: block;
-      width: 30px;
-      margin: 0 auto;
-      font-size: 30px;
-      color: #515151;
-      cursor: default;
+    text-align: center;
+    line-height: normal;
+    padding: 15px 0;
+    a {
+      cursor: pointer;
+      color: #666;
+      &.active {
+        color: #169BD5;
+      }
+      i {
+        display: inline-block;
+        font-size: 30px;
+      }
+      p {
+        display: inline-block;
+      }
     }
   }
 }

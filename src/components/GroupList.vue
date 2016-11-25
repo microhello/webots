@@ -3,7 +3,7 @@
     <div class="title clearfix">
       <p>我的群</p>
       <p class="pull-right">
-        共<span class="count">{{ groups.length || 0 }}</span>个群
+        共<span class="count">{{ 0 }}</span>个群
       </p>
     </div>
     <!-- <ul class="list-content">
@@ -17,14 +17,14 @@
       </router-link>
     </ul> -->
     <ul class="account-list">
-      <template v-for="item of accounts">
-        <li @click="toggleSubList(item)">
-          <i class="iconfont" :class="item.showGroups ? 'icon-xiangxia' :'icon-1-copy-copy'"></i>{{ item.nick_name }}
+      <template v-for="account of accounts">
+        <li @click="toggleSubList(account)">
+          <i class="iconfont" :class="account.showGroups ? 'icon-xiangxia' : 'icon-1-copy-copy'"></i>{{ account.nick_name }}
         </li>
-        <ul class="sub-list" v-show="item.showGroups">
-          <li>
-            【地推人·上海1】🅰跨界社群
-          </li>
+        <ul class="sub-list">
+          <router-link v-for="group of account.groups" :to="{ path: '/main/messages', query: { uin: account.uin, nick_name: group.nick_name } }" tag="li">
+            {{ group.nick_name || '（未命名）' }}
+          </router-link>
         </ul>
       </template>
     </ul>
@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
+import { Group } from '../api'
 
 export default {
   name: 'GroupList',
@@ -52,20 +53,22 @@ export default {
     //   return {}
     // },
     ...mapState({
-      groups: state => state.group.items,
       accounts: state => state.account.items
     })
   },
   methods: {
-    toggleSubList (item) {
-      this.$set(item, 'showGroups', !item.showGroups)
+    async toggleSubList (item) {
       if (item.showGroups) {
-        this.setGroups({
-          uin: item.uin
+        this.$set(item, 'groups', [])
+      } else {
+        let groups = await Group.getGroups({
+          uin: item.uin,
+          access_token: this.$store.state.user.token
         })
+        this.$set(item, 'groups', groups.items)
       }
-    },
-    ...mapActions(['setAccounts', 'setGroups'])
+      this.$set(item, 'showGroups', !item.showGroups)
+    }
   },
   watch: {
     // groups (newVal) {
@@ -81,7 +84,7 @@ export default {
     // }
   },
   mounted () {
-    this.setAccounts()
+    // this.setAccounts()
   }
 }
 </script>

@@ -1,28 +1,30 @@
 import * as types from '../types'
 
 const state = {
+  count: 0,
   items: [],
-  pageIndex: 0,
-  pageSize: 10
+  offset: 0,
+  limit: 10
 }
 
 const mutations = {
   [types.SET_MESSAGES] (state, { action, items }) {
+    state.count = items.count
     switch (action) {
       case 'concat':
-        state.items = state.items.concat(items)
+        state.items = state.items.concat(items.items)
         break
       case 'splice':
-        state.items.splice(state.pageIndex * state.pageSize, state.pageSize, ...items)
+        state.items.splice(state.offset, state.limit, ...items.items)
         break
     }
   },
   [types.DEL_MESSAGES] (state) {
     state.items = []
-    state.pageIndex = 0
+    state.offset = 0
   },
   [types.NEXT_PAGE] (state) {
-    state.pageIndex++
+    state.offset += state.limit
   }
 }
 

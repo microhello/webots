@@ -26,6 +26,7 @@
     <div class="side-content search-content">
       <div class="title">
         <h2 class="title-name">搜索"<span :title="keywords">{{ keywords }}</span>"</h2>
+        <!-- <span>共{{ count }}条</span> -->
       </div>
       <div class="search-results-wrapper">
         <ul class="search-results" v-if="messages.length" @scroll="nextPage">
@@ -43,6 +44,7 @@
 
 <script>
 import { Message as MessageApi } from '../api'
+import { mapState } from 'vuex'
 const Message = resolve => require(['./Message'], resolve)
 
 export default {
@@ -52,21 +54,27 @@ export default {
   },
   data () {
     return {
+      // count: 0,
       messages: [],
-      pageIndex: 0,
-      pageSize: 10
+      offset: 0,
+      limit: 10
     }
+  },
+  computed: {
+    ...mapState({
+      token: state => state.user.token
+    })
   },
   methods: {
     async search () {
       try {
-        let offset = this.pageIndex * this.pageSize
-        let data = await MessageApi.getMessages({ keywords: this.keywords, offset: offset, limit: this.pageSize })
-        if (data.length < this.pageSize) {
-          this.messages.splice(offset, this.pageSize, ...data)
+        let data = await MessageApi.getMessages({ keywords: this.keywords, offset: this.offset, limit: this.limit, access_token: this.token })
+        // this.count = data.count
+        if (data.items.length < this.limit) {
+          this.messages.splice(this.offset, this.limit, ...data.items)
         } else {
-          this.messages = this.messages.concat(data)
-          this.pageIndex++
+          this.messages = this.messages.concat(data.items)
+          this.offset += this.limit
         }
         console.log('search success', this.messages)
       } catch (err) {
@@ -139,7 +147,9 @@ export default {
     position: relative;
     margin-left: 0;
     .title .title-name {
+      font-size: 16px;
       font-weight: normal;
+      display: inline-block;
       width: 100%;
       word-break: keep-all;
       white-space: nowrap;
