@@ -16,13 +16,17 @@ const methodDict = {
 }
 
 export default {
-  getAccounts ({ access_token }) {
+  getAccounts ({ access_token, online, keywords, offset, limit }) {
     return new Promise((resolve, reject) => {
       Vue.http({
         url: urlPrefix + urlPort + urlDict.getAccounts,
         method: methodDict.get,
         params: {
-          access_token: access_token
+          access_token: access_token,
+          online: online,
+          keywords: keywords,
+          offset: offset,
+          limit: limit
         }
       }).then(response => {
         if (response.status === 200 || response.status === 204 || response.status === 201) {

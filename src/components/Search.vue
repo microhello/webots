@@ -44,7 +44,7 @@
 
 <script>
 import { Message as MessageApi } from '../api'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 const Message = resolve => require(['./Message'], resolve)
 
 export default {
@@ -61,9 +61,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      token: state => state.user.token
-    })
+    ...mapGetters(['token'])
   },
   methods: {
     async search () {
@@ -146,6 +144,8 @@ export default {
   .search-content {
     position: relative;
     margin-left: 0;
+    width: 100%;
+    height: 100%;
     .title .title-name {
       font-size: 16px;
       font-weight: normal;

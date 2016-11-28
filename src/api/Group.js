@@ -6,7 +6,7 @@ const urlDict = {
   // 微信群列表
   getGroups: '/wx/groups',
   // 微信群成员
-  getMembers: '/wx/groups/{ group_id }/members'
+  getMembers: '/wx/groups/members'
 }
 const methodDict = {
   get: 'GET',
@@ -36,13 +36,15 @@ export default {
       })
     })
   },
-  getMembers ({ group_id, access_token, offset, limit }) {
+  getMembers ({ access_token, uin, group_id, offset, limit }) {
     return new Promise((resolve, reject) => {
       Vue.http({
-        url: urlPrefix + urlPort + urlDict.getMembers.replace('{ group_id }', group_id),
+        url: urlPrefix + urlPort + urlDict.getMembers,
         method: methodDict.get,
         params: {
           access_token: access_token,
+          uin: uin,
+          group_id: group_id,
           offset: offset,
           limit: limit
         }

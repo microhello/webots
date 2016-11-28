@@ -40,7 +40,6 @@ export default {
     })
   },
   login ({ phone, password }) {
-    console.log(phone, md5(password))
     return new Promise((resolve, reject) => {
       Vue.http({
         url: urlPrefix + urlPort + urlDict.login,
@@ -48,6 +47,23 @@ export default {
         body: {
           phone: phone,
           password: md5(password)
+        }
+      }).then(response => {
+        if (response.status === 200 || response.status === 204 || response.status === 201) {
+          resolve(response.body)
+        }
+      }, response => {
+        reject(response.body.message)
+      })
+    })
+  },
+  logout ({ access_token }) {
+    return new Promise((resolve, reject) => {
+      Vue.http({
+        url: urlPrefix + urlPort + urlDict.logout,
+        method: methodDict.post,
+        params: {
+          access_token: access_token
         }
       }).then(response => {
         if (response.status === 200 || response.status === 204 || response.status === 201) {

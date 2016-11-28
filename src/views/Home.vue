@@ -6,7 +6,7 @@
           <a>
             <div class="count">
               <i class="iconfont">&#xe6ef;</i>
-              <span>3</span>
+              <span>{{ accountsCount }}</span>
             </div>
             <p>托管账号</p>
           </a>
@@ -15,7 +15,7 @@
           <a @click="addTab({ title: '微信好友', value: 'contact', type: 'contact' })">
             <div class="count">
               <i class="iconfont">&#xe604;</i>
-              <span>12332</span>
+              <span>{{ contactsCount }}</span>
             </div>
             <p>微信好友</p>
           </a>
@@ -26,7 +26,7 @@
           <a>
             <div class="count">
               <i class="iconfont">&#xe603;</i>
-              <span>545</span>
+              <span>{{ groupsCount }}</span>
             </div>
             <p>微信群</p>
           </a>
@@ -35,7 +35,7 @@
           <a @click="addTab({ title: '群成员', value: 'member', type: 'member' })">
             <div class="count">
               <i class="iconfont">&#xe627;</i>
-              <span>1545</span>
+              <span>{{ membersCount }}</span>
             </div>
             <p>群成员</p>
           </a>
@@ -46,7 +46,7 @@
           <router-link to="/main/messages">
             <div class="count">
               <i class="iconfont">&#xe654;</i>
-              <span>11213456</span>
+              <span>{{ messagesCount }}</span>
             </div>
             <p>全部消息</p>
           </router-link>
@@ -79,12 +79,12 @@
             </ul>
           </div>
           <div class="table-body">
-            <ul class="table-row" v-for="n of 10">
+            <!-- <ul class="table-row" v-for="n of 10">
               <li>【地推人·上海1】🅰跨界社群</li>
               <li>7</li>
               <li>124</li>
               <li>今天   09:30:31</li>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </div>
@@ -103,11 +103,11 @@
             </ul>
           </div>
           <div class="table-body">
-            <ul class="table-row" v-for="n of 10">
+            <!-- <ul class="table-row" v-for="n of 10">
               <li>老大哥在看着我</li>
               <li>24</li>
               <li>今天   09:30:31</li>
-            </ul>
+            </ul> -->
           </div>
         </div>
       </div>
@@ -116,14 +116,43 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
+import * as API from '../api'
 import * as types from '../store/types'
 
 export default {
   name: 'Home',
+  data () {
+    return {
+      contactsCount: 0,
+      groupsCount: 0,
+      membersCount: 0,
+      messagesCount: 0
+    }
+  },
+  computed: {
+    ...mapState({
+      accountsCount: state => state.account.count
+    }),
+    ...mapGetters(['token'])
+  },
   methods: {
     ...mapMutations({
       addTab: types.ADD_TAB
+    })
+  },
+  mounted () {
+    API.Account.getContacts({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.contactsCount = count
+    })
+    API.Group.getGroups({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.groupsCount = count
+    })
+    API.Group.getMembers({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.membersCount = count
+    })
+    API.Message.getMessages({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.messagesCount = count
     })
   }
 }

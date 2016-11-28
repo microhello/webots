@@ -3,19 +3,9 @@
     <div class="title clearfix">
       <p>我的群</p>
       <p class="pull-right">
-        共<span class="count">{{ 0 }}</span>个群
+        共<span class="count">{{ groupsCount }}</span>个群
       </p>
     </div>
-    <!-- <ul class="list-content">
-      <router-link
-        v-for="item of groups"
-        :to="{ path: '/home/messages', query: { uin: item.uin, nick_name: item.nick_name } }"
-        :class="{ 'active': item.nick_name === nick_name }"
-        tag="li"
-      >
-        {{ item.nick_name }}（{{ item.member_count }}人）
-      </router-link>
-    </ul> -->
     <ul class="account-list">
       <template v-for="account of accounts">
         <li @click="toggleSubList(account)">
@@ -32,29 +22,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Group } from '../api'
 
 export default {
   name: 'GroupList',
+  data () {
+    return {
+      groupsCount: 0
+    }
+  },
   computed: {
-    // uin () {
-    //   return parseInt(this.$route.query.uin)
-    // },
-    // nick_name () {
-    //   return this.$route.query.nick_name
-    // },
-    // currentAccount () {
-    //   for (let item of this.accounts) {
-    //     if (item.uin === this.uin) {
-    //       return item
-    //     }
-    //   }
-    //   return {}
-    // },
     ...mapState({
       accounts: state => state.account.items
-    })
+    }),
+    ...mapGetters(['token'])
   },
   methods: {
     async toggleSubList (item) {
@@ -63,28 +45,17 @@ export default {
       } else {
         let groups = await Group.getGroups({
           uin: item.uin,
-          access_token: this.$store.state.user.token
+          access_token: this.token
         })
         this.$set(item, 'groups', groups.items)
       }
       this.$set(item, 'showGroups', !item.showGroups)
     }
   },
-  watch: {
-    // groups (newVal) {
-    //   if (typeof this.nick_name === 'undefined') {
-    //     this.$router.replace({
-    //       path: '/home/messages',
-    //       query: {
-    //         uin: this.groups[0].uin,
-    //         nick_name: this.groups[0].nick_name
-    //       }
-    //     })
-    //   }
-    // }
-  },
   mounted () {
-    // this.setAccounts()
+    Group.getGroups({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.groupsCount = count
+    })
   }
 }
 </script>

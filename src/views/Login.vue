@@ -5,15 +5,15 @@
     </div>
     <div class="login-form">
       <div class="form-line clearfix">
-        <label>账号</label>
+        <label class="form-label">账号</label>
         <div class="form-input">
-          <input type="text" v-model.trim="loginForm.phone" placeholder="手机号" />
+          <input type="text" name="account" v-model.trim="loginForm.phone" placeholder="手机号" />
         </div>
       </div>
       <div class="form-line clearfix">
-        <label>密码</label>
+        <label class="form-label">密码</label>
         <div class="form-input">
-          <input type="text" v-model.trim="loginForm.password" placeholder="6-16个字符" />
+          <input type="password" name="password" v-model.trim="loginForm.password" placeholder="6-16个字符" />
         </div>
       </div>
       <div class="form-line clearfix">
@@ -23,7 +23,7 @@
       </div>
       <div class="form-line clearfix remember-password">
         <div class="form-input">
-          <input type="checkbox" />记住密码
+          <input type="checkbox" id="remember-password" v-model="remember" /><label for="remember-password">记住密码</label>
         </div>
       </div>
     </div>
@@ -39,9 +39,10 @@ export default {
   data () {
     return {
       loginForm: {
-        phone: '',
-        password: ''
-      }
+        phone: window.localStorage.account,
+        password: window.localStorage.password
+      },
+      remember: !!window.localStorage.account
     }
   },
   methods: {
@@ -59,6 +60,13 @@ export default {
           type: 'success',
           message: '登录成功'
         })
+        if (this.remember) {
+          window.localStorage.account = this.loginForm.phone
+          window.localStorage.password = this.loginForm.password
+        } else {
+          delete window.localStorage.account
+          delete window.localStorage.password
+        }
         this.$router.push({
           path: '/main'
         })
@@ -98,7 +106,7 @@ export default {
     text-align: center;
     .form-line {
       line-height: 75px;
-      label {
+      .form-label {
         display: block;
         font-size: 16px;
         float: left;
@@ -109,7 +117,7 @@ export default {
       .form-input {
         display: block;
         margin-left: 100px;
-        input[type=text] {
+        input[type=text], input[type=password] {
           padding: 10px 5px;
           border-radius: 3px;
           border: 1px solid #d7d7d7;

@@ -50,6 +50,7 @@ export default {
   methods: {
     ...mapMutations({
       addTab: types.ADD_TAB,
+      delTab: types.DEL_TAB,
       setActiveTab: types.ACTIVE
     }),
     ...mapActions(['setAccounts'])
@@ -64,6 +65,7 @@ export default {
     Contact
   },
   mounted () {
+    this.delTab()
     this.addTab({
       title: '机器人',
       value: 'root',
@@ -80,7 +82,7 @@ export default {
 
 .main {
   .app-header {
-    box-shadow: 0 0 2px rgba(0,0,0,0.1);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid #d4d4d4;
     position: absolute;
     top: 0;
@@ -90,7 +92,7 @@ export default {
   }
   .container {
     position: absolute;
-    top: 62px;
+    top: 61px;
     right: 0;
     bottom: 0;
     left: 0;

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '../store'
+import Cookies from 'js-cookie'
 
 Vue.use(Router)
 
@@ -8,6 +8,7 @@ const HomePage = resolve => require(['../views/HomePage'], resolve)
 const Login = resolve => require(['../views/Login'], resolve)
 const Main = resolve => require(['../views/Main'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
+const Account = resolve => require(['../views/Account'], resolve)
 const Messages = resolve => require(['../views/Messages'], resolve)
 
 const router = new Router({
@@ -42,6 +43,10 @@ const router = new Router({
       name: 'Home',
       component: Home
     }, {
+      path: '/main/account',
+      name: 'Account',
+      component: Account
+    }, {
       path: '/main/messages',
       name: 'Messages',
       component: Messages
@@ -54,11 +59,11 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  // console.log(to, from, next)
-  if (to.path === '/login' || to.path === '/homepage' || store.state.user.token) {
+  // console.log(to, from, Cookies.get('token'))
+  if (to.path === '/login' || to.path === '/homepage' || Cookies.get('token')) {
     next() // 必须调用，否则导航会终止
   } else {
-    next('/login')
+    next('/login') // 重定向
   }
 })
 

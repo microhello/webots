@@ -20,3 +20,4 @@ export const ACTIVE = 'tab/ACTIVE'
 
 // user
 export const LOGIN = 'user/LOGIN'
+export const LOGOUT = 'user/LOGOUT'

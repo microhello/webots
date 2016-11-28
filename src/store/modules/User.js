@@ -1,16 +1,24 @@
 import * as types from '../types'
+import Cookies from 'js-cookie'
 
 const state = {
-  token: ''
 }
 
 const mutations = {
   [types.LOGIN] (state, data) {
-    state.token = data.token
+    Cookies.set('token', data.token)
+  },
+  [types.LOGOUT] (state) {
+    Cookies.remove('token')
   }
+}
+
+const getters = {
+  token: () => Cookies.get('token')
 }
 
 export default {
   state,
-  mutations
+  mutations,
+  getters
 }

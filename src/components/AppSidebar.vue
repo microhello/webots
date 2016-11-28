@@ -7,6 +7,12 @@
       </router-link>
     </li>
     <li>
+      <router-link to="/main/account" :class="{ 'active': currentPath === '/main/account' }">
+        <i class="iconfont">&#xe657;</i>
+        <p>账号</p>
+      </router-link>
+    </li>
+    <li>
       <router-link to="/main/messages" :class="{ 'active': currentPath === '/main/messages' }">
         <i class="iconfont">&#xe84a;</i>
         <p>群消息</p>

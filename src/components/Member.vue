@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Group } from '../api'
 
 export default {
@@ -56,16 +56,17 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.user.token,
-      accounts: state => state.account.items
-    })
+      accounts: state => [{ nick_name: '全部' }].concat(state.account.items)
+    }),
+    ...mapGetters(['token'])
   },
   methods: {
     async getMembers () {
       try {
         let data = await Group.getMembers({
-          group_id: this.currentGroup.group_id,
           access_token: this.token,
+          uin: this.currentAccount.uin,
+          group_id: this.currentGroup.group_id,
           offset: this.offset,
           limit: this.limit
         })
@@ -87,7 +88,7 @@ export default {
           access_token: this.token,
           limit: 500
         })
-        this.groups = data.items
+        this.groups = [{ nick_name: '全部' }].concat(data.items)
         this.currentGroup = this.groups[0]
         console.log('getGroups success', this.groups)
       } catch (err) {
@@ -107,6 +108,8 @@ export default {
   },
   watch: {
     currentAccount () {
+      this.members = []
+      this.offset = 0
       this.getGroups()
     },
     currentGroup () {
@@ -114,6 +117,9 @@ export default {
       this.offset = 0
       this.getMembers()
     }
+  },
+  mounted () {
+    this.currentAccount = this.accounts[0]
   }
 }
 </script>

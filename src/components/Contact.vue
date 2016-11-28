@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Account } from '../api'
 
 export default {
@@ -58,9 +58,9 @@ export default {
   },
   computed: {
     ...mapState({
-      token: state => state.user.token,
       accounts: state => state.account.items
-    })
+    }),
+    ...mapGetters(['token'])
   },
   methods: {
     async getContacts () {

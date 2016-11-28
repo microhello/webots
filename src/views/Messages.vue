@@ -109,7 +109,6 @@ export default {
     position: relative;
   }
   .messages-content {
-    min-height: 500px;
     margin: 20px 10px;
     position: absolute;
     top: 50px;

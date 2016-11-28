@@ -1,9 +1,9 @@
 import * as types from './types'
 import { Account, Group, Message, User } from '../api'
 
-export const setAccounts = async ({ state, commit }) => {
+export const setAccounts = async ({ commit, getters }) => {
   try {
-    let data = await Account.getAccounts({ access_token: state.user.token })
+    let data = await Account.getAccounts({ access_token: getters.token })
     console.log('getAccounts success', data)
     commit(types.SET_ACCOUNTS, data)
   } catch (err) {
@@ -11,9 +11,9 @@ export const setAccounts = async ({ state, commit }) => {
   }
 }
 
-export const setGroups = async ({ state, commit }, payload) => {
+export const setGroups = async ({ commit, getters }, payload) => {
   try {
-    payload.access_token = state.user.token
+    payload.access_token = getters.token
     let data = await Group.getGroups(payload)
     console.log('getGroups success', data)
     commit(types.SET_GROUPS, data)
@@ -22,11 +22,11 @@ export const setGroups = async ({ state, commit }, payload) => {
   }
 }
 
-export const setMessages = async ({ state, commit }, payload) => {
+export const setMessages = async ({ state, commit, getters }, payload) => {
   try {
     payload.offset = state.message.offset
     payload.limit = state.message.limit
-    payload.access_token = state.user.token
+    payload.access_token = getters.token
     let data = await Message.getMessages(payload)
     if (data.items.length < state.message.limit) {
       if (state.message.items.length >= state.message.count) {
@@ -61,6 +61,18 @@ export const login = async ({ commit }, payload) => {
     commit(types.LOGIN, data)
   } catch (err) {
     console.log('login failure', err)
+    return err
+  }
+  return 'success'
+}
+
+export const logout = async ({ commit, getters }) => {
+  try {
+    let data = await User.logout({ access_token: getters.token })
+    console.log('logout success', data)
+    commit(types.LOGOUT)
+  } catch (err) {
+    console.log('logout failure', err)
     return err
   }
   return 'success'
