@@ -103,21 +103,24 @@ export default {
       vertical-align: middle;
       width: 300px;
       height: 30px;
-      border: 1px solid @main-border-color;
-      border-radius: 15px;
+      border: 1px solid #ececec;
+      border-radius: 5px;
       background-color: @main-background-color;
       outline: 0;
-      padding: 0 40px 0 15px;
+      padding-left: 45px;
       transition: border-color .2s;
       &:focus {
         border-color: #169bd5;
+      }
+      &::placeholder {
+        color: #d1d1d1;
       }
     }
     i {
       color: #707070;
       position: absolute;
       top: 50%;
-      right: 15px;
+      left: 15px;
       display: inline-block;
       line-height: normal;
       transform: translateY(-50%);

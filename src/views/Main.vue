@@ -5,7 +5,7 @@
       <app-sidebar class="app-sidebar"></app-sidebar>
       <div class="wrapper">
         <app-tab class="tab"></app-tab>
-        <router-view class="content" v-show="tabs[0] === active"></router-view>
+        <router-view class="content" :class="{ 'cover-tabs': tabs.length <= 1 }" v-show="tabs[0] === active"></router-view>
         <login v-for="item of NewAccountTabs" class="content" v-show="item === active" :key="item"></login>
         <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
         <member v-for="item of MemberTabs" class="content" v-show="item === active" :key="item"></member>
@@ -114,6 +114,10 @@ export default {
         bottom: 0;
         left: 0;
         overflow-y: auto;
+        transition: top .2s linear;
+        &.cover-tabs {
+          top: 0;
+        }
       }
     }
   }
@@ -145,20 +149,21 @@ export default {
         display: inline-block;
         width: 25%;
         vertical-align: middle;
-        padding: 10px 0;
+        padding: 15px 0;
       }
     }
     .table-head {
       background-color: @main-background-color;
+      border: 1px solid #ececec;
     }
     .table-body {
       position: absolute;
-      top: 39px;
+      top: 51px;
       bottom: 0;
       width: 100%;
       overflow-y: auto;
       .table-row {
-        border-bottom: 1px solid @main-border-color;
+        border-bottom: 1px solid #ececec;
       }
     }
   }

@@ -5,16 +5,13 @@
       <li>
         <h1>托管微信账号</h1>
       </li>
-      <li class="pull-right">
-        <a class="unselectable" @click="showAddAccount = true"><i class="iconfont">&#xe63b;</i>新增账号</a>
-      </li>
-    </ul>
-    <ul class="selector">
       <li>
-        <span>状态</span>
         <select v-model="status">
           <option v-for="item of statuses" :value="item">{{ item.title }}</option>
         </select>
+      </li>
+      <li class="pull-right">
+        <a class="unselectable" @click="showAddAccount = true"><i class="iconfont">&#xe63b;</i>新增账号</a>
       </li>
       <li class="account-search pull-right">
         <input type="text" v-model="keywords" @keyup.enter="search" placeholder="微信号，昵称" />
@@ -134,28 +131,27 @@ export default {
 
 <style lang="less">
 @import "../assets/less/colors.less";
-@button-color: #169bd5;
-@padding-top: 50px;
-@padding-right: 90px;
+@button-color: #61b0ff;
+@padding-top: 40px;
+@padding-right: 40px;
 .account {
   padding: @padding-top @padding-right;
   .account-title {
     line-height: 30px;
-    padding-right: 50px;
     font-size: 0;
     li {
+      font-size: 14px;
       display: inline-block;
       vertical-align: middle;
       h1 {
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 20px;
+        margin-right: 20px;
       }
       a {
-        font-size: 14px;
         display: block;
-        width: 100px;
+        width: 150px;
         height: 30px;
-        border-radius: 15px;
+        border-radius: 5px;
         color: #fff;
         background-color: @button-color;
         text-align: center;
@@ -164,30 +160,36 @@ export default {
           margin-right: 5px;
         }
       }
-    }
-  }
-  .selector {
-    line-height: 70px;
-    padding: 0 50px;
-    font-size: 0;
-    li {
-      font-size: 14px;
-      display: inline-block;
-      span {
-        margin-right: 10px;
+      select {
+        height: 30px;
+        border-radius: 5px;
+        padding-left: 5px;
+        outline: 0;
+        background-color: #f9f9f9;
+        border-color: #ececec;
+        transition: border-color .2s;
+        &:focus {
+          border-color: @button-color;
+        }
       }
       &.account-search {
+        margin-right: 20px;
         position: relative;
         input[type=text] {
           font-size: 12px;
-          height: 26px;
-          border: 1px solid #c9c9c9;
-          border-radius: 13px;
-          padding: 0 30px 0 13px;
+          width: 200px;
+          height: 30px;
+          border: 1px solid #ececec;
+          border-radius: 5px;
+          background-color: #f9f9f9;
+          padding-left: 35px;
           outline: 0;
           transition: border-color .2s;
           &:focus {
             border-color: @button-color;
+          }
+          &::placeholder {
+            color: #d1d1d1;
           }
         }
         i {
@@ -196,16 +198,15 @@ export default {
           cursor: pointer;
           position: absolute;
           top: 50%;
-          right: 10px;
+          left: 10px;
           transform: translateY(-50%);
-          color: #c9c9c9;
         }
       }
     }
   }
   .table-wrapper {
     position: absolute;
-    top: 155px;
+    top: 90px;
     right: @padding-right;
     bottom: @padding-top;
     left: @padding-right;
@@ -214,11 +215,11 @@ export default {
         width: 20%!important;
         a {
           display: inline-block;
-          width: 50px;
+          width: 45px;
           height: 20px;
           line-height: 18px;
           font-size: 12px;
-          border-radius: 10px;
+          border-radius: 5px;
           border: 1px solid @button-color;
           color: @button-color;
         }
