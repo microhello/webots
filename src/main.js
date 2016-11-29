@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App'
-import Help from './Help'
 import router from './router'
 import store from './store'
 import * as filters from './filters'
@@ -22,12 +21,5 @@ new Vue({
   template: '<App/>',
   components: { App },
   router,
-  store
-})
-
-new Vue({
-  el: '#help',
-  template: '<Help/>',
-  components: { Help },
   store
 })

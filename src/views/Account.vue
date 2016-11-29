@@ -1,11 +1,12 @@
 <template>
   <div class="account">
+    <add-account v-if="showAddAccount" @cancel="showAddAccount = false"></add-account>
     <ul class="account-title clearfix">
       <li>
         <h1>托管微信账号</h1>
       </li>
       <li class="pull-right">
-        <a class="unselectable"><i class="iconfont">&#xe63b;</i>新增账号</a>
+        <a class="unselectable" @click="showAddAccount = true"><i class="iconfont">&#xe63b;</i>新增账号</a>
       </li>
     </ul>
     <ul class="selector">
@@ -55,6 +56,8 @@
 import { mapGetters } from 'vuex'
 import { Account } from '../api'
 
+const AddAccount = resolve => require(['../components/AddAccount'], resolve)
+
 export default {
   name: 'Account',
   data () {
@@ -73,7 +76,8 @@ export default {
       offset: 0,
       limit: 20,
       accounts: [],
-      statuses: statuses
+      statuses: statuses,
+      showAddAccount: false
     }
   },
   computed: {
@@ -118,6 +122,9 @@ export default {
     status () {
       this.search()
     }
+  },
+  components: {
+    AddAccount
   },
   mounted () {
     this.getAccounts()

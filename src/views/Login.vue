@@ -3,27 +3,51 @@
     <div class="header">
       群喵 智能群管理助手
     </div>
-    <div class="login-form">
+    <ul class="login-tabs">
+      <li @click="showLogin = true" :class="{ 'active': showLogin }">登录LOGIN</li>
+      <li @click="showLogin = false" :class="{ 'active': !showLogin }">注册REGISTER</li>
+      <div class="underline" :class="{ 'showLogin': showLogin }"></div>
+    </ul>
+    <div class="login-form" v-if="showLogin">
       <div class="form-line clearfix">
         <label class="form-label">账号</label>
         <div class="form-input">
-          <input type="text" name="account" v-model.trim="loginForm.phone" placeholder="手机号" />
+          <input type="text" name="account" v-model.trim="loginForm.phone" @keyup.enter="submitLogin" placeholder="手机号" />
         </div>
       </div>
       <div class="form-line clearfix">
         <label class="form-label">密码</label>
         <div class="form-input">
-          <input type="password" name="password" v-model.trim="loginForm.password" placeholder="6-16个字符" />
+          <input type="password" name="password" v-model.trim="loginForm.password" @keyup.enter="submitLogin" placeholder="6-16个字符" />
         </div>
       </div>
       <div class="form-line clearfix">
         <div class="form-input">
-          <a @click="submit" class="login-button">登录</a>
+          <a @click="submitLogin" class="login-button">登录</a>
         </div>
       </div>
       <div class="form-line clearfix remember-password">
         <div class="form-input">
           <input type="checkbox" id="remember-password" v-model="remember" /><label for="remember-password">记住密码</label>
+        </div>
+      </div>
+    </div>
+    <div class="login-form" v-else>
+      <div class="form-line clearfix">
+        <label class="form-label">账号</label>
+        <div class="form-input">
+          <input type="text" name="account" v-model.trim="registerForm.phone" @keyup.enter="submitRegister" placeholder="手机号" />
+        </div>
+      </div>
+      <div class="form-line clearfix">
+        <label class="form-label">密码</label>
+        <div class="form-input">
+          <input type="password" name="password" v-model.trim="registerForm.password" @keyup.enter="submitRegister" placeholder="6-16个字符" />
+        </div>
+      </div>
+      <div class="form-line clearfix">
+        <div class="form-input">
+          <a @click="submitRegister" class="login-button">注册</a>
         </div>
       </div>
     </div>
@@ -42,16 +66,17 @@ export default {
         phone: window.localStorage.account,
         password: window.localStorage.password
       },
-      remember: !!window.localStorage.account
+      registerForm: {
+        phone: '',
+        password: ''
+      },
+      remember: !!window.localStorage.account,
+      showLogin: true
     }
   },
   methods: {
-    async submit () {
-      if (!this.loginForm.phone || !this.loginForm.password) {
-        this.addALertMessage({
-          type: 'error',
-          message: '请输入账号和密码'
-        })
+    async submitLogin () {
+      if (!this.confirmForm(this.loginForm)) {
         return
       }
       let message = await this.login(this.loginForm)
@@ -77,10 +102,39 @@ export default {
         })
       }
     },
+    async submitRegister () {
+      if (!this.confirmForm(this.registerForm)) {
+        return
+      }
+      let message = await this.register(this.registerForm)
+      if (message === 'success') {
+        this.addALertMessage({
+          type: 'success',
+          message: '注册成功'
+        })
+        this.showLogin = true
+      } else {
+        this.addALertMessage({
+          type: 'error',
+          message: '注册失败：' + message
+        })
+      }
+    },
+    confirmForm (form) {
+      if (!form.phone || !form.password) {
+        this.addALertMessage({
+          type: 'error',
+          message: '请输入账号和密码'
+        })
+        return false
+      } else {
+        return true
+      }
+    },
     ...mapMutations({
       addALertMessage: types.ADD_ALERT_MESSAGE
     }),
-    ...mapActions(['login'])
+    ...mapActions(['login', 'register'])
   }
 }
 </script>
@@ -100,8 +154,37 @@ export default {
     font-weight: bold;
     color: #fff;
   }
+  .login-tabs {
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+    border-bottom: 1px solid #f7f7f7;
+    position: relative;
+    font-size: 0;
+    .underline {
+      width: 120px;
+      border-bottom: 1px solid #3087b5;
+      position: absolute;
+      bottom: 0;
+      transition: all .2s;
+      left: 50%;
+      &.showLogin {
+        transform: translateX(-100%);
+      }
+    }
+    li {
+      font-size: 16px;
+      display: inline-block;
+      width: 120px;
+      cursor: pointer;
+      transition: all .2s;
+      &.active {
+        color: #3087b5;
+      }
+    }
+  }
   .login-form {
-    margin: 90px auto 0;
+    margin: 0 auto;
     width: 450px;
     text-align: center;
     .form-line {

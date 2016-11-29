@@ -1,11 +1,10 @@
 <template>
-  <div class="messages">
+  <div class="messages clearfix">
     <group-list class="side-bar"></group-list>
     <div class="side-content">
       <div class="title">
         <p>群消息记录</p>
       </div>
-      <!-- <router-view></router-view> -->
       <div class="messages-content">
         <date-selector class="date-selector" @selected="selected"></date-selector>
         <div class="message-content" @scroll="nextPage">

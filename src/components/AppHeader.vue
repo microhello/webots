@@ -21,7 +21,8 @@
     </li>
     <li class="add-account pull-right">
       <i class="iconfont">&#xe622;</i>
-      <a>新增账号</a>
+      <a @click="showAddAccount = true">新增账号</a>
+      <add-account v-if="showAddAccount" @cancel="showAddAccount = false"></add-account>
     </li>
   </ul>
 </template>
@@ -30,6 +31,8 @@
 import { mapMutations, mapActions } from 'vuex'
 import * as types from '../store/types'
 
+const AddAccount = resolve => require(['./AddAccount'], resolve)
+
 export default {
   name: 'AppHeader',
   data () {
@@ -37,7 +40,8 @@ export default {
       title: '微信群助理机器人',
       keywords: '',
       username: 'wemiyun',
-      showDropdown: false
+      showDropdown: false,
+      showAddAccount: false
     }
   },
   methods: {
@@ -64,6 +68,9 @@ export default {
       addTab: types.ADD_TAB
     }),
     ...mapActions(['logout'])
+  },
+  components: {
+    AddAccount
   }
 }
 </script>
@@ -121,7 +128,7 @@ export default {
     color: #d7d7d7;
     margin: 0 20px;
   }
-  .add-account {
+  li.add-account {
     i {
       display: inline-block;
       transform: translateY(-1px);

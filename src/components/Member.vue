@@ -1,7 +1,7 @@
 <template>
   <div class="member">
     <div class="title">
-      <p>群成员</p>
+      <p>群成员 （{{ membersCount }}人）</p>
     </div>
     <div class="member-content">
       <div class="selector">
@@ -51,7 +51,8 @@ export default {
       groups: [],
       members: [],
       offset: 0,
-      limit: 20
+      limit: 20,
+      membersCount: 0
     }
   },
   computed: {
@@ -120,6 +121,9 @@ export default {
   },
   mounted () {
     this.currentAccount = this.accounts[0]
+    Group.getMembers({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.membersCount = count
+    })
   }
 }
 </script>

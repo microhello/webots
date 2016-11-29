@@ -19,7 +19,7 @@
       </router-link>
     </li>
     <li>
-      <router-link to="/main" :class="{ 'active': currentPath === '/main' }">
+      <router-link to="/main/watcher" :class="{ 'active': currentPath === '/main/watcher' }">
         <i class="iconfont">&#xe608;</i>
         <p>群值守</p>
       </router-link>

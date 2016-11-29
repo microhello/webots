@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <help></help>
   </div>
 </template>
 
 <script>
+const Help = resolve => require(['./views/Help'], resolve)
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Help
+  }
 }
 </script>
 
@@ -18,7 +24,7 @@ export default {
 
 #app {
   height: 100%;
-  min-width: 700px;
+  min-width: 800px;
   position: relative;
 }
 </style>

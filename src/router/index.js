@@ -10,6 +10,7 @@ const Main = resolve => require(['../views/Main'], resolve)
 const Home = resolve => require(['../views/Home'], resolve)
 const Account = resolve => require(['../views/Account'], resolve)
 const Messages = resolve => require(['../views/Messages'], resolve)
+const Watcher = resolve => require(['../views/Watcher'], resolve)
 
 const router = new Router({
   // mode: 'history',
@@ -50,6 +51,10 @@ const router = new Router({
       path: '/main/messages',
       name: 'Messages',
       component: Messages
+    }, {
+      path: '/main/watcher',
+      name: 'Watcher',
+      component: Watcher
     }]
     // alias: '/item', // 别名
   }, {

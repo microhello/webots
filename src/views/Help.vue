@@ -8,8 +8,8 @@
 <script>
 import { mapState } from 'vuex'
 
-const Loading = resolve => require(['./components/Loading'], resolve)
-const Alert = resolve => require(['./components/Alert'], resolve)
+const Loading = resolve => require(['../components/Loading'], resolve)
+const Alert = resolve => require(['../components/Alert'], resolve)
 
 export default {
   name: 'Help',

@@ -1,7 +1,7 @@
 <template>
   <div class="contact">
     <div class="title">
-      <p>群成员</p>
+      <p>微信好友 （{{ contactsCount }}人）</p>
     </div>
     <div class="contact-content">
       <div class="selector">
@@ -53,7 +53,8 @@ export default {
       currentAccount: null,
       contacts: [],
       offset: 0,
-      limit: 20
+      limit: 20,
+      contactsCount: 0
     }
   },
   computed: {
@@ -99,6 +100,12 @@ export default {
       this.offset = 0
       this.getContacts()
     }
+  },
+  mounted () {
+    this.currentAccount = this.accounts[0]
+    Account.getContacts({ access_token: this.token, limit: 0 }).then(({ count }) => {
+      this.contactsCount = count
+    })
   }
 }
 </script>

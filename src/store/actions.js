@@ -54,6 +54,17 @@ export const trial = async ({ commit }, payload) => {
   return 'success'
 }
 
+export const register = async ({ commit }, payload) => {
+  try {
+    let data = await User.register(payload)
+    console.log('register success', data)
+  } catch (err) {
+    console.log('register failure', err)
+    return err
+  }
+  return 'success'
+}
+
 export const login = async ({ commit }, payload) => {
   try {
     let data = await User.login(payload)

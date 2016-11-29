@@ -23,7 +23,6 @@ const AppTab = resolve => require(['../components/AppTab'], resolve)
 const AppHeader = resolve => require(['../components/AppHeader'], resolve)
 const AppSidebar = resolve => require(['../components/AppSidebar'], resolve)
 const Search = resolve => require(['../components/Search'], resolve)
-const Login = resolve => require(['../components/Login'], resolve)
 const Member = resolve => require(['../components/Member'], resolve)
 const Contact = resolve => require(['../components/Contact'], resolve)
 
@@ -59,7 +58,6 @@ export default {
     AppHeader,
     AppSidebar,
     AppTab,
-    Login,
     Search,
     Member,
     Contact
@@ -124,6 +122,14 @@ export default {
     line-height: 50px;
     padding: 0 15px;
     border-bottom: 1px solid @main-border-color;
+    font-size: 0;
+    p {
+      font-size: 14px;
+      display: inline-block;
+      .count {
+        color: #169BD5;
+      }
+    }
   }
 
 

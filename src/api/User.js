@@ -39,6 +39,24 @@ export default {
       })
     })
   },
+  register ({ phone, password }) {
+    return new Promise((resolve, reject) => {
+      Vue.http({
+        url: urlPrefix + urlPort + urlDict.register,
+        method: methodDict.post,
+        body: {
+          phone: phone,
+          password: md5(password)
+        }
+      }).then(response => {
+        if (response.status === 200 || response.status === 204 || response.status === 201) {
+          resolve(response.body)
+        }
+      }, response => {
+        reject(response.body.message)
+      })
+    })
+  },
   login ({ phone, password }) {
     return new Promise((resolve, reject) => {
       Vue.http({
