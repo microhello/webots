@@ -25,6 +25,9 @@ const mutations = {
   },
   [types.ACTIVE] (state, item) {
     state.active = item
+  },
+  [types.RENAME_TAB] (state, { tab, title }) {
+    tab.title = title
   }
 }
 

@@ -14,6 +14,9 @@ import * as types from '../store/types'
 export default {
   name: 'AppTab',
   computed: {
+    root () {
+      return this.tabs.filter(item => item.type === 'root')[0]
+    },
     ...mapState({
       tabs: state => state.tab.items,
       active: state => state.tab.active
@@ -22,8 +25,27 @@ export default {
   methods: {
     ...mapMutations({
       delTab: types.DEL_TAB,
-      setActiveTab: types.ACTIVE
+      setActiveTab: types.ACTIVE,
+      renameTab: types.RENAME_TAB
     })
+  },
+  watch: {
+    $route (newVal) {
+      switch (newVal.name) {
+        case 'Home':
+          this.renameTab({ tab: this.root, title: '首页' })
+          break
+        case 'Account':
+          this.renameTab({ tab: this.root, title: '账号' })
+          break
+        case 'Messages':
+          this.renameTab({ tab: this.root, title: '群消息' })
+          break
+        case 'Watcher':
+          this.renameTab({ tab: this.root, title: '群值守' })
+          break
+      }
+    }
   }
 }
 </script>
@@ -48,7 +70,6 @@ export default {
     cursor: default;
     background-color: #d7d7d7;
     position: relative;
-    border-left: 3px solid #d7d7d7;
     &, & i {
       -webkit-transition: all .3s;
       -moz-transition: all .3s;
@@ -58,10 +79,12 @@ export default {
     }
     &.active, &:hover {
       background-color: #fff;
-      border-color: @active-background-color;
       i {
         opacity: 1;
       }
+    }
+    &.active {
+      border-top: 2px solid @active-background-color;
     }
     p {
       padding-right: 20px;

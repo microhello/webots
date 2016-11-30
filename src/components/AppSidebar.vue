@@ -1,7 +1,12 @@
 <template>
-  <ul class="app-sidebar">
+  <ul class="app-sidebar" :class="{ 'spread': spread }">
     <li class="brand">
-      <img src="../assets/image/logo/01.png" />
+      <i class="nav-item">
+        <img src="../assets/image/logo/03.png" />
+      </i>
+      <span class="nav-item">
+        <img src="../assets/image/logo/04.png" />
+      </span>
     </li>
     <router-link to="/main/home" :class="{ 'active': currentPath === '/main/home' }" tag="li">
       <i class="iconfont nav-item">&#xe60a;</i>
@@ -28,7 +33,13 @@ import * as types from '../store/types'
 
 export default {
   name: 'AppSidebar',
+  props: {
+    spreadSideBar: Boolean
+  },
   computed: {
+    spread () {
+      return this.spreadSideBar
+    },
     currentPath () {
       return this.$route.path
     },
@@ -52,13 +63,19 @@ export default {
 <style lang="less">
 .app-sidebar {
   background-color: #22252c;
+  width: 50px;
+  transition: width .2s;
+  &.spread {
+    width: 170px;
+  }
   li {
-    height: 60px;
-    line-height: 60px;
+    height: 50px;
+    line-height: 50px;
     cursor: pointer;
     color: #d1d1d1;
     font-size: 0;
     transition: all .2s;
+    overflow: hidden;
     &.active {
       color: #fff;
       background: #161e21;
@@ -74,18 +91,20 @@ export default {
     }
     span {
       font-size: 14px;
+      width: 120px;
     }
   }
   .brand {
     background-color: #187be0;
-    position: relative;
     cursor: default;
-    img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: 33px;
+    height: 60px;
+    line-height: 60px;
+    .nav-item {
+      font-size: 0;
+      img {
+        height: 20px;
+        vertical-align: middle;
+      }
     }
   }
 }

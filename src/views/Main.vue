@@ -1,8 +1,8 @@
 <template>
   <div class="main clearfix">
-    <app-sidebar class="app-sidebar"></app-sidebar>
-    <div class="app-content clearfix">
-      <app-header class="app-header"></app-header>
+    <app-sidebar class="app-sidebar" :spread-side-bar="spreadSideBar"></app-sidebar>
+    <div class="app-content" :class="{ 'spread-app-sidebar': spreadSideBar }">
+      <app-header class="app-header" :spread-side-bar="spreadSideBar" @toggle-side-bar="toggleSideBar"></app-header>
       <div class="wrapper">
         <app-tab class="tab"></app-tab>
         <div class="container" :class="{ 'hide-tabs': tabs.length <= 1 }">
@@ -29,6 +29,11 @@ const Contact = resolve => require(['../components/Contact'], resolve)
 
 export default {
   name: 'Main',
+  data () {
+    return {
+      spreadSideBar: false
+    }
+  },
   computed: {
     SearchTabs () {
       return this.tabs.filter(item => item.type === 'search')
@@ -45,6 +50,9 @@ export default {
     })
   },
   methods: {
+    toggleSideBar () {
+      this.spreadSideBar = !this.spreadSideBar
+    },
     ...mapMutations({
       addTab: types.ADD_TAB,
       delTab: types.DEL_TAB,
@@ -63,7 +71,7 @@ export default {
   mounted () {
     this.delTab()
     this.addTab({
-      title: '机器人',
+      title: '首页',
       value: 'root',
       type: 'root'
     })
@@ -80,15 +88,18 @@ export default {
   width: 100%;
   height: 100%;
   .app-sidebar {
-    width: 170px;
     height: 100%;
     float: left;
   }
   .app-content {
     height: 100%;
-    margin-left: 170px;
     background-color: @main-background-color;
     position: relative;
+    margin-left: 50px;
+    transition: margin-left .2s;
+    &.spread-app-sidebar {
+      margin-left: 170px;
+    }
     .app-header {
       box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
       border-bottom: 1px solid #d4d4d4;

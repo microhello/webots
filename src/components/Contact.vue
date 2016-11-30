@@ -33,7 +33,7 @@
               <li>{{ item.province }}</li>
               <li>{{ item.city }}</li>
               <li>{{ item.signature }}</li>
-              <li>{{ currentAccount.nick_name }}</li>
+              <li>{{ getAccountNickName(item.uin) }}</li>
             </ul>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     ...mapState({
-      accounts: state => state.account.items
+      accounts: state => [{ nick_name: '全部' }].concat(state.account.items)
     }),
     ...mapGetters(['token'])
   },
@@ -91,6 +91,13 @@ export default {
       // console.log(scrollBottom)
       if (scrollBottom === 0) {
         this.getContacts()
+      }
+    },
+    getAccountNickName (uin) {
+      for (let item of this.accounts) {
+        if (item.uin === uin) {
+          return item.nick_name
+        }
       }
     }
   },

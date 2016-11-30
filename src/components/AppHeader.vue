@@ -1,5 +1,9 @@
 <template>
   <ul class="app-header clearfix">
+    <li class="toggle-side-bar">
+      <i class="iconfont" v-show="spread" @click="toggleSideBar">&#xe626;</i>
+      <i class="iconfont" v-show="!spread" @click="toggleSideBar">&#xe613;</i>
+    </li>
     <li class="header-search">
       <input type="text" name="keywords" placeholder="搜索关键词：多个关键词使用“+”或“,”分隔" v-model="keywords" @keyup.enter="search" />
       <i class="button iconfont" @click="search">&#xe620;</i>
@@ -41,7 +45,18 @@ export default {
       showAddAccount: false
     }
   },
+  props: {
+    spreadSideBar: Boolean
+  },
+  computed: {
+    spread () {
+      return this.spreadSideBar
+    }
+  },
   methods: {
+    toggleSideBar () {
+      this.$emit('toggle-side-bar')
+    },
     search () {
       this.keywords = this.keywords.replace(/^[+,]+|[+,]+$/g, '').replace(/[+,]{2,}/g, $ => $[0])
       if (this.keywords === '' || this.$route.name === 'Login') {
@@ -79,24 +94,34 @@ export default {
   background-color: #fff;
   height: 60px;
   line-height: 60px;
-  padding: 0 40px;
+  padding-right: 40px;
   font-size: 0;
   li {
     font-size: 14px;
     display: inline-block;
     vertical-align: middle;
   }
+  .toggle-side-bar {
+    width: 60px;
+    text-align: center;
+    border-right: 1px solid #ececec;
+    i {
+      cursor: pointer;
+      font-size: 20px;
+      color: #b7b7b7;
+    }
+  }
   .header-search {
     display: inline-block;
     position: relative;
     input[type=text] {
-      font-size: 12px;
+      font-size: 14px;
       vertical-align: middle;
       width: 300px;
       height: 30px;
-      border: 1px solid #ececec;
+      border: 0;
       border-radius: 5px;
-      background-color: @main-background-color;
+      // background-color: @main-background-color;
       outline: 0;
       padding-left: 45px;
       transition: border-color .2s;

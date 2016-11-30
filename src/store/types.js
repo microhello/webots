@@ -17,6 +17,7 @@ export const ADD_ALERT_MESSAGE = 'help/ADD_ALERT_MESSAGE'
 export const ADD_TAB = 'tab/ADD_TAB'
 export const DEL_TAB = 'tab/DEL_TAB'
 export const ACTIVE = 'tab/ACTIVE'
+export const RENAME_TAB = 'tab/RENAME_TAB'
 
 // user
 export const LOGIN = 'user/LOGIN'
