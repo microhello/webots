@@ -1,15 +1,16 @@
 <template>
   <div class="main clearfix">
-    <app-header class="app-header"></app-header>
-    <div class="container clearfix">
-      <app-sidebar class="app-sidebar"></app-sidebar>
+    <app-sidebar class="app-sidebar"></app-sidebar>
+    <div class="app-content clearfix">
+      <app-header class="app-header"></app-header>
       <div class="wrapper">
         <app-tab class="tab"></app-tab>
-        <router-view class="content" :class="{ 'cover-tabs': tabs.length <= 1 }" v-show="tabs[0] === active"></router-view>
-        <login v-for="item of NewAccountTabs" class="content" v-show="item === active" :key="item"></login>
-        <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
-        <member v-for="item of MemberTabs" class="content" v-show="item === active" :key="item"></member>
-        <contact v-for="item of ContactTabs" class="content" v-show="item === active" :key="item"></contact>
+        <div class="container" :class="{ 'hide-tabs': tabs.length <= 1 }">
+          <router-view class="content" v-show="tabs[0] === active"></router-view>
+          <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
+          <member v-for="item of MemberTabs" class="content" v-show="item === active" :key="item"></member>
+          <contact v-for="item of ContactTabs" class="content" v-show="item === active" :key="item"></contact>
+        </div>
       </div>
     </div>
   </div>
@@ -29,9 +30,6 @@ const Contact = resolve => require(['../components/Contact'], resolve)
 export default {
   name: 'Main',
   computed: {
-    NewAccountTabs () {
-      return this.tabs.filter(item => item.type === 'new-account')
-    },
     SearchTabs () {
       return this.tabs.filter(item => item.type === 'search')
     },
@@ -79,34 +77,31 @@ export default {
 @import "../assets/less/colors.less";
 
 .main {
-  .app-header {
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid #d4d4d4;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    z-index: 9999;
+  width: 100%;
+  height: 100%;
+  .app-sidebar {
+    width: 170px;
+    height: 100%;
+    float: left;
   }
-  .container {
-    position: absolute;
-    top: 61px;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  .app-content {
+    height: 100%;
+    margin-left: 170px;
     background-color: @main-background-color;
-    .app-sidebar {
-      background-color: #e7e7e7;
-      width: 60px;
-      height: 100%;
-      line-height: 60px;
-      float: left;
+    position: relative;
+    .app-header {
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid #d4d4d4;
+      position: absolute;
+      top: 0;
+      width: 100%;
     }
     .wrapper {
-      height: 100%;
-      margin-left: 60px;
-      position: relative;
-      .content {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      width: 100%;
+      .container {
         background-color: #fff;
         position: absolute;
         top: 40px;
@@ -115,7 +110,12 @@ export default {
         left: 0;
         overflow-y: auto;
         transition: top .2s linear;
-        &.cover-tabs {
+        .content {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+        }
+        &.hide-tabs {
           top: 0;
         }
       }

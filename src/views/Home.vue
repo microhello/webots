@@ -23,7 +23,7 @@
       </div>
       <div class="count-content">
         <div class="count-item">
-          <a>
+          <a @click="addTab({ title: '群成员', value: 'member', type: 'member' })">
             <div class="count">
               <i class="iconfont">&#xe603;</i>
               <span>{{ groupsCount }}</span>
@@ -160,7 +160,7 @@ export default {
 
 <style lang="less">
 .home {
-  padding: 40px 50px;
+  padding: 40px;
   .count-box {
     font-size: 0;
     margin-bottom: 40px;

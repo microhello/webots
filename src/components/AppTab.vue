@@ -2,7 +2,7 @@
   <ul class="tab">
     <li v-for="item of tabs" :class="{ 'active': active === item }" @click="setActiveTab(item)" :title="item.title">
       <p>{{ item.title }}</p>
-      <i v-if="item.type !== 'root'" @click.stop="delTab(item)">x</i>
+      <i class="iconfont" v-if="item.type !== 'root'" @click.stop="delTab(item)">&#xe652;</i>
     </li>
   </ul>
 </template>
@@ -71,10 +71,9 @@ export default {
       text-overflow: ellipsis;
     }
     i {
-      font-style: normal;
       display: inline-block;
-      height: 10px;
-      line-height: 10px;
+      height: 16px;
+      line-height: 16px;
       position: absolute;
       top: 50%;
       right: 10px;

@@ -25,7 +25,7 @@
     </div> -->
     <div class="side-content search-content">
       <div class="title">
-        <h2 class="title-name">搜索"<span :title="keywords">{{ keywords }}</span>"</h2>
+        <h2 class="search-keywords">搜索"<span :title="keywords">{{ keywords }}</span>"</h2>
         <!-- <span>共{{ count }}条</span> -->
       </div>
       <div class="search-results-wrapper">
@@ -146,15 +146,18 @@ export default {
     margin-left: 0;
     width: 100%;
     height: 100%;
-    .title .title-name {
-      font-size: 16px;
-      font-weight: normal;
-      display: inline-block;
-      width: 100%;
-      word-break: keep-all;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .title {
+      padding: 0 40px;
+      .search-keywords {
+        font-size: 16px;
+        font-weight: normal;
+        display: inline-block;
+        width: 100%;
+        word-break: keep-all;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     .search-results-wrapper {
       position: absolute;
@@ -166,7 +169,7 @@ export default {
         overflow-y: auto;
         height: 100%;
         .search-results-item {
-          padding: 15px 30px;
+          padding: 15px 40px;
           border-bottom: 1px solid @main-border-color;
           font-size: 12px;
           .result-item {

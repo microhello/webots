@@ -1,8 +1,5 @@
 <template>
   <ul class="app-header clearfix">
-    <li class="brand">
-      <img src="../assets/image/logo/02.jpg" />
-    </li>
     <li class="header-search">
       <input type="text" name="keywords" placeholder="搜索关键词：多个关键词使用“+”或“,”分隔" v-model="keywords" @keyup.enter="search" />
       <i class="button iconfont" @click="search">&#xe620;</i>
@@ -80,6 +77,7 @@ export default {
 
 .app-header {
   background-color: #fff;
+  height: 60px;
   line-height: 60px;
   padding: 0 40px;
   font-size: 0;
@@ -87,13 +85,6 @@ export default {
     font-size: 14px;
     display: inline-block;
     vertical-align: middle;
-  }
-  .brand {
-    margin-right: 40px;
-    img {
-      height: 25px;
-      vertical-align: middle;
-    }
   }
   .header-search {
     display: inline-block;

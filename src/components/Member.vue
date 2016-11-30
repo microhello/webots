@@ -129,16 +129,18 @@ export default {
 </script>
 
 <style lang="less">
+@padding-left: 40px;
+@title-height: 50px;
 .member {
   .title {
-    padding-left: 50px;
+    padding: 0 40px;
   }
   .member-content {
     position: absolute;
-    top: 50px;
-    right: 50px;
+    top: @title-height;
+    right: @padding-left;
     bottom: 50px;
-    left: 50px;
+    left: @padding-left;
     .selector {
       padding: 0 40px;
       line-height: 100px;
