@@ -65,7 +65,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // console.log(to, from, Cookies.get('token'))
-  if (to.path === '/login' || to.path === '/homepage' || Cookies.get('token')) {
+  if (to.path === '/login' || to.path === '/register' || to.path === '/homepage' || Cookies.get('token')) {
     next() // 必须调用，否则导航会终止
   } else {
     next('/login') // 重定向
