@@ -1,6 +1,6 @@
 <template>
   <div class="account">
-    <add-account v-if="showAddAccount" @cancel="showAddAccount = false" :account-info="accountInfo"></add-account>
+    <add-account v-if="showAddAccount" @close="showAddAccount = false" :account-info="accountInfo"></add-account>
     <ul class="account-title clearfix">
       <li>
         <h1>托管微信账号</h1>

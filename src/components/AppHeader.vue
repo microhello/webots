@@ -23,7 +23,7 @@
     <li class="add-account pull-right">
       <i class="iconfont">&#xe622;</i>
       <a @click="showAddAccount = true">新增账号</a>
-      <add-account v-if="showAddAccount" @cancel="showAddAccount = false"></add-account>
+      <add-account v-if="showAddAccount" @close="showAddAccount = false"></add-account>
     </li>
   </ul>
 </template>

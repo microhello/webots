@@ -146,14 +146,13 @@ export default {
   background-color: #fff;
   height: 100%;
   .header {
-    background-image: url(../assets/image/background/04.png);
+    background-image: url(../assets/image/background/04.jpg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     text-align: center;
-    padding: 100px 0 60px 0;
+    padding: 100px 0 80px 0;
     font-size: 42px;
-    font-weight: bold;
     color: #fff;
   }
   .login-tabs {

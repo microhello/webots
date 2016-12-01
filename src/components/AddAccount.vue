@@ -1,7 +1,8 @@
 <template>
   <div class="add-account">
-    <div class="add-account-wrapper" @click="cancel"></div>
+    <div class="add-account-wrapper" @click="close"></div>
     <div class="login-box">
+      <i class="iconfont close-btn" @click="close">&#xe652;</i>
       <div class="step-add step-online" v-if="accountInfo">
         <h1>上线托管微信</h1>
         <ul class="step-body">
@@ -89,9 +90,9 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
-    cancel () {
+    close () {
       clearTimeout(this.timeoutId)
-      this.$emit('cancel')
+      this.$emit('close')
     },
     timeout () {
       this.timing = false
@@ -147,6 +148,19 @@ div.add-account {
     padding: 60px 70px;
     border-radius: 5px;
     line-height: normal;
+    .close-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #fff;
+      transform: translateX(100%);
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      font-size: 26px;
+      cursor: pointer;
+    }
     .step-body {
       width: 575px;
       text-align: center;
@@ -203,12 +217,12 @@ div.add-account {
             background-color: #c9c9c9;
             .cover {
               background-color: #00cc66;
-              width: 0;
+              width: 100%;
               height: 100%;
             }
             &.timing > .cover {
               transition: width 300s linear;
-              width: 100%;
+              width: 0;
             }
           }
         }
