@@ -24,7 +24,7 @@ export default {
   position: fixed;
   top: 0;
   left: 50%;
-  z-index: 100001;
+  z-index: 1000001;
   transform: translateX(-50%);
   pointer-events: none;
   li {

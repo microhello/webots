@@ -2,14 +2,42 @@
   <div class="add-account">
     <div class="add-account-wrapper" @click="cancel"></div>
     <div class="login-box">
-      <div class="step1" v-show="step === 1" @click="step = 2">
+      <div class="step-add step-online" v-if="accountInfo">
+        <h1>上线托管微信</h1>
+        <ul class="step-body">
+          <li>
+            <div class="qrcode-box">
+              <h2>请使用微信扫描二维码</h2>
+              <img class="qr-code" :src="imgUrl" />
+              <div class="progress-bar" :class="{ 'timing': timing }">
+                <div class="cover"></div>
+              </div>
+            </div>
+          </li>
+          <li class="qrcode-illustration">
+            <ul class="account-info">
+              <li>
+                <span class="info-title">昵称/名字：</span>
+                <span class="info-value">{{ accountInfo.nick_name }}</span>
+              </li>
+              <li>
+                <span class="info-title">托管UIN：</span>
+                <span class="info-value">{{ accountInfo.uin }}</span>
+              </li>
+            </ul>
+            <p>1、请保证上线微信与首次托管微信微同一微信。</p>
+            <p>2、请在有效时间内扫码，超过时间二维码自动刷新。</p>
+          </li>
+        </ul>
+      </div>
+      <div class="step-add" v-else>
         <h1>新增托管微信</h1>
         <ul class="step-body">
           <li>
             <div class="qrcode-box">
               <h2>请使用微信扫描二维码</h2>
-              <img src="../assets/image/login.png" />
-              <div class="progress-bar">
+              <img class="qr-code" :src="imgUrl" />
+              <div class="progress-bar" :class="{ 'timing': timing }">
                 <div class="cover"></div>
               </div>
             </div>
@@ -20,7 +48,7 @@
           </li>
         </ul>
       </div>
-      <div class="step2" v-show="step === 2" @click="step = 3">
+      <!-- <div class="step-success">
         <div class="step-body">
           <i class="iconfont">&#xe612;</i>
           <ul class="account-info">
@@ -35,51 +63,59 @@
           </ul>
           <a class="to-account-setting">进入账号设置</a>
         </div>
-      </div>
-      <div class="step1 step3" v-show="step === 3" @click="step = 1">
-        <h1>上线托管微信</h1>
-        <ul class="step-body">
-          <li>
-            <div class="qrcode-box">
-              <h2>请使用微信扫描二维码</h2>
-              <img src="../assets/image/login.png" />
-              <div class="progress-bar">
-                <div class="cover"></div>
-              </div>
-            </div>
-          </li>
-          <li class="qrcode-illustration">
-            <ul class="account-info">
-              <li>
-                <span class="info-title">昵称/名字：</span>
-                <span class="info-value">许夜</span>
-              </li>
-              <li>
-                <span class="info-title">托管UIN：</span>
-                <span class="info-value">3300264983</span>
-              </li>
-            </ul>
-            <p>1、请保证上线微信与首次托管微信微同一微信。</p>
-            <p>2、请在有效时间内扫码，超过时间二维码自动刷新。</p>
-          </li>
-        </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
+import { Account } from '../api'
+import { mapGetters, mapMutations } from 'vuex'
+import * as types from '../store/types'
+
 export default {
   name: 'AddAccount',
   data () {
     return {
-      step: 1
+      timeoutId: 0,
+      timing: false,
+      imgUrl: null
     }
+  },
+  props: {
+    accountInfo: Object
+  },
+  computed: {
+    ...mapGetters(['token'])
   },
   methods: {
     cancel () {
+      clearTimeout(this.timeoutId)
       this.$emit('cancel')
-    }
+    },
+    timeout () {
+      this.timing = false
+      Account.getQrcode({ access_token: this.token }).then(data => {
+        console.log('getQrcode success', data)
+        this.imgUrl = window.URL.createObjectURL(data)
+        this.timeoutId = setTimeout(() => {
+          this.timeout()
+        }, 300000)
+        this.timing = true
+      }, data => {
+        console.log('getQrcode failure', data)
+        this.addAlertMessage({
+          type: 'error',
+          message: '获取二维码失败，请稍后再试'
+        })
+      })
+    },
+    ...mapMutations({
+      addAlertMessage: types.ADD_ALERT_MESSAGE
+    })
+  },
+  mounted () {
+    this.timeout()
   }
 }
 </script>
@@ -138,7 +174,7 @@ div.add-account {
         }
       }
     }
-    .step1 {
+    .step-add {
       h1 {
         font-size: 16px;
         margin-bottom: 30px;
@@ -170,8 +206,8 @@ div.add-account {
               width: 0;
               height: 100%;
             }
-            &:hover > .cover {
-              transition: width 10s linear;
+            &.timing > .cover {
+              transition: width 300s linear;
               width: 100%;
             }
           }
@@ -187,7 +223,7 @@ div.add-account {
         }
       }
     }
-    .step2 > .step-body {
+    .step-success > .step-body {
       i {
         font-size: 80px;
         color: #2aa515;
@@ -198,7 +234,7 @@ div.add-account {
         color: #169BD5;
       }
     }
-    .step3 > .step-body > .qrcode-illustration {
+    .step-online > .step-body > .qrcode-illustration {
       padding-right: 0;
       .account-info {
         margin: 0 0 40px;

@@ -21,7 +21,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 1000000;
   .sk-three-bounce {
     position: absolute;
     top: 50%;

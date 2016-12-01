@@ -4,11 +4,11 @@
       群喵 智能群管理助手
     </div>
     <ul class="login-tabs">
-      <li @click="showLogin = true" :class="{ 'active': showLogin }">登录LOGIN</li>
-      <li @click="showLogin = false" :class="{ 'active': !showLogin }">注册REGISTER</li>
-      <div class="underline" :class="{ 'showLogin': showLogin }"></div>
+      <router-link to="/login" :class="{ 'active': action === '/login' }" tag="li">登录LOGIN</router-link>
+      <router-link to="/register" :class="{ 'active': action === '/register' }" tag="li">注册REGISTER</router-link>
+      <div class="underline" :class="{ 'on-login': action === '/login' }"></div>
     </ul>
-    <div class="login-form" v-if="showLogin">
+    <div class="login-form" v-show="action === '/login'">
       <div class="form-line clearfix">
         <label class="form-label">账号</label>
         <div class="form-input">
@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="login-form" v-else>
+    <div class="login-form" v-show="action === '/register'">
       <div class="form-line clearfix">
         <label class="form-label">账号</label>
         <div class="form-input">
@@ -70,8 +70,12 @@ export default {
         phone: '',
         password: ''
       },
-      remember: !!window.localStorage.account,
-      showLogin: true
+      remember: !!window.localStorage.account
+    }
+  },
+  computed: {
+    action () {
+      return this.$route.path
     }
   },
   methods: {
@@ -92,9 +96,7 @@ export default {
           delete window.localStorage.account
           delete window.localStorage.password
         }
-        this.$router.push({
-          path: '/main'
-        })
+        this.$router.push('/main')
       } else {
         this.addALertMessage({
           type: 'error',
@@ -112,7 +114,7 @@ export default {
           type: 'success',
           message: '注册成功'
         })
-        this.showLogin = true
+        this.$router.push('/login')
       } else {
         this.addALertMessage({
           type: 'error',
@@ -168,7 +170,7 @@ export default {
       bottom: 0;
       transition: all .2s;
       left: 50%;
-      &.showLogin {
+      &.on-login {
         transform: translateX(-100%);
       }
     }

@@ -33,7 +33,8 @@ const router = new Router({
   }, {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    alias: '/register' // 别名
   }, {
     path: '/main',
     name: 'Main',
@@ -56,7 +57,6 @@ const router = new Router({
       name: 'Watcher',
       component: Watcher
     }]
-    // alias: '/item', // 别名
   }, {
     path: '*',
     redirect: '/homepage' // 重定向

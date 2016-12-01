@@ -1,6 +1,6 @@
 <template>
   <div class="account">
-    <add-account v-if="showAddAccount" @cancel="showAddAccount = false"></add-account>
+    <add-account v-if="showAddAccount" @cancel="showAddAccount = false" :account-info="accountInfo"></add-account>
     <ul class="account-title clearfix">
       <li>
         <h1>托管微信账号</h1>
@@ -11,7 +11,7 @@
         </select>
       </li>
       <li class="pull-right">
-        <a class="unselectable" @click="showAddAccount = true"><i class="iconfont">&#xe63b;</i>新增账号</a>
+        <a class="unselectable" @click="toggleAddAccount()"><i class="iconfont">&#xe63b;</i>新增账号</a>
       </li>
       <li class="account-search pull-right">
         <input type="text" v-model="keywords" @keyup.enter="search" placeholder="微信号，昵称" />
@@ -40,7 +40,7 @@
             </li>
             <li>
               <a v-if="item.online">下线</a>
-              <a v-else>上线</a>
+              <a v-else @click="toggleAddAccount(item)">上线</a>
             </li>
           </ul>
         </div>
@@ -74,7 +74,8 @@ export default {
       limit: 20,
       accounts: [],
       statuses: statuses,
-      showAddAccount: false
+      showAddAccount: false,
+      accountInfo: undefined
     }
   },
   computed: {
@@ -113,6 +114,10 @@ export default {
       if (scrollBottom === 0) {
         this.getAccounts()
       }
+    },
+    toggleAddAccount (accountInfo) {
+      this.accountInfo = accountInfo
+      this.showAddAccount = !this.showAddAccount
     }
   },
   watch: {

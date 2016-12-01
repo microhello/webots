@@ -8,13 +8,19 @@
             <img src="../assets/image/logo/01.png" />
           </li>
           <li class="pull-right">
+            <router-link to="/register" class="unselectable">注册</router-link>
+          </li>
+          <li class="pull-right split">
+            |
+          </li>
+          <li class="pull-right">
             <router-link to="/login" class="unselectable">登录</router-link>
           </li>
         </ul>
         <div class="title-wrapper">
           <div class="title">
             <h1>智能群管理助手，高效社群运营助推器</h1>
-            <a class="join-button unselectable" @click="toggleModal">申请试用</a>
+            <router-link to="/register" class="join-button unselectable">立即试用</router-link>
           </div>
         </div>
       </div>
@@ -84,7 +90,7 @@
       </div>
       <div class="content-item join">
         <h2>现在选择群喵，让你的运营更简单，高效</h2>
-        <a class="join-button unselectable" @click="toggleModal">立即体验</a>
+        <router-link to="/register" class="join-button unselectable">立即试用</router-link>
       </div>
     </div>
     <ul class="footer">
@@ -107,12 +113,12 @@
         </a>
         <span>13162502127</span>
       </li>
-      <li>
+      <!-- <li>
         <a @click="toggleModal">
           <i class="iconfont">&#xe67a;</i>
           <p>申请试用</p>
         </a>
-      </li>
+      </li> -->
       <li>
         <a @click="goTop">
           <i class="iconfont">&#xe653;</i>
@@ -120,7 +126,7 @@
         </a>
       </li>
     </ul>
-    <div class="modal" v-if="showModal">
+    <!-- <div class="modal" v-if="showModal">
       <div class="backdrop" @click="toggleModal"></div>
       <div class="dialog">
         <div class="dialog-header">申请试用<i class="iconfont" @click="toggleModal">&#xe652;</i></div>
@@ -139,63 +145,63 @@
           <a class="unselectable" @click="submit">立即申请</a>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
-import * as types from '../store/types'
+// import { mapMutations, mapActions } from 'vuex'
+// import * as types from '../store/types'
 
 export default {
   name: 'HomePage',
-  data () {
-    return {
-      showModal: false,
-      trialForm: {
-        name: '',
-        phone: ''
-      }
-    }
-  },
+  // data () {
+  //   return {
+  //     showModal: false,
+  //     trialForm: {
+  //       name: '',
+  //       phone: ''
+  //     }
+  //   }
+  // },
   methods: {
     goTop () {
       window.scrollTo(0, 0)
-    },
-    toggleModal () {
-      this.showModal = !this.showModal
-      if (!this.showModal) {
-        this.trialForm.name = ''
-        this.trialForm.phone = ''
-      }
-    },
-    async submit () {
-      if (!this.trialForm.name || !this.trialForm.phone) {
-        this.addALertMessage({
-          type: 'error',
-          message: '请填写申请信息'
-        })
-        return
-      }
-      let message = await this.trial(this.trialForm)
-      if (message === 'success') {
-        this.addALertMessage({
-          type: 'success',
-          message: '提交成功'
-        })
-      } else {
-        this.addALertMessage({
-          type: 'error',
-          message: message
-        })
-        return
-      }
-      this.toggleModal()
-    },
-    ...mapMutations({
-      addALertMessage: types.ADD_ALERT_MESSAGE
-    }),
-    ...mapActions(['trial'])
+    }
+    // toggleModal () {
+    //   this.showModal = !this.showModal
+    //   if (!this.showModal) {
+    //     this.trialForm.name = ''
+    //     this.trialForm.phone = ''
+    //   }
+    // },
+    // async submit () {
+    //   if (!this.trialForm.name || !this.trialForm.phone) {
+    //     this.addALertMessage({
+    //       type: 'error',
+    //       message: '请填写申请信息'
+    //     })
+    //     return
+    //   }
+    //   let message = await this.trial(this.trialForm)
+    //   if (message === 'success') {
+    //     this.addALertMessage({
+    //       type: 'success',
+    //       message: '提交成功'
+    //     })
+    //   } else {
+    //     this.addALertMessage({
+    //       type: 'error',
+    //       message: message
+    //     })
+    //     return
+    //   }
+    //   this.toggleModal()
+    // },
+    // ...mapMutations({
+    //   addALertMessage: types.ADD_ALERT_MESSAGE
+    // }),
+    // ...mapActions(['trial'])
   }
 }
 </script>
@@ -241,15 +247,19 @@ export default {
           }
           a {
             color: #fff;
-            background-color: transparent;
-            border: 1px solid #fff;
-            border-radius: 5px;
-            display: inline-block;
-            width: 90px;
-            line-height: 35px;
-            text-align: center;
-            vertical-align: middle;
+            // background-color: transparent;
+            // border: 1px solid #fff;
+            // border-radius: 5px;
+            // display: inline-block;
+            // width: 90px;
+            // line-height: 35px;
+            // text-align: center;
+            // vertical-align: middle;
           }
+        }
+        .split {
+          margin: 0 20px;
+          color: #fff;
         }
       }
       .title-wrapper {

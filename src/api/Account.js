@@ -6,7 +6,9 @@ const urlDict = {
   // 微信账号（机器人）列表
   getAccounts: '/wx/accounts',
   // 微信好友
-  getContacts: '/wx/contacts'
+  getContacts: '/wx/contacts',
+  // 获取二维码登录账号
+  getQrcode: '/wx/actions/get_qrcode'
 }
 const methodDict = {
   get: 'GET',
@@ -47,6 +49,23 @@ export default {
           account_id: account_id,
           offset: offset,
           limit: limit
+        }
+      }).then(response => {
+        if (response.status === 200 || response.status === 204 || response.status === 201) {
+          resolve(response.body)
+        }
+      }, response => {
+        reject(response.body.message)
+      })
+    })
+  },
+  getQrcode ({ access_token }) {
+    return new Promise((resolve, reject) => {
+      Vue.http({
+        url: urlPrefix + urlPort + urlDict.getQrcode,
+        method: methodDict.get,
+        params: {
+          access_token: access_token
         }
       }).then(response => {
         if (response.status === 200 || response.status === 204 || response.status === 201) {
