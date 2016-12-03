@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-const urlPrefix = 'http://neituiyun.com'
-const urlPort = ':1000'
+const urlPrefix = 'http://qunmiao.wemiyun.com'
+const urlPort = ':80'
 const urlDict = {
   // 群消息
   getMessages: '/wx/msgs'

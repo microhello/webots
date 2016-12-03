@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import md5 from 'md5'
 
-const urlPrefix = 'http://neituiyun.com'
-const urlPort = ':1000'
+const urlPrefix = 'http://qunmiao.wemiyun.com'
+const urlPort = ':80'
 const urlDict = {
   // 测试
   trial: '/wx/auth/trial',

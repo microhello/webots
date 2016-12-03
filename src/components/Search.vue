@@ -64,20 +64,15 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
-    async search () {
-      try {
-        let data = await MessageApi.getMessages({ keywords: this.keywords, offset: this.offset, limit: this.limit, access_token: this.token })
-        // this.count = data.count
+    search () {
+      MessageApi.getMessages({ keywords: this.keywords, offset: this.offset, limit: this.limit, access_token: this.token }).then(data => {
         if (data.items.length < this.limit) {
           this.messages.splice(this.offset, this.limit, ...data.items)
         } else {
           this.messages = this.messages.concat(data.items)
           this.offset += this.limit
         }
-        console.log('search success', this.messages)
-      } catch (err) {
-        console.log('search failure', err)
-      }
+      })
     },
     nextPage (event) {
       let offsetHeight = event.target.offsetHeight

@@ -62,39 +62,31 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
-    async getMembers () {
-      try {
-        let data = await Group.getMembers({
-          access_token: this.token,
-          uin: this.currentAccount.uin,
-          group_id: this.currentGroup.group_id,
-          offset: this.offset,
-          limit: this.limit
-        })
+    getMembers () {
+      Group.getMembers({
+        access_token: this.token,
+        uin: this.currentAccount.uin,
+        group_id: this.currentGroup.group_id,
+        offset: this.offset,
+        limit: this.limit
+      }).then(data => {
         if (data.items.length < this.limit) {
           this.members.splice(this.offset, this.limit, ...data.items)
         } else {
           this.members = this.members.concat(data.items)
           this.offset += this.limit
         }
-        console.log('getMembers success', this.members)
-      } catch (err) {
-        console.log('getMembers failure', err)
-      }
+      })
     },
-    async getGroups () {
-      try {
-        let data = await Group.getGroups({
-          uin: this.currentAccount.uin,
-          access_token: this.token,
-          limit: 500
-        })
+    getGroups () {
+      Group.getGroups({
+        uin: this.currentAccount.uin,
+        access_token: this.token,
+        limit: 500
+      }).then(data => {
         this.groups = [{ nick_name: '全部' }].concat(data.items)
         this.currentGroup = this.groups[0]
-        console.log('getGroups success', this.groups)
-      } catch (err) {
-        console.log('getGroups failure', err)
-      }
+      })
     },
     nextPage (event) {
       let offsetHeight = event.target.offsetHeight

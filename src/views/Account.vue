@@ -1,6 +1,6 @@
 <template>
   <div class="account">
-    <add-account v-if="showAddAccount" @close="showAddAccount = false" :account-info="accountInfo"></add-account>
+    <add-account v-if="showAddAccount" @close="closeAddAccount" :account-info="accountInfo"></add-account>
     <ul class="account-title clearfix">
       <li>
         <h1>托管微信账号</h1>
@@ -11,7 +11,7 @@
         </select>
       </li>
       <li class="pull-right">
-        <a class="unselectable" @click="toggleAddAccount()"><i class="iconfont">&#xe63b;</i>新增账号</a>
+        <a class="unselectable" @click="addAccount"><i class="iconfont">&#xe63b;</i>新增账号</a>
       </li>
       <li class="account-search pull-right">
         <input type="text" v-model="keywords" @keyup.enter="search" placeholder="微信号，昵称" />
@@ -39,8 +39,8 @@
               <span class="offline" v-else>账号已离线</span>
             </li>
             <li>
-              <a v-if="item.online">下线</a>
-              <a v-else @click="toggleAddAccount(item)">上线</a>
+              <a v-if="item.online" @click="stopClient(item)">下线</a>
+              <a v-else @click="startClient(item)">上线</a>
             </li>
           </ul>
         </div>
@@ -50,8 +50,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { Account } from '../api'
+import * as types from '../store/types'
 
 const AddAccount = resolve => require(['../components/AddAccount'], resolve)
 
@@ -82,6 +83,14 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
+    addAccount () {
+      this.accountInfo = undefined
+      this.showAddAccount = true
+    },
+    closeAddAccount () {
+      this.showAddAccount = false
+      this.search()
+    },
     getAccounts () {
       Account.getAccounts({
         access_token: this.token,
@@ -115,10 +124,27 @@ export default {
         this.getAccounts()
       }
     },
-    toggleAddAccount (accountInfo) {
-      this.accountInfo = accountInfo
-      this.showAddAccount = !this.showAddAccount
-    }
+    startClient (account) {
+      // Account.startClient({ access_token: this.token, account_id: account.account_id }).then(data => {
+      //   this.addAlertMessage({ type: 'success', message: account.nick_name + ' 上线成功' })
+      //   this.search()
+      // }, data => {
+      //   this.addAlertMessage({ type: 'error', message: account.nick_name + ' 上线失败，请重试' })
+      // })
+      this.accountInfo = account
+      this.showAddAccount = true
+    },
+    stopClient (account) {
+      Account.stopClient({ access_token: this.token, account_id: account.account_id }).then(data => {
+        this.addAlertMessage({ type: 'success', message: account.nick_name + ' 下线成功' })
+        this.search()
+      }, data => {
+        this.addAlertMessage({ type: 'error', message: account.nick_name + ' 下线失败，请重试' })
+      })
+    },
+    ...mapMutations({
+      addAlertMessage: types.ADD_ALERT_MESSAGE
+    })
   },
   watch: {
     status () {

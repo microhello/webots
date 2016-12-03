@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import * as types from '../store/types'
 
 const DateSelector = resolve => require(['../components/DateSelector'], resolve)
@@ -76,6 +76,9 @@ export default {
     },
     ...mapMutations({
       delMessages: types.DEL_MESSAGES
+    }),
+    ...mapActions({
+      getAccounts: 'setAccounts'
     })
   },
   watch: {
@@ -88,6 +91,9 @@ export default {
     DateSelector,
     Message,
     GroupList
+  },
+  mounted () {
+    this.getAccounts()
   }
 }
 </script>

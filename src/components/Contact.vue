@@ -64,24 +64,20 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
-    async getContacts () {
-      try {
-        let data = await Account.getContacts({
-          account_id: this.currentAccount.account_id,
-          access_token: this.token,
-          offset: this.offset,
-          limit: this.limit
-        })
+    getContacts () {
+      Account.getContacts({
+        account_id: this.currentAccount.account_id,
+        access_token: this.token,
+        offset: this.offset,
+        limit: this.limit
+      }).then(data => {
         if (data.items.length < this.limit) {
           this.contacts.splice(this.offset, this.limit, ...data.items)
         } else {
           this.contacts = this.contacts.concat(data.items)
           this.offset += this.limit
         }
-        console.log('getMembers success', this.contacts)
-      } catch (err) {
-        console.log('getMembers failure', err)
-      }
+      })
     },
     nextPage (event) {
       let offsetHeight = event.target.offsetHeight

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-const urlPrefix = 'http://neituiyun.com'
-const urlPort = ':1000'
+const urlPrefix = 'http://qunmiao.wemiyun.com'
+const urlPort = ':80'
 const urlDict = {
   // 微信群列表
   getGroups: '/wx/groups',

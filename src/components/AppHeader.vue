@@ -23,7 +23,7 @@
     <li class="add-account pull-right">
       <i class="iconfont">&#xe622;</i>
       <a @click="showAddAccount = true">新增账号</a>
-      <add-account v-if="showAddAccount" @close="showAddAccount = false"></add-account>
+      <add-account v-if="showAddAccount" @close="closeAddAccount"></add-account>
     </li>
   </ul>
 </template>
@@ -57,6 +57,10 @@ export default {
     toggleSideBar () {
       this.$emit('toggle-side-bar')
     },
+    closeAddAccount () {
+      this.showAddAccount = false
+      this.setAccounts()
+    },
     search () {
       this.keywords = this.keywords.replace(/^[+,]+|[+,]+$/g, '').replace(/[+,]{2,}/g, $ => $[0])
       if (this.keywords === '' || this.$route.name === 'Login') {
@@ -79,7 +83,7 @@ export default {
     ...mapMutations({
       addTab: types.ADD_TAB
     }),
-    ...mapActions(['logout'])
+    ...mapActions(['logout', 'setAccounts'])
   },
   components: {
     AddAccount

@@ -3,13 +3,13 @@
     <div class="count-box">
       <div class="count-content">
         <div class="count-item">
-          <a>
+          <router-link to="/main/account">
             <div class="count">
               <i class="iconfont">&#xe6ef;</i>
               <span>{{ accountsCount }}</span>
             </div>
             <p>托管账号</p>
-          </a>
+          </router-link>
         </div>
         <div class="count-item">
           <a @click="addTab({ title: '微信好友', value: 'contact', type: 'contact' })">
@@ -52,13 +52,13 @@
           </router-link>
         </div>
         <div class="count-item">
-          <a>
+          <router-link to="/main/watcher">
             <div class="count">
               <i class="iconfont">&#xe663;</i>
-              <span>3421</span>
+              <span>{{ watchersCount }}</span>
             </div>
             <p>值守消息</p>
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import * as API from '../api'
 import * as types from '../store/types'
 
@@ -127,21 +127,38 @@ export default {
       contactsCount: 0,
       groupsCount: 0,
       membersCount: 0,
-      messagesCount: 0
+      messagesCount: 0,
+      watchersCount: 0
     }
   },
   computed: {
     ...mapState({
-      accountsCount: state => state.account.count
+      accountsCount: state => state.account.count,
+      accounts: state => state.account.items
     }),
     ...mapGetters(['token'])
   },
   methods: {
     ...mapMutations({
       addTab: types.ADD_TAB
+    }),
+    ...mapActions({
+      getAccounts: 'setAccounts'
     })
   },
+  watch: {
+    accounts (newVal) {
+      if (newVal.length > 0) {
+        let keywords = []
+        for (let item of newVal) {
+          keywords.push('@' + item.nick_name)
+        }
+        API.Message.getMessages({ access_token: this.token, limit: 0, keywords: keywords.join(',') })
+      }
+    }
+  },
   mounted () {
+    this.getAccounts()
     API.Account.getContacts({ access_token: this.token, limit: 0 }).then(({ count }) => {
       this.contactsCount = count
     })

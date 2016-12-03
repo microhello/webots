@@ -5,33 +5,106 @@
         <p>值守账号</p>
       </div>
       <ul class="account-list">
-        <li v-for="n of 20">
+        <li v-for="item of accounts" @click="setCurrentAccount(item)" :class="{ 'active': item === currentAccount }">
           <i class="iconfont">&#xe709;</i>
-          <span class="nick-name">老大哥看着我</span>
-          <span class="status online">在线</span>
-          <span class="status offline">离线</span>
+          <span class="nick-name">{{ item.nick_name }}</span>
+          <span class="status online" v-if="item.online">在线</span>
+          <span class="status offline" v-else>离线</span>
         </li>
       </ul>
     </div>
     <div class="watcher-content">
       <div class="title">
-        <p class="account-name">@{{ title }}</p>
+        <p class="account-name">{{ keywords }}</p>
         <p><span class="count">{{ count }}</span>条记录</p>
       </div>
-      <div class="messages-content">
-      </div>
+      <ul class="messages-content" @scroll="nextPage">
+        <li v-for="item of messages">
+          <p class="message-item-title">{{ item.create_time | formatDate }} | {{ item.sender_name }}:</p>
+          <message :message="item.message" :keyword="keywords"></message>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import * as types from '../store/types'
+import { Message as MessageApi } from '../api'
+
+const Message = resolve => require(['../components/Message'], resolve)
+
 export default {
   name: 'Watcher',
   data () {
     return {
-      title: '老大哥看着我',
-      count: 3
+      count: 0,
+      messages: [],
+      offset: 0,
+      limit: 20,
+      currentAccount: {},
+      keywords: ''
     }
+  },
+  computed: {
+    ...mapState({
+      accounts: state => state.account.items
+    }),
+    ...mapGetters(['token'])
+  },
+  methods: {
+    setCurrentAccount (account) {
+      this.currentAccount = account
+    },
+    getMessages () {
+      MessageApi.getMessages({ access_token: this.token, keywords: this.keywords, offset: this.offset, limit: this.limit }).then(data => {
+        this.count = data.count
+        if (data.items.length < this.limit) {
+          this.messages.splice(this.offset, this.limit, ...data.items)
+        } else {
+          this.messages = this.messages.concat(data.items)
+          this.offset += this.limit
+        }
+      }, data => {
+        this.addAlertMessage({ type: 'error', message: '获取失败，请重试' })
+      })
+    },
+    nextPage (event) {
+      let offsetHeight = event.target.offsetHeight
+      let scrollTop = event.target.scrollTop
+      let scrollHeight = event.target.scrollHeight
+      let scrollBottom = scrollHeight - scrollTop - offsetHeight
+      // console.log(scrollBottom)
+      if (scrollBottom === 0) {
+        this.getMessages()
+      }
+    },
+    ...mapMutations({
+      addAlertMessage: types.ADD_ALERT_MESSAGE
+    }),
+    ...mapActions({
+      getAccounts: 'setAccounts'
+    })
+  },
+  watch: {
+    currentAccount (newVal) {
+      this.offset = 0
+      this.keywords = '@' + newVal.nick_name
+      this.messages = []
+      this.getMessages()
+    },
+    accounts (newVal) {
+      if (newVal.length > 0) {
+        this.currentAccount = newVal[0]
+      }
+    }
+  },
+  components: {
+    Message
+  },
+  mounted () {
+    this.getAccounts()
   }
 }
 </script>
@@ -98,8 +171,30 @@ export default {
     margin-left: 300px;
     height: 100%;
     position: relative;
-    .title > p.account-name {
-      margin-right: 20px;
+    .title {
+      padding: 0 40px;
+      p.account-name {
+        margin-right: 20px;
+      }
+    }
+    .messages-content {
+      position: absolute;
+      top: 50px;
+      bottom: 0;
+      width: 100%;
+      overflow: auto;
+      li {
+        padding: 25px 40px;
+        font-size: 12px;
+        border-bottom: 1px solid #ececec;
+        .message-item-title {
+          margin-bottom: 15px;
+        }
+        mark {
+          color: #999;
+          background-color: transparent
+        }
+      }
     }
   }
 }

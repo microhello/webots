@@ -3,35 +3,36 @@
     <div class="add-account-wrapper" @click="close"></div>
     <div class="login-box">
       <i class="iconfont close-btn" @click="close">&#xe652;</i>
-      <div class="step-add step-online" v-if="accountInfo">
-        <h1>上线托管微信</h1>
-        <ul class="step-body">
-          <li>
-            <div class="qrcode-box">
-              <h2>请使用微信扫描二维码</h2>
-              <img class="qr-code" :src="imgUrl" />
-              <div class="progress-bar" :class="{ 'timing': timing }">
-                <div class="cover"></div>
+      <template v-if="showQrCode">
+        <div class="step-add step-online" v-if="accountInfo">
+          <h1>上线托管微信</h1>
+          <ul class="step-body">
+            <li>
+              <div class="qrcode-box">
+                <h2>请使用微信扫描二维码</h2>
+                <img class="qr-code" :src="imgUrl" />
+                <div class="progress-bar" :class="{ 'timing': timing }">
+                  <div class="cover"></div>
+                </div>
               </div>
-            </div>
-          </li>
-          <li class="qrcode-illustration">
-            <ul class="account-info">
-              <li>
-                <span class="info-title">昵称/名字：</span>
-                <span class="info-value">{{ accountInfo.nick_name }}</span>
-              </li>
-              <li>
-                <span class="info-title">托管UIN：</span>
-                <span class="info-value">{{ accountInfo.uin }}</span>
-              </li>
-            </ul>
-            <p>1、请保证上线微信与首次托管微信微同一微信。</p>
-            <p>2、请在有效时间内扫码，超过时间二维码自动刷新。</p>
-          </li>
-        </ul>
-      </div>
-      <div class="step-add" v-else>
+            </li>
+            <li class="qrcode-illustration">
+              <ul class="account-info">
+                <li>
+                  <span class="info-title">昵称/名字：</span>
+                  <span class="info-value">{{ accountInfo.nick_name }}</span>
+                </li>
+                <li>
+                  <span class="info-title">托管UIN：</span>
+                  <span class="info-value">{{ accountInfo.uin }}</span>
+                </li>
+              </ul>
+              <p>1、请保证上线微信与首次托管微信微同一微信。</p>
+              <p>2、请在有效时间内扫码，超过时间二维码自动刷新。</p>
+            </li>
+          </ul>
+        </div>
+        <div class="step-add" v-else>
         <h1>新增托管微信</h1>
         <ul class="step-body">
           <li>
@@ -49,22 +50,23 @@
           </li>
         </ul>
       </div>
-      <!-- <div class="step-success">
+      </template>
+      <div class="step-success" v-else>
         <div class="step-body">
           <i class="iconfont">&#xe612;</i>
           <ul class="account-info">
             <li>
               <span class="info-title">昵称/名字：</span>
-              <span class="info-value">许夜</span>
+              <span class="info-value">{{ account.nick_name}}</span>
             </li>
             <li>
               <span class="info-title">托管UIN：</span>
-              <span class="info-value">3300264983</span>
+              <span class="info-value">{{ account.uin }}</span>
             </li>
           </ul>
-          <a class="to-account-setting">进入账号设置</a>
+          <a @click="toAccount" class="to-account-setting">进入账号设置</a>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -77,10 +79,23 @@ import * as types from '../store/types'
 export default {
   name: 'AddAccount',
   data () {
+    let randomString = (len = 8) => {
+      let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
+      let maxPos = chars.length
+      let name = ''
+      for (let i = 0; i < len; i++) {
+        name += chars.charAt(Math.floor(Math.random() * maxPos))
+      }
+      return name
+    }
     return {
+      showQrCode: true,
       timeoutId: 0,
+      checkId: 0,
       timing: false,
-      imgUrl: null
+      imgUrl: null,
+      name: randomString(),
+      account: {}
     }
   },
   props: {
@@ -90,15 +105,23 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
+    toAccount () {
+      this.close()
+      this.$router.push('/main/account')
+    },
     close () {
-      clearTimeout(this.timeoutId)
+      this.clear()
       this.$emit('close')
     },
     timeout () {
       this.timing = false
-      Account.getQrcode({ access_token: this.token }).then(data => {
+      clearTimeout(this.checkId)
+      Account.getQrcode({ access_token: this.token, name: this.name }).then(data => {
         console.log('getQrcode success', data)
         this.imgUrl = window.URL.createObjectURL(data)
+        this.checkId = setTimeout(() => {
+          this.check()
+        }, 5000)
         this.timeoutId = setTimeout(() => {
           this.timeout()
         }, 300000)
@@ -110,6 +133,24 @@ export default {
           message: '获取二维码失败，请稍后再试'
         })
       })
+    },
+    check () {
+      Account.checkClient({ access_token: this.token, name: this.name }).then(data => {
+        console.log(data)
+        if (data.account_id) {
+          this.account = data
+          this.showQrCode = false
+          this.clear()
+        } else {
+          this.checkId = setTimeout(() => {
+            this.check()
+          }, 5000)
+        }
+      })
+    },
+    clear () {
+      clearTimeout(this.timeoutId)
+      clearTimeout(this.checkId)
     },
     ...mapMutations({
       addAlertMessage: types.ADD_ALERT_MESSAGE
