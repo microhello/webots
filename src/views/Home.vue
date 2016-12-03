@@ -79,12 +79,12 @@
             </ul>
           </div>
           <div class="table-body">
-            <!-- <ul class="table-row" v-for="n of 10">
-              <li>【地推人·上海1】🅰跨界社群</li>
-              <li>7</li>
-              <li>124</li>
-              <li>今天   09:30:31</li>
-            </ul> -->
+            <ul class="table-row" v-for="item of groupStat">
+              <li>{{ item.group.nick_name }}</li>
+              <li>{{ item.msg_count_today }}</li>
+              <li>{{ item.msg_count_total }}</li>
+              <li>{{ item.msg_last_time | formatDate }}</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -103,10 +103,10 @@
             </ul>
           </div>
           <div class="table-body">
-            <ul class="table-row" v-for="n of 20">
-              <li>老大哥在看着我</li>
-              <li>24</li>
-              <li>今天   09:30:31</li>
+            <ul class="table-row" v-for="item of guardStat">
+              <li>{{ item.guard.nick_name }}</li>
+              <li>{{ item.msg_count_total }}</li>
+              <li>{{ item.msg_last_time | formatDate }}</li>
             </ul>
           </div>
         </div>
@@ -128,7 +128,9 @@ export default {
       groupsCount: 0,
       membersCount: 0,
       messagesCount: 0,
-      watchersCount: 0
+      watchersCount: 0,
+      groupStat: [],
+      guardStat: []
     }
   },
   computed: {
@@ -170,6 +172,12 @@ export default {
     })
     API.Message.getMessages({ access_token: this.token, limit: 0 }).then(({ count }) => {
       this.messagesCount = count
+    })
+    API.Message.getGroupStat({ access_token: this.token }).then(data => {
+      this.groupStat = data.items
+    })
+    API.Message.getGuardStat({ access_token: this.token }).then(data => {
+      this.guardStat = data.items
     })
   }
 }
@@ -276,14 +284,15 @@ export default {
       }
       .table > .table-body {
         position: static;
-        .table-row > li {
-          font-size: 12px;
-          &:first-of-type {
-            text-align: left;
-            padding-left: 20px;
-          }
-          &:last-of-type {
-            color: #A1A1A1;
+        .table-row {
+          border-width: 0 1px 1px;
+          border-style: solid;
+          border-color: #ececec;
+          li {
+            font-size: 12px;
+            &:last-of-type {
+              color: #A1A1A1;
+            }
           }
         }
       }

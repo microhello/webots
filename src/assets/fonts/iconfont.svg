@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-Created by FontForge 20120731 at Wed Nov 30 11:37:02 2016
+Created by FontForge 20120731 at Sat Dec  3 17:39:48 2016
  By admin
 </metadata>
 <defs>
@@ -162,6 +162,9 @@ d="M869 808h-715q-37 0 -63 -26.5t-26 -64.5v-456q0 -38 26 -64.5t63 -26.5h715q37 0
 l-64 -64l-64 64l-128 128l64 64l128 -128l320 319l64 -64z" />
     <glyph glyph-name="haoyou" unicode="&#xe604;" 
 d="M472 363q41 24 65.5 66t24.5 91q0 76 -54 129.5t-130.5 53.5t-131 -53.5t-54.5 -129.5q0 -49 24.5 -91t65.5 -66q-106 -26 -162.5 -109t-56.5 -211h628q0 128 -56 211t-163 109zM676 469v-47h283v47h-283zM746 304h213v47h-213v-47zM794 186h165v47h-165v-47z" />
+    <glyph glyph-name="zhuye" unicode="&#xe701;" 
+d="M555 821q-21 22 -42 22q-9 0 -19.5 -5.5t-16.5 -11.5l-5 -5q-367 -367 -394 -393q-15 -16 -20.5 -32.5t-2.5 -24.5l2 -9l18 -20q19 -21 42 -21h42v-354v-4.5t2 -10t6 -13t12.5 -10t21.5 -4.5h166q20 0 30.5 10.5t10.5 20.5l1 11v104q0 2 0.5 4.5t3 10t6.5 13t12.5 10
+t19.5 4.5h104q19 0 29.5 -10.5t11.5 -20.5l1 -11v-104v-4.5t2 -10t5.5 -13t12.5 -10t21 -4.5h167q20 0 30.5 10.5t10.5 20.5l1 11v354h42q10 0 20 5.5t16 10.5l6 5l20 20q2 1 4.5 3.5t7 9.5t6.5 14t-1.5 18t-13.5 21z" />
     <glyph glyph-name="bk-unexpand" unicode="&#xe626;" 
 d="M2 35h1021v-114h-1021v114zM342 318h680v-114h-680v114zM342 545h680v-114h-680v114zM2 829h1021v-115h-1021v115zM229 175l-227 228l227 170v-398zM229 175z" />
     <glyph glyph-name="new" unicode="&#xe62d;" 

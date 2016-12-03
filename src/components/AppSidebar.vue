@@ -9,7 +9,7 @@
       </span>
     </li>
     <router-link to="/main/home" :class="{ 'active': currentPath === '/main/home' }" tag="li">
-      <i class="iconfont nav-item">&#xe60a;</i>
+      <i class="iconfont nav-item">&#xe701;</i>
       <span class="nav-item">首页</span>
     </router-link>
     <router-link to="/main/account" :class="{ 'active': currentPath === '/main/account' }" tag="li">
