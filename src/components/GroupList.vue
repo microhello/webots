@@ -60,8 +60,17 @@ export default {
           access_token: this.token
         })
         this.$set(item, 'groups', groups.items)
+        this.$router.replace({ path: '/main/messages', query: { uin: groups.items[0].uin, nick_name: groups.items[0].nick_name } })
       }
       this.$set(item, 'showGroups', !item.showGroups)
+    }
+  },
+  watch: {
+    accounts () {
+      if (this.accounts.length > 0) {
+        this.accounts[0].showGroups = false
+        this.toggleSubList(this.accounts[0])
+      }
     }
   },
   mounted () {

@@ -29,9 +29,6 @@ export const setMessages = async ({ state, commit, getters }, payload) => {
     payload.access_token = getters.token
     let data = await Message.getMessages(payload)
     if (data.items.length < state.message.limit) {
-      if (state.message.items.length >= state.message.count) {
-        commit(types.ADD_ALERT_MESSAGE, { type: 'error', message: '暂无新消息' })
-      }
       commit(types.SET_MESSAGES, { action: 'splice', items: data })
     } else {
       commit(types.SET_MESSAGES, { action: 'concat', items: data })
