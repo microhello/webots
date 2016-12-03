@@ -28,8 +28,8 @@
             <ul class="table-row" v-for="item of members">
               <li>{{ item.nick_name }}</li>
               <li>{{ item.display_name }}</li>
-              <li>{{ currentGroup.nick_name }}</li>
-              <li>{{ currentAccount.nick_name }}</li>
+              <li>{{ getGroup(item) }}</li>
+              <li>{{ getAccount(item) }}</li>
             </ul>
           </div>
         </div>
@@ -62,6 +62,20 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
+    getAccount (member) {
+      for (let item of this.accounts) {
+        if (member.uin === item.uin) {
+          return item.nick_name
+        }
+      }
+    },
+    getGroup (member) {
+      for (let item of this.groups) {
+        if (member.group_id === item.group_id) {
+          return item.nick_name
+        }
+      }
+    },
     getMembers () {
       Group.getMembers({
         access_token: this.token,

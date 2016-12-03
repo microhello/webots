@@ -33,7 +33,7 @@
               <li>{{ item.province }}</li>
               <li>{{ item.city }}</li>
               <li>{{ item.signature }}</li>
-              <li>{{ getAccountNickName(item.uin) }}</li>
+              <li>{{ getAccount(item.uin) }}</li>
             </ul>
           </div>
         </div>
@@ -89,7 +89,7 @@ export default {
         this.getContacts()
       }
     },
-    getAccountNickName (uin) {
+    getAccount (uin) {
       for (let item of this.accounts) {
         if (item.uin === uin) {
           return item.nick_name

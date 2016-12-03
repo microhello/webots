@@ -103,11 +103,11 @@
             </ul>
           </div>
           <div class="table-body">
-            <!-- <ul class="table-row" v-for="n of 10">
+            <ul class="table-row" v-for="n of 20">
               <li>老大哥在看着我</li>
               <li>24</li>
               <li>今天   09:30:31</li>
-            </ul> -->
+            </ul>
           </div>
         </div>
       </div>
