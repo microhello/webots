@@ -67,7 +67,7 @@
         <div class="title clearfix">
           <i class="title-item"></i>
           <h1 class="title-item">群消息</h1>
-          <a class="title-item">更多</a>
+          <router-link to="/main/messages" class="title-item">更多</router-link>
         </div>
         <div class="table">
           <div class="table-head">
@@ -92,7 +92,7 @@
         <div class="title clearfix">
           <i class="title-item"></i>
           <h1 class="title-item">群值守</h1>
-          <a class="title-item">更多</a>
+          <router-link to="/main/watcher" class="title-item">更多</router-link>
         </div>
         <div class="table">
           <div class="table-head">
