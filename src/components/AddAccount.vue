@@ -33,23 +33,23 @@
           </ul>
         </div>
         <div class="step-add" v-else>
-        <h1>新增托管微信</h1>
-        <ul class="step-body">
-          <li>
-            <div class="qrcode-box">
-              <h2>请使用微信扫描二维码</h2>
-              <img class="qr-code" :src="imgUrl" />
-              <div class="progress-bar" :class="{ 'timing': timing }">
-                <div class="cover"></div>
+          <h1>新增托管微信</h1>
+          <ul class="step-body">
+            <li>
+              <div class="qrcode-box">
+                <h2>请使用微信扫描二维码</h2>
+                <img class="qr-code" :src="imgUrl" />
+                <div class="progress-bar" :class="{ 'timing': timing }">
+                  <div class="cover"></div>
+                </div>
               </div>
-            </div>
-          </li>
-          <li class="qrcode-illustration">
-            <p>1、扫描二维码将微信上线到托管状态，可在账号设置中下线。</p>
-            <p>2、请在有效时间内扫码，超过时间二维码自动刷新。</p>
-          </li>
-        </ul>
-      </div>
+            </li>
+            <li class="qrcode-illustration">
+              <p>1、扫描二维码将微信上线到托管状态，可在账号设置中下线。</p>
+              <p>2、请在有效时间内扫码，超过时间二维码自动刷新。</p>
+            </li>
+          </ul>
+        </div>
       </template>
       <div class="step-success" v-else>
         <div class="step-body">
