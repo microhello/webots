@@ -1,12 +1,12 @@
 <template>
   <div class="main clearfix">
-    <div class="main-ad">
-      <h1 class="ad-item"><span>群喵</span><span>智能群助理客户端</span></h1>
-      <h2 class="ad-item">多账户聊天 | 消息管理 | 后台值守</h2>
-      <h1 class="ad-item">即将上线，敬请期待！</h1>
+    <div class="main-abcd">
+      <h1 class="abcd-item"><span>群喵</span><span>智能群助理客户端</span></h1>
+      <h2 class="abcd-item">多账户聊天 | 消息管理 | 后台值守</h2>
+      <h1 class="abcd-item">即将上线，敬请期待！</h1>
       <i class="iconfont" @click="toggleAd">&#xe652;</i>
     </div>
-    <div class="main-container" :class="{ 'show-ad': showAd }">
+    <div class="main-container" :class="{ 'show-abcd': showAd }">
       <app-sidebar class="app-sidebar" :spread-side-bar="spreadSideBar"></app-sidebar>
       <div class="app-content" :class="{ 'spread-app-sidebar': spreadSideBar }">
         <app-header class="app-header" :spread-side-bar="spreadSideBar" @toggle-side-bar="toggleSideBar"></app-header>
@@ -98,14 +98,14 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-  .main-ad {
+  .main-abcd {
     height: 50px;
     line-height: 50px;
     background-color: #f0f9ff;
     text-align: center;
     position: relative;
     color: #62676a;
-    .ad-item {
+    .abcd-item {
       display: inline-block;
     }
     h1 {
@@ -143,7 +143,7 @@ export default {
     bottom: 0;
     left: 0;
     transition: top .2s;
-    &.show-ad {
+    &.show-abcd {
       top: 50px;
     }
   }
