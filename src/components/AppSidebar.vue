@@ -14,7 +14,7 @@
     </router-link>
     <router-link to="/main/account" :class="{ 'active': currentPath === '/main/account' }" tag="li">
       <i class="iconfont nav-item">&#xe657;</i>
-      <span class="nav-item">账号</span>
+      <span class="nav-item">机器人</span>
     </router-link>
     <router-link to="/main/messages" :class="{ 'active': currentPath === '/main/messages' }" tag="li">
       <i class="iconfont nav-item">&#xe84a;</i>

@@ -3,7 +3,7 @@
     <add-account v-if="showAddAccount" @close="closeAddAccount" :account-info="accountInfo"></add-account>
     <ul class="account-title clearfix">
       <li>
-        <h1>托管微信账号</h1>
+        <h1>托管机器人</h1>
       </li>
       <li>
         <select v-model="status">
@@ -41,6 +41,7 @@
             <li>
               <a v-if="item.online" @click="stopClient(item)">下线</a>
               <a v-else @click="startClient(item)">上线</a>
+              <a @click="addTab({ title: '配置', data: { uin: item.uin }, type: 'robot_setting' })">配置</a>
             </li>
           </ul>
         </div>
@@ -143,7 +144,8 @@ export default {
       })
     },
     ...mapMutations({
-      addAlertMessage: types.ADD_ALERT_MESSAGE
+      addAlertMessage: types.ADD_ALERT_MESSAGE,
+      addTab: types.ADD_TAB
     })
   },
   watch: {

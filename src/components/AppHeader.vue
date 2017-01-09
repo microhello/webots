@@ -68,7 +68,9 @@ export default {
       }
       this.addTab({
         title: '搜索：' + this.keywords,
-        value: this.keywords,
+        data: {
+          keywords: this.keywords
+        },
         type: 'search'
       })
       this.keywords = ''

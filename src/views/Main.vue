@@ -14,9 +14,10 @@
           <app-tab class="tab"></app-tab>
           <div class="container" :class="{ 'hide-tabs': tabs.length <= 1 }">
             <router-view class="content" v-show="tabs[0] === active"></router-view>
-            <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.value"></search>
+            <search v-for="item of SearchTabs" class="content" v-show="item === active" :key="item" :keywords="item.data.keywords"></search>
             <member v-for="item of MemberTabs" class="content" v-show="item === active" :key="item"></member>
             <contact v-for="item of ContactTabs" class="content" v-show="item === active" :key="item"></contact>
+            <robot-setting v-for="item of RobotSettingTabs" class="content" v-show="item === active" :key="item" :uin="item.data.uin"></robot-setting>
           </div>
         </div>
       </div>
@@ -34,6 +35,7 @@ const AppSidebar = resolve => require(['../components/AppSidebar'], resolve)
 const Search = resolve => require(['../components/Search'], resolve)
 const Member = resolve => require(['../components/Member'], resolve)
 const Contact = resolve => require(['../components/Contact'], resolve)
+const RobotSetting = resolve => require(['../components/RobotSetting'], resolve)
 
 export default {
   name: 'Main',
@@ -52,6 +54,9 @@ export default {
     },
     ContactTabs () {
       return this.tabs.filter(item => item.type === 'contact')
+    },
+    RobotSettingTabs () {
+      return this.tabs.filter(item => item.type === 'robot_setting')
     },
     ...mapState({
       tabs: state => state.tab.items,
@@ -77,13 +82,14 @@ export default {
     AppTab,
     Search,
     Member,
-    Contact
+    Contact,
+    RobotSetting
   },
   mounted () {
     this.delTab()
     this.addTab({
       title: '首页',
-      value: 'root',
+      data: {},
       type: 'root'
     })
     this.setActiveTab(this.tabs[0])
@@ -179,12 +185,12 @@ export default {
         right: 0;
         bottom: 0;
         left: 0;
-        overflow-y: auto;
+        overflow: auto;
         transition: top .2s linear;
         .content {
-          position: absolute;
-          width: 100%;
-          height: 100%;
+          // width: 100%;
+          // height: 100%;
+          // overflow: auto;
         }
         &.hide-tabs {
           top: 0;

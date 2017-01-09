@@ -12,7 +12,7 @@
           </router-link>
         </div>
         <div class="count-item">
-          <a @click="addTab({ title: '微信好友', value: 'contact', type: 'contact' })">
+          <a @click="addTab({ title: '微信好友', data: {}, type: 'contact' })">
             <div class="count">
               <i class="iconfont">&#xe604;</i>
               <span>{{ contactsCount }}</span>
@@ -23,7 +23,7 @@
       </div>
       <div class="count-content">
         <div class="count-item">
-          <a @click="addTab({ title: '群成员', value: 'member', type: 'member' })">
+          <a @click="addTab({ title: '群成员', data: {}, type: 'member' })">
             <div class="count">
               <i class="iconfont">&#xe603;</i>
               <span>{{ groupsCount }}</span>
@@ -32,7 +32,7 @@
           </a>
         </div>
         <div class="count-item">
-          <a @click="addTab({ title: '群成员', value: 'member', type: 'member' })">
+          <a @click="addTab({ title: '群成员', data: {}, type: 'member' })">
             <div class="count">
               <i class="iconfont">&#xe627;</i>
               <span>{{ membersCount }}</span>
