@@ -1,29 +1,26 @@
 <template>
-  <ul class="app-header clearfix">
-    <li class="toggle-side-bar">
-      <i class="iconfont" v-show="spread" @click="toggleSideBar">&#xe626;</i>
-      <i class="iconfont" v-show="!spread" @click="toggleSideBar">&#xe613;</i>
+  <ul class="app-header">
+    <li class="app-header-brand shadow-box">
+      <img src="../assets/image/logo/02.jpg" />
     </li>
-    <li class="header-search">
+    <li class="app-header-search shadow-box clearfix">
       <input type="text" name="keywords" placeholder="搜索关键词：多个关键词使用“+”或“,”分隔" v-model="keywords" @keyup.enter="search" />
-      <i class="button iconfont" @click="search">&#xe620;</i>
+      <i class="iconfont" @click="search">&#xe66f;</i>
     </li>
-    <li class="account-dropdown pull-right">
-      <a @click="toggleDropdown">{{ username }}<i class="iconfont">&#xe601;</i></a>
-      <ul class="dropdown" @click="toggleDropdown" v-show="showDropdown">
-        <li @click="Logout">
-          退出
-        </li>
+    <li class="app-header-account shadow-box">
+      <span>
+        <a @click="showAddAccount = true"><i class="iconfont">&#xe67d;</i> 添加账号</a>
+      </span>
+      <modal v-if="showAddAccount" @close="closeAddAccount">
+        <add-account></add-account>
+      </modal>
+      <span>
+        <a @click="showDropdown = true">{{ username }} <i class="iconfont" style="font-size: 12px;">&#xe611;</i></a>
+      </span>
+      <ul class="account-dropdown shadow-box" @click="showDropdown = false" v-show="showDropdown">
+        <li @click="Logout">退出</li>
+        <div class="dropdown-wrapper"></div>
       </ul>
-      <div class="dropdown-wrapper" @click="toggleDropdown" v-show="showDropdown"></div>
-    </li>
-    <li class="split pull-right">
-      |
-    </li>
-    <li class="add-account pull-right">
-      <i class="iconfont">&#xe622;</i>
-      <a @click="showAddAccount = true">新增账号</a>
-      <add-account v-if="showAddAccount" @close="closeAddAccount"></add-account>
     </li>
   </ul>
 </template>
@@ -33,33 +30,22 @@ import { mapMutations, mapActions } from 'vuex'
 import * as types from '../store/types'
 
 const AddAccount = resolve => require(['./AddAccount'], resolve)
+const Modal = resolve => require(['./Modal'], resolve)
 
 export default {
   name: 'AppHeader',
   data () {
     return {
-      title: '微信群助理机器人',
       keywords: '',
       username: 'wemiyun',
       showDropdown: false,
       showAddAccount: false
     }
   },
-  props: {
-    spreadSideBar: Boolean
-  },
-  computed: {
-    spread () {
-      return this.spreadSideBar
-    }
-  },
   methods: {
-    toggleSideBar () {
-      this.$emit('toggle-side-bar')
-    },
     closeAddAccount () {
       this.showAddAccount = false
-      this.setAccounts()
+      this.getAccounts()
     },
     search () {
       this.keywords = this.keywords.replace(/^[+,]+|[+,]+$/g, '').replace(/[+,]{2,}/g, $ => $[0])
@@ -79,16 +65,17 @@ export default {
       await this.logout()
       window.location.reload()
     },
-    toggleDropdown () {
-      this.showDropdown = !this.showDropdown
-    },
     ...mapMutations({
       addTab: types.ADD_TAB
     }),
-    ...mapActions(['logout', 'setAccounts'])
+    ...mapActions({
+      logout: 'logout',
+      getAccounts: 'setAccounts'
+    })
   },
   components: {
-    AddAccount
+    AddAccount,
+    Modal
   }
 }
 </script>
@@ -97,100 +84,122 @@ export default {
 @import "../assets/less/colors.less";
 
 .app-header {
+  padding: 15px 0;
   background-color: #fff;
-  height: 60px;
-  line-height: 60px;
   padding-right: 40px;
   font-size: 0;
-  li {
-    font-size: 14px;
+  line-height: 45px;
+  display: -webkit-flex;     /* NEW - Chrome */
+  display: flex;
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: box;              /* OLD - Android 4.4- */
+  -webkit-box-pack: space-between;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  & > li {
+    font-size: 12px;
     display: inline-block;
     vertical-align: middle;
+    height: 45px;
+    line-height: 45px;
   }
-  .toggle-side-bar {
-    width: 60px;
+  .app-header-brand {
+    width: 180px;
     text-align: center;
-    border-right: 1px solid #ececec;
-    i {
-      cursor: pointer;
-      font-size: 20px;
-      color: #b7b7b7;
+    img {
+      height: 25px;
+      vertical-align: middle;
     }
   }
-  .header-search {
-    display: inline-block;
+  .app-header-search {
+    min-width: 300px;
+    width: 40%;
     position: relative;
     input[type=text] {
-      font-size: 14px;
-      vertical-align: middle;
-      width: 300px;
-      height: 30px;
-      border: 0;
+      display: block;
+      font-size: 12px;
+      padding: 0 45px 0 15px;
+      width: 100%;
+      height: 45px;
       border-radius: 5px;
-      // background-color: @main-background-color;
+      border: 1px solid #fff;
       outline: 0;
-      padding-left: 45px;
-      transition: border-color .2s;
-      &:focus {
-        border-color: #169bd5;
-      }
+      -webkit-transition: border-color .3s;
+      -moz-transition: border-color .3s;
+      -ms-transition: border-color .3s;
+      -o-transition: border-color .3s;
+      transition: border-color .3s;
       &::placeholder {
         color: #d1d1d1;
       }
+      &:focus {
+        border-color: #5598ed;
+      }
     }
     i {
-      color: #707070;
+      font-size: 18px;
+      color: #333;
+      display: block;
       position: absolute;
-      top: 50%;
-      left: 15px;
-      display: inline-block;
-      line-height: normal;
-      transform: translateY(-50%);
+      top: 0;
+      right: 0;
+      border-radius: 0 5px 5px 0;
+      width: 45px;
+      height: 45px;
+      line-height: 45px;
+      text-align: center;
       cursor: pointer;
     }
   }
-  .split {
-    color: #d7d7d7;
-    margin: 0 20px;
-  }
-  li.add-account {
-    i {
-      display: inline-block;
-      transform: translateY(-1px);
-    }
-  }
-  .account-dropdown {
+  .app-header-account {
+    float: right;
+    font-size: 0;
     position: relative;
-    width: 100px;
-    text-align: center;
-    i {
-      margin-left: 10px;
-    }
-    .dropdown {
-      position: absolute;
-      z-index: 500;
-      width: 100%;
-      line-height: 35px;
-      background-color: #fff;
-      -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.349019607843137);
-      -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.349019607843137);
-      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.349019607843137);
-      li {
-        display: block;
-        font-size: 12px;
-        cursor: default;
-        &:hover {
-          background-color: rgba(0, 0, 0, .1);
-        }
+    & > span {
+      font-size: 12px;
+      display: inline-block;
+      width: 120px;
+      height: 25px;
+      line-height: 25px;
+      vertical-align: middle;
+      text-align: center;
+      border-right: 1px solid #d1d1d1;
+      &:last-of-type {
+        border-right: 0;
       }
     }
-    .dropdown-wrapper {
-      position: fixed;
-      top: 0;
+    .account-dropdown {
+      width: 120px;
+      position: absolute;
+      top: 45px;
       right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 499;
+      z-index: 10000;
+      border-radius: 0;
+      li {
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+        background-color: #fff;
+        position: relative;
+        z-index: 10000;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        &:last-of-type {
+          border-bottom: 0;
+        }
+      }
+      .dropdown-wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 9999;
+      }
     }
   }
 }

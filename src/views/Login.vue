@@ -156,8 +156,8 @@ export default {
     color: #fff;
   }
   .login-tabs {
-    height: 100px;
-    line-height: 100px;
+    height: 75px;
+    line-height: 75px;
     text-align: center;
     border-bottom: 1px solid #f7f7f7;
     position: relative;

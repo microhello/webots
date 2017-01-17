@@ -1,46 +1,43 @@
 <template>
   <div class="member">
-    <div class="title">
-      <p>群成员 （{{ membersCount }}人）</p>
-    </div>
-    <div class="member-content">
-      <div class="selector">
-        <label>托管账号</label>
-        <select v-model="currentAccount">
-          <option v-for="item of accounts" :value="item">{{ item.nick_name }}</option>
-        </select>
-        <label>所属群</label>
-        <select v-model="currentGroup">
-          <option v-for="item of groups" :value="item">{{ item.nick_name }}</option>
-        </select>
-      </div>
-      <div class="table-box">
-        <div class="table">
-          <div class="table-head">
-            <ul class="table-row">
-              <li>成员昵称</li>
-              <li>群内昵称</li>
-              <li>所属群</li>
-              <li>所属托管账号</li>
-            </ul>
-          </div>
-          <div class="table-body" @scroll="nextPage">
-            <ul class="table-row" v-for="item of members">
-              <li>{{ item.nick_name }}</li>
-              <li>{{ item.display_name }}</li>
-              <li>{{ getGroup(item) }}</li>
-              <li>{{ getAccount(item) }}</li>
-            </ul>
-          </div>
+    <div class="member-box border-box">
+      <div class="member-box-header">
+        <h1>群成员 （{{ count }}人）</h1>
+        <div class="selector">
+          <span>托管账号</span>
+          <select class="shadow-box" v-model="currentAccount">
+            <option v-for="item of accounts" :value="item">{{ item.nick_name }}</option>
+          </select>
+          <span>所属群</span>
+          <select class="shadow-box" v-model="currentGroup">
+            <option v-for="item of groups" :value="item">{{ item.nick_name }}</option>
+          </select>
         </div>
       </div>
+      <table>
+        <tr>
+          <th>成员昵称</th>
+          <th>群内昵称</th>
+          <th>所属群</th>
+          <th>所属托管账号</th>
+        </tr>
+        <tr v-for="item of members">
+          <td>{{ item.nick_name }}</td>
+          <td>{{ item.display_name }}</td>
+          <td>{{ getGroup(item) }}</td>
+          <td>{{ getAccount(item) }}</td>
+        </tr>
+      </table>
     </div>
+    <paginator class="border-box" :default-page-size="limit" :item-count="count" @page-changed="onPageChanged" v-if="showPaginator"></paginator>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Group } from '../api'
+
+const Paginator = resolve => require(['./Paginator'], resolve)
 
 export default {
   name: 'Member',
@@ -51,8 +48,9 @@ export default {
       groups: [],
       members: [],
       offset: 0,
-      limit: 20,
-      membersCount: 0
+      limit: 10,
+      count: 0,
+      showPaginator: true
     }
   },
   computed: {
@@ -84,12 +82,11 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(data => {
-        if (data.items.length < this.limit) {
-          this.members.splice(this.offset, this.limit, ...data.items)
-        } else {
-          this.members = this.members.concat(data.items)
-          this.offset += this.limit
-        }
+        this.members = data.items
+        this.count = data.count
+      }, data => {
+        this.members = []
+        this.addAlertMessage({ type: 'error', message: '获取成员列表失败，请重试！' })
       })
     },
     getGroups () {
@@ -102,15 +99,10 @@ export default {
         this.currentGroup = this.groups[0]
       })
     },
-    nextPage (event) {
-      let offsetHeight = event.target.offsetHeight
-      let scrollTop = event.target.scrollTop
-      let scrollHeight = event.target.scrollHeight
-      let scrollBottom = scrollHeight - scrollTop - offsetHeight
-      // console.log(scrollBottom)
-      if (scrollBottom === 0) {
-        this.getMembers()
-      }
+    onPageChanged ({ offset, limit }) {
+      this.offset = offset
+      this.limit = limit
+      this.getMembers()
     }
   },
   watch: {
@@ -119,49 +111,63 @@ export default {
       this.offset = 0
       this.getGroups()
     },
-    currentGroup () {
+    async currentGroup () {
+      this.showPaginator = false
       this.members = []
       this.offset = 0
-      this.getMembers()
+      await this.getMembers()
+      this.showPaginator = true
     }
+  },
+  components: {
+    Paginator
   },
   mounted () {
     this.currentAccount = this.accounts[0]
     Group.getMembers({ access_token: this.token, limit: 0 }).then(({ count }) => {
-      this.membersCount = count
+      this.count = count
     })
   }
 }
 </script>
 
 <style lang="less">
-@padding-left: 40px;
-@title-height: 50px;
 .member {
-  .title {
-    padding: 0 40px;
-  }
-  .member-content {
-    position: absolute;
-    top: @title-height;
-    right: @padding-left;
-    bottom: 50px;
-    left: @padding-left;
-    .selector {
-      padding: 0 40px;
-      line-height: 100px;
-      label {
-        margin-right: 10px;
+  .member-box {
+    padding: 30px 40px 35px;
+    margin-bottom: 35px;
+    .member-box-header {
+      line-height: 40px;
+      margin-bottom: 25px;
+      h1 {
+        font-size: 20px;
+        margin-right: 25px;
+        display: inline-block;
+        vertical-align: top;
       }
-      select {
-        margin-right: 20px;
+      .selector {
+        display: inline-block;
+        vertical-align: top;
+        select {
+          height: 40px;
+          padding-left: 5px;
+          outline: 0;
+          background-color: #fff;
+          border-color: #fff;
+          -webkit-transition: border-color .3s;
+          -moz-transition: border-color .3s;
+          -ms-transition: border-color .3s;
+          -o-transition: border-color .3s;
+          transition: border-color .3s;
+          margin-right: 25px;
+          &:last-of-type {
+            margin-right: 0;
+          }
+          &:focus {
+            border-color: #5598ed;
+          }
+        }
       }
-    }
-    .table-box {
-      position: absolute;
-      top: 100px;
-      bottom: 0;
-      width: 100%;
     }
   }
 }

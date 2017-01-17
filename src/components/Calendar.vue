@@ -1,9 +1,9 @@
 <template>
   <div class="calendar">
     <h1 class="header">
-      <i class="iconfont left" @click="prevMonth">&#xe698;</i>
+      <i class="iconfont left" @click="prevMonth">&#xe778;</i>
       <span>{{ calendar.year }}年{{ calendar.month + 1 }}月</span>
-      <i class="iconfont right" @click="nextMonth">&#xe607;</i>
+      <i class="iconfont right" @click="nextMonth">&#xe7c0;</i>
     </h1>
     <div class="calendar-content">
       <h2 class="calendar-row">
@@ -137,12 +137,21 @@ export default {
   padding: 20px;
   .header {
     text-align: center;
-    display: -webkit-flex; /* Safari */
+    display: -webkit-flex;     /* NEW - Chrome */
     display: flex;
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: box;              /* OLD - Android 4.4- */
+    -webkit-box-pack: space-between;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -ms-justify-content: space-between;
+    -o-justify-content: space-between;
     justify-content: space-between;
+    padding: 0 15px;
     .iconfont {
       font-size: 32px;
-      color: #ced2d3;
       cursor: pointer;
     }
   }
@@ -150,12 +159,21 @@ export default {
     padding: 0 20px;
     .calendar-row {
       text-align: center;
-      display: -webkit-flex; /* Safari */
+      display: -webkit-flex;     /* NEW - Chrome */
       display: flex;
+      display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+      display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+      display: -ms-flexbox;      /* TWEENER - IE 10 */
+      display: box;              /* OLD - Android 4.4- */
+      -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       .calendar-item {
-        flex-grow: 1;
-        flex-basis: 14.2857%;
+        -webkit-flex: auto;        /* Chrome */
+        -ms-flex: auto;            /* IE 10 */
+        flex: auto;                /* NEW, Spec - Opera 12.1, Firefox 20+ */
+        -webkit-box-flex: auto;    /* OLD - iOS 6-, Safari 3.1-6 */
+        -moz-box-flex: auto;       /* OLD - Firefox 19- */
+        width: 14.2857%;
         &[disabled], &[otherMonth] {
           color: @main-dashed-color;
         }

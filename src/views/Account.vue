@@ -1,52 +1,52 @@
 <template>
   <div class="account">
-    <add-account v-if="showAddAccount" @close="closeAddAccount" :account-info="accountInfo"></add-account>
-    <ul class="account-title clearfix">
-      <li>
-        <h1>托管机器人</h1>
-      </li>
-      <li>
-        <select v-model="status">
-          <option v-for="item of statuses" :value="item">{{ item.title }}</option>
-        </select>
-      </li>
-      <li class="pull-right">
-        <a class="unselectable" @click="addAccount"><i class="iconfont">&#xe63b;</i>新增账号</a>
-      </li>
-      <li class="account-search pull-right">
-        <input type="text" v-model="keywords" @keyup.enter="search" placeholder="微信号，昵称" />
-        <i class="iconfont" @click="search">&#xe620;</i>
-      </li>
-    </ul>
-    <div class="table-wrapper">
-      <div class="table">
-        <div class="table-head">
-          <ul class="table-row">
-            <li>托管UIN</li>
-            <li>名字/昵称</li>
-            <li>微信账号</li>
-            <li>状态</li>
-            <li>操作</li>
-          </ul>
-        </div>
-        <div class="table-body" @scroll="nextPage">
-          <ul class="table-row" v-for="item of accounts">
-            <li>{{ item.uin }}</li>
-            <li>{{ item.nick_name }}</li>
-            <li>暂无</li>
-            <li>
-              <span class="online" v-if="item.online">正在托管中</span>
-              <span class="offline" v-else>账号已离线</span>
-            </li>
-            <li>
-              <a v-if="item.online" @click="stopClient(item)">下线</a>
-              <a v-else @click="startClient(item)">上线</a>
-              <a @click="addTab({ title: '配置', data: { uin: item.uin }, type: 'robot_setting' })">配置</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <modal v-if="showAddAccount" @close="closeAddAccount">
+      <add-account :account-info="accountInfo"></add-account>
+    </modal>
+    <div class="account-box border-box">
+      <ul class="account-title clearfix">
+        <li>
+          <h1>托管机器人</h1>
+        </li>
+        <li>
+          <select class="shadow-box" v-model="status">
+            <option v-for="item of statuses" :value="item">{{ item.title }}</option>
+          </select>
+        </li>
+        <li class="shadow-box add-account-btn pull-right" @click="addAccount">
+          <span>新增账号</span>
+          <i class="iconfont">&#xe67d;</i>
+        </li>
+        <li class="account-search shadow-box pull-right">
+          <input type="text" v-model="keywords" @keyup.enter="search" placeholder="微信号，昵称" />
+          <i class="iconfont" @click="search">&#xe66f;</i>
+        </li>
+      </ul>
+      <table class="account-list">
+        <tr>
+          <th>托管UIN</th>
+          <th>名字/昵称</th>
+          <th>微信账号</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+        <tr v-for="item of accounts">
+          <td>{{ item.uin }}</td>
+          <td>{{ item.nick_name }}</td>
+          <td>暂无</td>
+          <td>
+            <span class="online" v-if="item.online">正在托管中</span>
+            <span class="offline" v-else>账号已离线</span>
+          </td>
+          <td class="account-setting">
+            <a class="state offline" v-if="item.online" @click="stopClient(item)">下线</a>
+            <a class="state online" v-else @click="startClient(item)">上线</a>
+            <a class="setting" @click="addTab({ title: '配置机器人', data: { uin: item.uin }, type: 'robot_setting' })">配置</a>
+          </td>
+        </tr>
+      </table>
     </div>
+    <paginator class="border-box" :default-page-size="limit" :item-count="count" @page-changed="onPageChanged" v-if="showPaginator"></paginator>
   </div>
 </template>
 
@@ -56,6 +56,8 @@ import { Account } from '../api'
 import * as types from '../store/types'
 
 const AddAccount = resolve => require(['../components/AddAccount'], resolve)
+const Modal = resolve => require(['../components/Modal'], resolve)
+const Paginator = resolve => require(['../components/Paginator'], resolve)
 
 export default {
   name: 'Account',
@@ -73,11 +75,13 @@ export default {
       keywords: '',
       status: statuses[0],
       offset: 0,
-      limit: 20,
+      limit: 10,
+      count: 0,
       accounts: [],
       statuses: statuses,
       showAddAccount: false,
-      accountInfo: undefined
+      accountInfo: undefined,
+      showPaginator: true
     }
   },
   computed: {
@@ -100,30 +104,24 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(data => {
-        if (data.items.length < this.limit) {
-          this.accounts.splice(this.offset, this.limit, ...data.items)
-        } else {
-          this.accounts.concat(data.items)
-          this.offset += this.limit
-        }
+        this.accounts = data.items
+        this.count = data.count
       }, data => {
         this.accounts = []
+        this.addAlertMessage({ type: 'error', message: '获取账号列表失败，请重试！' })
       })
     },
-    search () {
+    async search () {
+      this.showPaginator = false
       this.offset = 0
       this.accounts = []
-      this.getAccounts()
+      await this.getAccounts()
+      this.showPaginator = true
     },
-    nextPage (event) {
-      let offsetHeight = event.target.offsetHeight
-      let scrollTop = event.target.scrollTop
-      let scrollHeight = event.target.scrollHeight
-      let scrollBottom = scrollHeight - scrollTop - offsetHeight
-      // console.log(scrollBottom)
-      if (scrollBottom === 0) {
-        this.getAccounts()
-      }
+    onPageChanged ({ offset, limit }) {
+      this.offset = offset
+      this.limit = limit
+      this.getAccounts()
     },
     startClient (account) {
       // Account.startClient({ access_token: this.token, account_id: account.account_id }).then(data => {
@@ -154,7 +152,9 @@ export default {
     }
   },
   components: {
-    AddAccount
+    AddAccount,
+    Modal,
+    Paginator
   },
   mounted () {
     this.getAccounts()
@@ -163,107 +163,118 @@ export default {
 </script>
 
 <style lang="less">
-@import "../assets/less/colors.less";
-@button-color: #61b0ff;
-@padding-top: 40px;
-@padding-right: 40px;
 .account {
-  padding: @padding-top @padding-right;
-  .account-title {
-    line-height: 30px;
-    font-size: 0;
-    li {
-      font-size: 14px;
-      display: inline-block;
-      vertical-align: middle;
-      h1 {
-        font-size: 20px;
-        margin-right: 20px;
-      }
-      a {
-        display: block;
-        width: 150px;
-        height: 30px;
-        border-radius: 5px;
-        color: #fff;
-        background-color: @button-color;
-        text-align: center;
-        i {
-          font-size: 12px;
-          margin-right: 5px;
+  .account-box {
+    padding: 30px 40px 35px;
+    margin-bottom: 35px;
+    .account-title {
+      margin-bottom: 25px;
+      line-height: 40px;
+      font-size: 0;
+      li {
+        font-size: 12px;
+        display: inline-block;
+        vertical-align: middle;
+        h1 {
+          font-size: 20px;
+          margin-right: 25px;
         }
-      }
-      select {
-        height: 30px;
-        border-radius: 5px;
-        padding-left: 5px;
-        outline: 0;
-        background-color: #f9f9f9;
-        border-color: #ececec;
-        transition: border-color .2s;
-        &:focus {
-          border-color: @button-color;
-        }
-      }
-      &.account-search {
-        margin-right: 20px;
-        position: relative;
-        input[type=text] {
-          font-size: 12px;
-          width: 200px;
-          height: 30px;
-          border: 1px solid #ececec;
-          border-radius: 5px;
-          background-color: #f9f9f9;
-          padding-left: 35px;
+        select {
+          height: 40px;
+          padding-left: 5px;
           outline: 0;
-          transition: border-color .2s;
+          background-color: #fff;
+          border-color: #fff;
+          -webkit-transition: border-color .3s;
+          -moz-transition: border-color .3s;
+          -ms-transition: border-color .3s;
+          -o-transition: border-color .3s;
+          transition: border-color .3s;
           &:focus {
-            border-color: @button-color;
-          }
-          &::placeholder {
-            color: #d1d1d1;
+            border-color: #5598ed;
           }
         }
-        i {
-          display: inline-block;
-          line-height: normal;
+        &.add-account-btn {
+          width: 120px;
+          height: 40px;
+          color: #fff;
+          background-color: #5598ed;
+          text-align: center;
           cursor: pointer;
-          position: absolute;
-          top: 50%;
-          left: 10px;
-          transform: translateY(-50%);
+          i {
+            font-size: 12px;
+          }
+        }
+        &.account-search {
+          width: 235px;
+          height: 40px;
+          margin-right: 25px;
+          position: relative;
+          input[type=text] {
+            display: block;
+            font-size: 12px;
+            padding: 0 40px 0 15px;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            border: 1px solid #fff;
+            outline: 0;
+            -webkit-transition: border-color .3s;
+            -moz-transition: border-color .3s;
+            -ms-transition: border-color .3s;
+            -o-transition: border-color .3s;
+            transition: border-color .3s;
+            &::placeholder {
+              color: #d1d1d1;
+            }
+            &:focus {
+              border-color: #5598ed;
+            }
+          }
+          i {
+            font-size: 18px;
+            color: #333;
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-radius: 0 5px 5px 0;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+          }
         }
       }
     }
-  }
-  .table-wrapper {
-    position: absolute;
-    top: 90px;
-    right: @padding-right;
-    bottom: @padding-top;
-    left: @padding-right;
-    .table {
-      li {
-        width: 20%!important;
+    .account-list {
+      span {
+        &.online {
+          color: #60ba77;
+        }
+        &.offline {
+          color: #d81e06;
+        }
+      }
+      td.account-setting {
+        font-size: 0;
         a {
-          display: inline-block;
-          width: 45px;
-          height: 20px;
-          line-height: 18px;
           font-size: 12px;
-          border-radius: 5px;
-          border: 1px solid @button-color;
-          color: @button-color;
+          color: #5598ed;
         }
-        span {
-          &.online {
-            color: @main-text-color-success;
-          }
-          &.offline {
-            color: @main-text-color-failure;
-          }
+        .state {
+          margin-right: 10%;
+          // &.online {
+          //   color: #60ba77;
+          // }
+          // &.offline {
+          //   color: #fdcf54;
+          // }
         }
+        // .setting {
+        //   color: #5598ed;
+        // }
       }
     }
   }

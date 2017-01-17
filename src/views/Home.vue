@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <div class="count-box">
+    <div class="count-box border-box">
       <div class="count-content">
         <div class="count-item">
           <router-link to="/main/account">
             <div class="count">
-              <i class="iconfont">&#xe6ef;</i>
+              <i class="iconfont">&#xe608;</i>
               <span>{{ accountsCount }}</span>
             </div>
             <p>托管账号</p>
@@ -14,7 +14,7 @@
         <div class="count-item">
           <a @click="addTab({ title: '微信好友', data: {}, type: 'contact' })">
             <div class="count">
-              <i class="iconfont">&#xe604;</i>
+              <i class="iconfont">&#xe602;</i>
               <span>{{ contactsCount }}</span>
             </div>
             <p>微信好友</p>
@@ -25,7 +25,7 @@
         <div class="count-item">
           <a @click="addTab({ title: '群成员', data: {}, type: 'member' })">
             <div class="count">
-              <i class="iconfont">&#xe603;</i>
+              <i class="iconfont">&#xe600;</i>
               <span>{{ groupsCount }}</span>
             </div>
             <p>微信群</p>
@@ -34,7 +34,7 @@
         <div class="count-item">
           <a @click="addTab({ title: '群成员', data: {}, type: 'member' })">
             <div class="count">
-              <i class="iconfont">&#xe627;</i>
+              <i class="iconfont">&#xe628;</i>
               <span>{{ membersCount }}</span>
             </div>
             <p>群成员</p>
@@ -45,7 +45,7 @@
         <div class="count-item">
           <router-link to="/main/messages">
             <div class="count">
-              <i class="iconfont">&#xe654;</i>
+              <i class="iconfont">&#xe607;</i>
               <span>{{ messagesCount }}</span>
             </div>
             <p>全部消息</p>
@@ -54,7 +54,7 @@
         <div class="count-item">
           <router-link to="/main/watcher">
             <div class="count">
-              <i class="iconfont">&#xe663;</i>
+              <i class="iconfont">&#xe66e;</i>
               <span>{{ watchersCount }}</span>
             </div>
             <p>值守消息</p>
@@ -62,56 +62,52 @@
         </div>
       </div>
     </div>
-    <div class="message-box">
-      <div class="message-content">
-        <div class="title clearfix">
-          <i class="title-item"></i>
-          <h1 class="title-item">群消息</h1>
-          <router-link to="/main/messages" class="title-item">更多</router-link>
-        </div>
-        <div class="table">
-          <div class="table-head">
-            <ul class="table-row">
-              <li>群名称</li>
-              <li>今日消息数</li>
-              <li>消息总数</li>
-              <li>最后接收时间</li>
-            </ul>
+    <ul class="message-box">
+      <li>
+        <div class="message-content border-box">
+          <div class="title clearfix">
+            <i class="title-item"></i>
+            <h1 class="title-item">群消息</h1>
+            <router-link to="/main/messages" class="title-item">更多</router-link>
           </div>
-          <div class="table-body">
-            <ul class="table-row" v-for="item of groupStat">
-              <li>{{ item.group.nick_name }}</li>
-              <li>{{ item.msg_count_today }}</li>
-              <li>{{ item.msg_count_total }}</li>
-              <li>{{ item.msg_last_time | formatDate }}</li>
-            </ul>
-          </div>
+          <table>
+            <tr>
+              <th>群名称</th>
+              <th>今日消息数</th>
+              <th>消息总数</th>
+              <th>最后接收时间</th>
+            </tr>
+            <tr v-for="item of groupStat">
+              <td>{{ item.group.nick_name }}</td>
+              <td>{{ item.msg_count_today }}</td>
+              <td>{{ item.msg_count_total }}</td>
+              <td>{{ item.msg_last_time | formatDate }}</td>
+            </tr>
+          </table>
         </div>
-      </div>
-      <div class="message-content">
-        <div class="title clearfix">
-          <i class="title-item"></i>
-          <h1 class="title-item">群值守</h1>
-          <router-link to="/main/watcher" class="title-item">更多</router-link>
-        </div>
-        <div class="table">
-          <div class="table-head">
-            <ul class="table-row">
-              <li>监控账号</li>
-              <li>值守消息</li>
-              <li>最后接收时间</li>
-            </ul>
+      </li>
+      <li>
+        <div class="message-content border-box">
+          <div class="title clearfix">
+            <i class="title-item"></i>
+            <h1 class="title-item">群值守</h1>
+            <router-link to="/main/watcher" class="title-item">更多</router-link>
           </div>
-          <div class="table-body">
-            <ul class="table-row" v-for="item of guardStat">
-              <li>{{ item.guard.nick_name }}</li>
-              <li>{{ item.msg_count_total }}</li>
-              <li>{{ item.msg_last_time | formatDate }}</li>
-            </ul>
-          </div>
+          <table>
+            <tr>
+              <th>监控账号</th>
+              <th>值守消息</th>
+              <th>最后接收时间</th>
+            </tr>
+            <tr v-for="item of guardStat">
+              <td>{{ item.guard.nick_name }}</td>
+              <td>{{ item.msg_count_total }}</td>
+              <td>{{ item.msg_last_time | formatDate }}</td>
+            </tr>
+          </table>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -185,10 +181,10 @@ export default {
 
 <style lang="less">
 .home {
-  padding: 40px;
   .count-box {
+    padding: 25px;
+    margin-bottom: 10px;
     font-size: 0;
-    margin-bottom: 40px;
     .count-content {
       display: inline-block;
       vertical-align: top;
@@ -240,59 +236,40 @@ export default {
   }
   .message-box {
     font-size: 0;
-    .message-content {
+    li {
       display: inline-block;
       vertical-align: top;
-      &:first-of-type {
+      &:nth-of-type(1) {
         width: 60%;
-        padding-right: 20px;
+        padding-right: 15px;
       }
-      &:last-of-type {
+      &:nth-of-type(2) {
         width: 40%;
-        padding-left: 20px;
-        li {
-          width: 33.333%;
-          &:first-of-type {
-            text-align: left;
-            padding-left: 20px;
+      }
+      .message-content {
+        padding: 15px 25px 25px;
+        .title {
+          height: 40px;
+          line-height: 40px;
+          padding: 0;
+          border: 0;
+          .title-item {
+            display: inline-block;
+            vertical-align: middle;
           }
-        }
-      }
-      .title {
-        height: 40px;
-        line-height: 40px;
-        padding: 0;
-        border: 0;
-        .title-item {
-          display: inline-block;
-          vertical-align: middle;
-        }
-        i {
-          width: 10px;
-          height: 10px;
-          background-color: #a1a1a1;
-          margin-right: 10px;
-        }
-        h1 {
-          font-size: 16px;
-        }
-        a {
-          font-size: 12px;
-          float: right;
-          color: #A1A1A1;
-        }
-      }
-      .table > .table-body {
-        position: static;
-        .table-row {
-          border-width: 0 1px 1px;
-          border-style: solid;
-          border-color: #ececec;
-          li {
+          i {
+            width: 10px;
+            height: 10px;
+            background-color: #a1a1a1;
+            margin-right: 10px;
+          }
+          h1 {
+            font-size: 16px;
+          }
+          a {
             font-size: 12px;
-            &:last-of-type {
-              color: #A1A1A1;
-            }
+            float: right;
+            color: #A1A1A1;
           }
         }
       }

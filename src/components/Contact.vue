@@ -1,50 +1,47 @@
 <template>
   <div class="contact">
-    <div class="title">
-      <p>微信好友 （{{ contactsCount }}人）</p>
-    </div>
-    <div class="contact-content">
-      <div class="selector">
-        <label>所属微信号</label>
-        <select v-model="currentAccount">
-          <option v-for="item of accounts" :value="item">{{ item.nick_name }}</option>
-        </select>
-      </div>
-      <div class="table-box">
-        <div class="table contact-table">
-          <div class="table-head">
-            <ul class="table-row">
-              <li>好友账号</li>
-              <li>昵称</li>
-              <li>备注名</li>
-              <li>性别</li>
-              <li>省份</li>
-              <li>城市</li>
-              <li>签名</li>
-              <li>所属微信号</li>
-            </ul>
-          </div>
-          <div class="table-body" @scroll="nextPage">
-            <ul class="table-row" v-for="item of contacts">
-              <li>{{ item.alias }}</li>
-              <li>{{ item. nick_name }}</li>
-              <li>{{ item.remark_name }}</li>
-              <li>{{ item.sex === 1 ? '男' : '女' }}</li>
-              <li>{{ item.province }}</li>
-              <li>{{ item.city }}</li>
-              <li>{{ item.signature }}</li>
-              <li>{{ getAccount(item.uin) }}</li>
-            </ul>
-          </div>
+    <div class="contact-box border-box">
+      <div class="contact-box-header">
+        <h1>微信好友 （{{ count }}人）</h1>
+        <div class="selector">
+          <span>所属微信号</span>
+          <select class="shadow-box" v-model="currentAccount">
+            <option v-for="item of accounts" :value="item">{{ item.nick_name }}</option>
+          </select>
         </div>
       </div>
+      <table>
+        <tr>
+          <th>好友账号</th>
+          <th>昵称</th>
+          <th>备注名</th>
+          <th>性别</th>
+          <th>省份</th>
+          <th>城市</th>
+          <th>签名</th>
+          <th>所属微信号</th>
+        </tr>
+        <tr v-for="item of contacts">
+          <td>{{ item.alias }}</td>
+          <td>{{ item. nick_name }}</td>
+          <td>{{ item.remark_name }}</td>
+          <td>{{ item.sex === 1 ? '男' : '女' }}</td>
+          <td>{{ item.province }}</td>
+          <td>{{ item.city }}</td>
+          <td>{{ item.signature }}</td>
+          <td>{{ getAccount(item.uin) }}</td>
+        </tr>
+      </table>
     </div>
+    <paginator class="border-box" :default-page-size="limit" :item-count="count" @page-changed="onPageChanged" v-if="showPaginator"></paginator>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Account } from '../api'
+
+const Paginator = resolve => require(['./Paginator'], resolve)
 
 export default {
   name: 'Contact',
@@ -53,8 +50,9 @@ export default {
       currentAccount: null,
       contacts: [],
       offset: 0,
-      limit: 20,
-      contactsCount: 0
+      limit: 10,
+      count: 0,
+      showPaginator: true
     }
   },
   computed: {
@@ -71,23 +69,17 @@ export default {
         offset: this.offset,
         limit: this.limit
       }).then(data => {
-        if (data.items.length < this.limit) {
-          this.contacts.splice(this.offset, this.limit, ...data.items)
-        } else {
-          this.contacts = this.contacts.concat(data.items)
-          this.offset += this.limit
-        }
+        this.contacts = data.items
+        this.count = data.count
+      }, data => {
+        this.contacts = []
+        this.addAlertMessage({ type: 'error', message: '获取好友列表失败，请重试！' })
       })
     },
-    nextPage (event) {
-      let offsetHeight = event.target.offsetHeight
-      let scrollTop = event.target.scrollTop
-      let scrollHeight = event.target.scrollHeight
-      let scrollBottom = scrollHeight - scrollTop - offsetHeight
-      // console.log(scrollBottom)
-      if (scrollBottom === 0) {
-        this.getContacts()
-      }
+    onPageChanged ({ offset, limit }) {
+      this.offset = offset
+      this.limit = limit
+      this.getContacts()
     },
     getAccount (uin) {
       for (let item of this.accounts) {
@@ -98,53 +90,60 @@ export default {
     }
   },
   watch: {
-    currentAccount () {
+    async currentAccount () {
+      this.showPaginator = false
       this.contacts = []
       this.offset = 0
-      this.getContacts()
+      await this.getContacts()
+      this.showPaginator = true
     }
+  },
+  components: {
+    Paginator
   },
   mounted () {
     this.currentAccount = this.accounts[0]
     Account.getContacts({ access_token: this.token, limit: 0 }).then(({ count }) => {
-      this.contactsCount = count
+      this.count = count
     })
   }
 }
 </script>
 
 <style lang="less">
-@padding-left: 40px;
-@title-height: 50px;
 .contact {
-  .title {
-    padding: 0 40px;
-  }
-  .contact-content {
-    position: absolute;
-    top: @title-height;
-    right: @padding-left;
-    bottom: 50px;
-    left: @padding-left;
-    .selector {
-      padding: 0 40px;
-      line-height: 100px;
-      label {
-        margin-right: 10px;
+  .contact-box {
+    padding: 30px 40px 35px;
+    margin-bottom: 35px;
+    .contact-box-header {
+      line-height: 40px;
+      margin-bottom: 25px;
+      h1 {
+        font-size: 20px;
+        margin-right: 25px;
+        display: inline-block;
+        vertical-align: top;
       }
-      select {
-        margin-right: 20px;
+      .selector {
+        display: inline-block;
+        vertical-align: top;
+        select {
+          height: 40px;
+          padding-left: 5px;
+          outline: 0;
+          background-color: #fff;
+          border-color: #fff;
+          -webkit-transition: border-color .3s;
+          -moz-transition: border-color .3s;
+          -ms-transition: border-color .3s;
+          -o-transition: border-color .3s;
+          transition: border-color .3s;
+          &:focus {
+            border-color: #5598ed;
+          }
+        }
       }
     }
-    .table-box {
-      position: absolute;
-      top: 100px;
-      bottom: 0;
-      width: 100%;
-    }
   }
-}
-.contact-table .table-row li {
-  width: 12.5%!important;
 }
 </style>

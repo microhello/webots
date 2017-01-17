@@ -11,6 +11,7 @@ const Home = resolve => require(['../views/Home'], resolve)
 const Account = resolve => require(['../views/Account'], resolve)
 const Messages = resolve => require(['../views/Messages'], resolve)
 const Watcher = resolve => require(['../views/Watcher'], resolve)
+const Mass = resolve => require(['../views/Mass'], resolve)
 
 const router = new Router({
   // mode: 'history',
@@ -56,6 +57,10 @@ const router = new Router({
       path: '/main/watcher',
       name: 'Watcher',
       component: Watcher
+    }, {
+      path: '/main/mass',
+      name: 'Mass',
+      component: Mass
     }]
   }, {
     path: '*',

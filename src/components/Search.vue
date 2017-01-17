@@ -1,43 +1,28 @@
 <template>
-  <div class="search clearfix">
-    <!-- <div class="side-bar">
-      <div class="title">
-        <h2 class="title-name" @click="console">机器人</h2>
+  <div class="search">
+    <div class="search-content">
+      <div class="search-content-header border-box">
+        <h1 class="search-keywords">搜索"<span :title="keywords">{{ keywords }}</span>"</h1>
+        <span>共{{ count }}条</span>
       </div>
-      <ul class="account-list-items">
-        <li v-for="(item, key) in results" class="clearfix" @click="current.account_id = key">
-          <div class="account-status online" v-if="item.account.online"></div>
-          <div class="account-status offline" v-else></div>
-          <div class="account-name">{{ item.account.nick_name }}</div>
+      <ul class="messages-list">
+        <li class="messages-list-item border-box" v-for="item of messages">
+          <div class="messages-list-item-header">
+            <h1>{{ item.sender_name }}</h1>
+            <p class="clearfix">
+              <span class="message-from">来自：{{ item.receiver_name }}</span>
+              <span class="message-date">{{ item.create_time | formatDate }}</span>
+            </p>
+          </div>
+          <div class="messages-list-item-body">
+            <message :message="item.message" :keyword="keywords"></message>
+          </div>
         </li>
+        <div class="messages-none border-box" v-show="count === 0">
+          没有找到相关消息
+        </div>
       </ul>
-    </div>
-    <div class="side-bar chat">
-      <div class="title">
-        <h2 class="title-name">聊天记录</h2>
-      </div>
-      <ul class="chat-record">
-        <li v-for="(item, key) in results[current.account_id].items" class="chat-record-item">
-          <h3 class="record-title">{{ key }}</h3>
-          <p class="record-count">{{item.length}}条聊天记录</p>
-        </li>
-      </ul>
-    </div> -->
-    <div class="side-content search-content">
-      <div class="title">
-        <h2 class="search-keywords">搜索"<span :title="keywords">{{ keywords }}</span>"</h2>
-        <!-- <span>共{{ count }}条</span> -->
-      </div>
-      <div class="search-results-wrapper">
-        <ul class="search-results" v-if="messages.length" @scroll="nextPage">
-          <li class="search-results-item" v-for="item of messages">
-            <p class="result-item result-name">{{ item.sender_name }}：</p>
-            <message class="result-item result-message" :message="item.message" :keyword="keywords"></message>
-            <p class="result-item result-time">{{ item.create_time | formatDate }}</p>
-          </li>
-        </ul>
-        <p class="no-result" v-else>没有找到与"<mark>{{ keywords }}</mark>"相关的消息</p>
-      </div>
+      <paginator class="border-box" :default-page-size="limit" :item-count="count" @page-changed="onPageChanged" v-if="showPaginator"></paginator>
     </div>
   </div>
 </template>
@@ -45,7 +30,9 @@
 <script>
 import { Message as MessageApi } from '../api'
 import { mapGetters } from 'vuex'
+
 const Message = resolve => require(['./Message'], resolve)
+const Paginator = resolve => require(['./Paginator'], resolve)
 
 export default {
   name: 'Search',
@@ -54,42 +41,40 @@ export default {
   },
   data () {
     return {
-      // count: 0,
       messages: [],
       offset: 0,
-      limit: 10
+      limit: 10,
+      count: 0,
+      showPaginator: true
     }
   },
   computed: {
     ...mapGetters(['token'])
   },
   methods: {
-    search () {
-      MessageApi.getMessages({ keywords: this.keywords, offset: this.offset, limit: this.limit, access_token: this.token }).then(data => {
-        if (data.items.length < this.limit) {
-          this.messages.splice(this.offset, this.limit, ...data.items)
-        } else {
-          this.messages = this.messages.concat(data.items)
-          this.offset += this.limit
-        }
+    getMessages () {
+      MessageApi.getMessages({
+        keywords: this.keywords,
+        offset: this.offset,
+        limit: this.limit,
+        access_token: this.token
+      }).then(data => {
+        this.messages = data.items
+        this.count = data.count
       })
     },
-    nextPage (event) {
-      let offsetHeight = event.target.offsetHeight
-      let scrollTop = event.target.scrollTop
-      let scrollHeight = event.target.scrollHeight
-      let scrollBottom = scrollHeight - scrollTop - offsetHeight
-      // console.log(scrollBottom)
-      if (scrollBottom === 0) {
-        this.search()
-      }
+    onPageChanged ({ offset, limit }) {
+      this.offset = offset
+      this.limit = limit
+      this.getMessages()
     }
   },
   components: {
-    Message
+    Message,
+    Paginator
   },
   mounted () {
-    this.search()
+    this.getMessages()
   }
 }
 </script>
@@ -98,101 +83,74 @@ export default {
 @import "../assets/less/colors.less";
 
 .search {
-  background-color: #fff;
-  // .side-bar {
-  //   position: relative;
-  // }
-  // .chat {
-  //   width: 290px;
-  //   .chat-record {
-  //     position: absolute;
-  //     top: 50px;
-  //     right: 0;
-  //     bottom: 0;
-  //     left: 0;
-  //     overflow-y: auto;
-  //     .chat-record-item {
-  //       padding: 15px 30px;
-  //       border-bottom: 1px solid @main-border-color;
-  //       cursor: default;
-  //       -webkit-transition: all .3s;
-  //       -moz-transition: all .3s;
-  //       -ms-transition: all .3s;
-  //       -o-transition: all .3s;
-  //       transition: all .3s;
-  //       &:hover {
-  //         background-color: rgba(48, 135, 181, .1);
-  //       }
-  //       &.active {
-  //         background-color: rgba(48, 135, 181, .3);
-  //       }
-  //       .record-title {
-  //         margin-bottom: 15px;
-  //       }
-  //       .record-count {
-  //         font-size: 14px;
-  //         color: #999;
-  //       }
-  //     }
-  //   }
-  // }
   .search-content {
-    position: relative;
-    margin-left: 0;
-    width: 100%;
-    height: 100%;
-    .title {
-      padding: 0 40px;
-      .search-keywords {
+    .search-content-header {
+      padding: 12px 25px;
+      margin-bottom: 10px;
+      font-size: 0;
+      h1 {
         font-size: 16px;
-        font-weight: normal;
         display: inline-block;
-        width: 100%;
-        word-break: keep-all;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        vertical-align: baseline;
+        margin-right: 10px;
+        span {
+          color: #d81e06;
+          display: inline-block;
+          vertical-align: top;
+          max-width: 200px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          -o-text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+      & > span {
+        font-size: 12px;
+        display: inline-block;
+        vertical-align: baseline;
       }
     }
-    .search-results-wrapper {
-      position: absolute;
-      top: 50px;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      .search-results {
-        overflow-y: auto;
-        height: 100%;
-        .search-results-item {
-          padding: 15px 40px;
-          border-bottom: 1px solid @main-border-color;
-          font-size: 12px;
-          .result-item {
-            margin-bottom: 10px;
-            &:last-child {
-              margin-bottom: 0;
+    .messages-list {
+      margin-bottom: 35px;
+      .messages-list-item {
+        padding: 0 25px;
+        margin-bottom: 10px;
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+        .messages-list-item-header {
+          padding-top: 10px;
+          border-bottom: 1px solid #a3a3a3;
+          h1 {
+            font-size: 14px;
+            line-height: 25px;
+          }
+          p {
+            line-height: 20px;
+            font-size: 12px;
+            color: #a3a3a3;
+            .message-from {
+              float: left;
+            }
+            .message-date {
+              float: right;
             }
           }
-          .result-name {
-            color: @active-background-color;
-          }
-          .result-time {
-            color: #a1a1a1;
+        }
+        .messages-list-item-body {
+          line-height: 20px;
+          font-size: 12px;
+          padding: 15px 0;
+          mark {
+            color: #d81e06;
+            background-color: transparent;
           }
         }
       }
-      .no-result {
-        font-size: 16px;
-        padding: 16px;
-        // text-align: center;
-        mark {
-          word-wrap: break-word;
-          word-break: normal;
-        }
-      }
-      mark {
-        color: @main-text-color-failure;
-        background-color: transparent;
+      .messages-none {
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
       }
     }
   }

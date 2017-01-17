@@ -63,7 +63,7 @@
       </div>
       <div class="content-item service">
         <div class="service-item">
-          <i class="iconfont">&#xe63c;</i>
+          <i class="iconfont">&#xe640;</i>
           <h2>群运营</h2>
           <p>智能助理将用户加为好友</p>
           <p>自动拉用户进入指定群</p>
@@ -72,7 +72,7 @@
           <p>群记录保存，内容沉淀，运营效果分析</p>
         </div>
         <div class="service-item">
-          <i class="iconfont">&#xe611;</i>
+          <i class="iconfont">&#xe612;</i>
           <h2>群客服</h2>
           <p>设定消息模板和关键词，智能客服自动答复</p>
           <p>智能客服加用户为通讯录好友，私聊</p>
@@ -80,7 +80,7 @@
           <p>工单系统</p>
         </div>
         <div class="service-item">
-          <i class="iconfont">&#xe62e;</i>
+          <i class="iconfont">&#xe61b;</i>
           <h2>群营销</h2>
           <p>群消息记录分类保存，结构化管理</p>
           <p>根据分析结果分类用户群，投放广告</p>
@@ -102,13 +102,13 @@
     <ul class="float-navi">
       <li>
         <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2183133171&site=qq&menu=yes">
-          <i class="iconfont">&#xe629;</i>
+          <i class="iconfont">&#xe66e;</i>
           <p>在线咨询</p>
         </a>
       </li>
       <li class="phone">
         <a>
-          <i class="iconfont">&#xe602;</i>
+          <i class="iconfont">&#xe622;</i>
           <p>电话咨询</p>
         </a>
         <span>13162502127</span>
@@ -121,7 +121,7 @@
       </li> -->
       <li>
         <a @click="goTop">
-          <i class="iconfont">&#xe653;</i>
+          <i class="iconfont">&#xe60c;</i>
           <p>返回顶部</p>
         </a>
       </li>
