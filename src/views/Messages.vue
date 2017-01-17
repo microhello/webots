@@ -28,7 +28,7 @@
         </a>
         <ul class="date-selector-tabs border-box">
           <li :class="{ 'active': item.valueOf() === currentDate.valueOf() }" v-for="item of dateList" @click="currentDate = item">
-            <p>{{ item | formatDate('MM-dd') }}<span v-if="item.toLocaleDateString() === new Date().toLocaleDateString()"> 今天</span></p>
+            <p>{{ item | formatDate('MM-dd') }}<span v-if="toLocaleDateString(item) === toLocaleDateString(new Date())"> 今天</span></p>
           </li>
         </ul>
       </div>
@@ -68,7 +68,7 @@ export default {
   name: 'Messages',
   data () {
     return {
-      currentDate: new Date(new Date().toLocaleDateString()),
+      currentDate: new Date(this.toLocaleDateString(new Date())),
       showCalendar: false,
       accounts: [],
       messages: [],
@@ -85,7 +85,7 @@ export default {
       let intHalfOfDisplayLength = parseInt(displayLength / 2)
       let dayLength = 24 * 60 * 60 * 1000
       let current = this.currentDate.valueOf()
-      let now = new Date(new Date().toLocaleDateString()).valueOf()
+      let now = new Date(this.toLocaleDateString(new Date())).valueOf()
       let start
       if (intHalfOfDisplayLength === displayLength / 2) {
         start = current - (intHalfOfDisplayLength - 1) * dayLength
@@ -118,6 +118,9 @@ export default {
     ...mapGetters(['token'])
   },
   methods: {
+    toLocaleDateString (date) {
+      return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate()
+    },
     selected (event) {
       this.showCalendar = false
       if (event instanceof Date) {
